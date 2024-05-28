@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TPC_webforms_equipo-F", "TPC_webforms_equipo-F\TPC_webforms_equipo-F.csproj", "{E154E9C3-6D86-48E9-BD07-ADE74B4D545F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E154E9C3-6D86-48E9-BD07-ADE74B4D545F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E154E9C3-6D86-48E9-BD07-ADE74B4D545F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E154E9C3-6D86-48E9-BD07-ADE74B4D545F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E154E9C3-6D86-48E9-BD07-ADE74B4D545F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {47568ADA-F243-4BBC-8AA7-0AD42BE85F7D}
+	EndGlobalSection
+EndGlobal
