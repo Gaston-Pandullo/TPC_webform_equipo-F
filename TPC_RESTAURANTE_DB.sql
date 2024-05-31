@@ -50,6 +50,15 @@ CREATE TABLE INGREDIENTES_X_PLATOS
 
 GO
 
+create table IMAGENES
+(
+	id int primary key not null,
+	idPlato int foreign key references platos(id_Plato) not null,
+	imagen_url varchar(1000) not null
+)
+
+GO
+
 -- Insertar datos en la tabla PLATOS
 INSERT INTO PLATOS (nombre, descripcion, precio, preparable, estado) VALUES
 ('Spaghetti Carbonara', 'Pasta italiana con salsa de crema y tocino', 12.50, 1, 1),
