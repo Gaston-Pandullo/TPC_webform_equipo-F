@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using dominio;
 
-namespace negocio
+namespace dominio
 {
-    public class ElementoCarritoNegocio
+    internal class Menu_platos
     {
-  
+        public List<Plato> lista_platos;
     }
 }
