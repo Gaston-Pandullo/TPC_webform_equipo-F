@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace dominio
 {
-    internal class Plato
+    public class Plato
     {
         public Plato() 
         {
@@ -21,7 +21,7 @@ namespace dominio
         public string descripcion { get; set; }
         public List<Ingrediente> lista_ingredientes { get; set; }
         public bool preparable { get; set; }
-        public int precio { get; set; }
+        public float precio { get; set; }
         public bool estado { get; set; }
         public Imagen imagen_plato { get; set; }
     }

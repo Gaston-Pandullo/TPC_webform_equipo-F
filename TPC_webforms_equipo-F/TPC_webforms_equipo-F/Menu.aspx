@@ -4,7 +4,18 @@
 
     <h1>--Menú--</h1>
     <div class="row">
-
+        <asp:Repeater ID="rptPlatos" runat="server">
+            <ItemTemplate>
+                <div class="col-12 mb-4">
+                    <div class="card" style="width: 100%; margin: auto;">
+                        <div class="card-body">
+                            <h5 class="card-title"><%# Eval("nombre") %></h5>
+                            <h5 class="card-text">$<%# Eval("precio") %></h5>
+                        </div>
+                    </div>
+                </div>
+            </ItemTemplate>
+        </asp:Repeater>
     </div>
 
 

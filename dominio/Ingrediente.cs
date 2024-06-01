@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace dominio
 {
-    sealed class Ingrediente
+    public class Ingrediente
     {
         public Ingrediente() 
         {
