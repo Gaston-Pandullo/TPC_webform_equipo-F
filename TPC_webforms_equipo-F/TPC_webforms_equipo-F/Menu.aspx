@@ -9,8 +9,11 @@
                 <div class="col-12 mb-4">
                     <div class="card" style="width: 100%; margin: auto;">
                         <div class="card-body">
-                            <h5 class="card-title"><%# Eval("nombre") %></h5>
-                            <h5 class="card-text">$<%# Eval("precio") %></h5>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h3 class="card-title"><%# Eval("nombre") %></h3>
+                                <h5 class="card-subtitle mb-2 text-muted">$<%# Eval("precio") %></h5>
+                            </div>
+                            <p class="card-text"><%# Eval("descripcion") %></p>
                         </div>
                     </div>
                 </div>
