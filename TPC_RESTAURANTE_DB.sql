@@ -6,6 +6,19 @@ use TPC_RESTAURANTE_DB
 
 go
 
+CREATE TABLE USERS(
+	id int primary key identity (1,1) not null,
+	username varchar(25) not null,
+	password varchar(25) not null, 
+	name varchar(15) null,
+	lastname varchar(15) null,
+	admin bit default(0) not null,
+	created_at DATETIME DEFAULT GETDATE() NOT NULL,
+    updated_at DATETIME DEFAULT GETDATE() NOT NULL
+)
+
+go
+
 CREATE TABLE PLATOS
 (
 	id_Plato int primary key identity (1,1) not null,
@@ -102,4 +115,7 @@ INSERT INTO INGREDIENTES_X_PLATOS (id_Ingrediente, id_Plato) VALUES
 (8, 3), -- Tomate
 (9,3);  -- Carne picada
 
+INSERT INTO USERS (username, password, name, lastname, admin) VALUES ('pepito', 'asdasd', 'Pepito', 'Gonzalez', 1);
 
+
+SELECT * FROM USERS;
