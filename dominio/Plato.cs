@@ -12,17 +12,18 @@ namespace dominio
         {
             nombre = "";
             descripcion = "";
-            preparable = true;
             precio = 0;
             estado = true;
+            cantidad = 0;
         }
         public int id { get; set; }
         public string nombre { get; set; }
         public string descripcion { get; set; }
         public List<Ingrediente> lista_ingredientes { get; set; }
-        public bool preparable { get; set; }
         public float precio { get; set; }
         public bool estado { get; set; }
+        public int cantidad { get; set; }
+        public int stock {  get; set; }
         public Imagen imagen_plato { get; set; }
     }
 }

@@ -26,7 +26,6 @@ namespace negocio
                     aux.nombre = datos.Lector["nombre"] != DBNull.Value ? (string)datos.Lector["nombre"] : string.Empty;
                     aux.descripcion = datos.Lector["descripcion"] != DBNull.Value ? (string)datos.Lector["descripcion"] : string.Empty;
                     aux.precio = datos.Lector["precio"] != DBNull.Value ? Convert.ToSingle(datos.Lector["precio"]) : 0.0f;
-                    aux.preparable = datos.Lector["preparable"] != DBNull.Value ? Convert.ToBoolean(datos.Lector["preparable"]) : false;
                     aux.estado = datos.Lector["estado"] != DBNull.Value ? Convert.ToBoolean(datos.Lector["estado"]) : false;
 
                     platos.Add(aux);

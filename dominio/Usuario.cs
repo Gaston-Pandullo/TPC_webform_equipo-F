@@ -6,31 +6,41 @@ using System.Threading.Tasks;
 
 namespace dominio
 {
-    internal class Usuario
+    public enum UserType
     {
-        Usuario(string nombre_usuario, string nombreYapellido, string contrasenia, bool esGerente)
+        NORMAL = 0,
+        ADMIN = 1,
+    }
+
+    public class Usuario
+    {
+        public int id { get; set; }
+        public string User { get; set; }
+        public string Name { get; set; }
+        public string Lastname { get; set; }
+        public string Pass { get; set; }
+        public UserType TipoUsuario { get; set; }
+
+        Usuario(string nombre_usuario, string nombre, string apellido, string pass, UserType tipo)
         {
-            this.nombre_usuario = nombre_usuario;
-            this.nombreYapellido = nombreYapellido;
-            this.contrasenia = contrasenia;
-            this.esGerente = esGerente;
+            this.User = nombre_usuario;
+            this.Name = nombre;
+            this.Lastname = apellido;
+            this.Pass = pass;
+            this.TipoUsuario = tipo;
         }
 
-        Usuario(string nombre_usuario, string contrasenia)
+        public Usuario(string nombre_usuario, string pass, bool admin)
         {
-            this.nombre_usuario = nombre_usuario;
-            nombreYapellido="";
-            this.contrasenia = contrasenia;
-            esGerente = false;
+            this.User = nombre_usuario;
+            this.Name = "";
+            this.Lastname = "";
+            this.Pass = pass;
+            this.TipoUsuario = admin ? UserType.ADMIN : UserType.NORMAL;
         }
 
         public Usuario(){ }
 
-        public int id { get; set; }
-        public string nombre_usuario { get; set; }
-        public string nombreYapellido { get; set; }
-        public string contrasenia { get; set; }
-        public bool esGerente { get; set; }
     
     }
 }

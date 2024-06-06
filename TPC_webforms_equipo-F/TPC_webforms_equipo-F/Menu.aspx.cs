@@ -14,6 +14,11 @@ namespace TPC_webforms_equipo_F
         public List<Plato> listaPlatos = new List<Plato>();
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["usuario"] == null)
+            {
+                Session.Add("error", "Tenes que loguearte para poder ingresar.");
+                Response.Redirect("Error.aspx", false);
+            }
             PlatosService platos = new PlatosService();
             listaPlatos = platos.getAll();
             MostrarPlatos(listaPlatos);
