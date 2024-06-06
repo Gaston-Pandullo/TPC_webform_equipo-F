@@ -6,4 +6,8 @@
 	<LangVersion>10.0</LangVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" Version="4.1.0" />
+  </ItemGroup>
+
 </Project>
