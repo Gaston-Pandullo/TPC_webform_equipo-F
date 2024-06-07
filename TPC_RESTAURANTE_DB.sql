@@ -28,20 +28,23 @@ CREATE TABLE PLATOS
 	precio money default(0) not null,
 	preparable bit default(1) not null,
 	stock int default(50) not null,
-	estado bit default(1) not null
+	estado bit default(1) not null,
+	categoria char not null
 )
 
 go
 
 CREATE TABLE BEBIDAS
 (
-	id_Bebida int primary key identity (1,1) not null,
-	nombre varchar(100) not null,
-	precio money default(0) not null,
-	alcoholica bit default(0) not null,
-	stock int default(50) not null,
-	estado bit default(1) not null
-)
+    id_Bebida int primary key identity (1,1) not null,
+    nombre varchar(100) not null,
+    descripcion varchar(500) null,
+    precio money default(0) not null,
+    alcoholica bit default(0) not null,
+    stock int default(50) not null,
+    estado bit default(1) not null,
+	categoria char not null
+);
 
 go 
 
@@ -75,17 +78,17 @@ create table IMAGENES
 GO
 
 -- Insertar datos en la tabla PLATOS
-INSERT INTO PLATOS (nombre, descripcion, precio, preparable, estado) VALUES
-('Spaghetti Carbonara', 'Pasta italiana con salsa de crema y tocino', 12.50, 1, 1),
-('Ensalada César', 'Ensalada con lechuga, croutons y aderezo César', 8.00, 1, 1),
-('Hamburguesa Clásica', 'Hamburguesa de carne con queso, lechuga y tomate', 10.00, 1, 1);
+INSERT INTO PLATOS (nombre, descripcion, precio, preparable, estado, categoria) VALUES
+('Spaghetti Carbonara', 'Pasta italiana con salsa de crema y tocino', 12.50, 1, 1, 'C'),
+('Ensalada César', 'Ensalada con lechuga, croutons y aderezo César', 8.00, 1, 1, 'C'),
+('Hamburguesa Clásica', 'Hamburguesa de carne con queso, lechuga y tomate', 10.00, 1, 1, 'C');
 GO
 
 -- Insertar datos en la tabla BEBIDAS
-INSERT INTO BEBIDAS (nombre, precio, alcoholica, stock, estado) VALUES
-('Coca Cola', 2.50, 0, 100, 1),
-('Cerveza Artesanal', 5.00, 1, 50, 1),
-('Agua Mineral', 1.50, 0, 200, 1);
+INSERT INTO BEBIDAS (nombre, descripcion, precio, alcoholica, stock, estado, categoria) VALUES
+('Coca Cola', 'Refresco de tipo cola', 2.50, 0, 100, 1, 'B'),
+('Cerveza Artesanal', 'Bebida alcoholica alta birrita', 5.00, 1, 50, 1, 'B'),
+('Agua Mineral', 'Aguita bien saludable pa''', 1.50, 0, 200, 1, 'B');
 GO
 
 -- Insertar datos en la tabla INGREDIENTES
@@ -120,4 +123,15 @@ INSERT INTO INGREDIENTES_X_PLATOS (id_Ingrediente, id_Plato) VALUES
 INSERT INTO USERS (username, password, name, lastname, admin) VALUES ('pepito', 'asdasd', 'Pepito', 'Gonzalez', 1);
 
 SELECT * FROM PLATOS;
+SELECT * FROM BEBIDAS;
 SELECT * FROM USERS;
+
+-- Modificar la tabla PLATOS
+ALTER TABLE PLATOS
+ADD CONSTRAINT CK_PLATOS_Categoria CHECK (categoria IN ('C', 'B', 'P'));
+
+-- Modificar la tabla BEBIDAS
+ALTER TABLE BEBIDAS
+ADD CONSTRAINT CK_BEBIDAS_Categoria CHECK (categoria IN ('C', 'B', 'P'));
+
+SELECT id_Bebida AS Id, nombre AS Nombre, descripcion AS Descripcion, precio AS Precio, stock AS Stock, categoria FROM BEBIDAS UNION ALL SELECT id_Plato AS Id, nombre AS Nombre, descripcion AS Descripcion, precio AS Precio, stock AS Stock, categoria FROM PLATOS;

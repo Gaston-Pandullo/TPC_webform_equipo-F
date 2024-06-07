@@ -6,14 +6,9 @@ using System.Threading.Tasks;
 
 namespace dominio
 {
-    internal class Bebidas
+    public class Bebidas : ItemMenu
     {
-        public Bebidas() { }
-        public int id {  get; set; }
-        public string nombre { get; set; }
-        public int precio { get; set; }
-        public int stock { get; set; }
-        public bool estado { get; set; }
-        public bool alcoholica { get; set; }
+        public Bebidas() {}
+        public byte alcoholica { get; set; }
     }
 }
