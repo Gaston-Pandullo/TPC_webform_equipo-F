@@ -1,6 +1,7 @@
 use master
 go
 create database TPC_RESTAURANTE_DB
+drop database TPC_RESTAURANTE_DB
 go
 use TPC_RESTAURANTE_DB
 
@@ -26,6 +27,7 @@ CREATE TABLE PLATOS
 	descripcion varchar(500) null,
 	precio money default(0) not null,
 	preparable bit default(1) not null,
+	stock int default(50) not null,
 	estado bit default(1) not null
 )
 
@@ -37,7 +39,7 @@ CREATE TABLE BEBIDAS
 	nombre varchar(100) not null,
 	precio money default(0) not null,
 	alcoholica bit default(0) not null,
-	stock int default(0) not null,
+	stock int default(50) not null,
 	estado bit default(1) not null
 )
 
@@ -117,5 +119,5 @@ INSERT INTO INGREDIENTES_X_PLATOS (id_Ingrediente, id_Plato) VALUES
 
 INSERT INTO USERS (username, password, name, lastname, admin) VALUES ('pepito', 'asdasd', 'Pepito', 'Gonzalez', 1);
 
-
+SELECT * FROM PLATOS;
 SELECT * FROM USERS;

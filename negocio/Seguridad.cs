@@ -11,8 +11,17 @@ namespace negocio
     {
         public static bool sesionActiva(object user)
         {
-            Usuario usuario = user as Usuario;
+            Usuario usuario = user != null ? (Usuario)user : null;
             if (usuario != null && usuario.id != 0)
+                return true;
+            else
+                return false;
+        }
+
+        public static bool esAdmin(object user)
+        {
+            Usuario usuario = user != null ? (Usuario)user : null;
+            if (usuario != null && usuario.TipoUsuario == 1)
                 return true;
             else
                 return false;

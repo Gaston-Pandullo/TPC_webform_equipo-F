@@ -12,6 +12,15 @@ namespace TPC_webforms_equipo_F
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            
+
+            if (!Seguridad.esAdmin(Session["usuario"]))
+            {
+                Session.Add("error", "Necesitas permisos de admin para ingresar aca.");
+                Response.Redirect("Error.aspx", false);
+            }
+
+
         }
     }
 }

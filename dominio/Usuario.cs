@@ -6,11 +6,6 @@ using System.Threading.Tasks;
 
 namespace dominio
 {
-    public enum UserType
-    {
-        NORMAL = 0,
-        ADMIN = 1,
-    }
 
     public class Usuario
     {
@@ -19,9 +14,9 @@ namespace dominio
         public string Name { get; set; }
         public string Lastname { get; set; }
         public string Pass { get; set; }
-        public UserType TipoUsuario { get; set; }
+        public byte TipoUsuario { get; set; }
 
-        Usuario(string nombre_usuario, string nombre, string apellido, string pass, UserType tipo)
+        Usuario(string nombre_usuario, string nombre, string apellido, string pass, byte tipo)
         {
             this.User = nombre_usuario;
             this.Name = nombre;
@@ -36,7 +31,7 @@ namespace dominio
             this.Name = "";
             this.Lastname = "";
             this.Pass = pass;
-            this.TipoUsuario = admin ? UserType.ADMIN : UserType.NORMAL;
+            this.TipoUsuario = (byte)(admin ? 1 : 0);
         }
 
         public Usuario(){ }

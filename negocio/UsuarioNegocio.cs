@@ -22,8 +22,8 @@ namespace negocio
                 datos.ejecutarLectura();
                 while (datos.Lector.Read())
                 {
-                    usuario.id = (int)datos.Lector["id"];
-                    usuario.TipoUsuario = (bool)(datos.Lector["admin"]) ? UserType.NORMAL : UserType.ADMIN;
+                    usuario.id = datos.Lector["id"] != DBNull.Value ? Convert.ToInt32(datos.Lector["id"]) : 0;
+                    usuario.TipoUsuario = datos.Lector["admin"] != DBNull.Value ? Convert.ToByte(datos.Lector["admin"]) : (byte)0;
                     return true;
                 }
                 return false;
