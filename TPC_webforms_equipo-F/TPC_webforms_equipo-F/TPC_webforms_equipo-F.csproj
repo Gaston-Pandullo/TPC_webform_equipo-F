@@ -101,6 +101,7 @@
   <ItemGroup>
     <Content Include="Administrador.aspx" />
     <Content Include="Almacen.aspx" />
+    <Content Include="AsignacionMeseros.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />
@@ -204,6 +205,13 @@
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="AsignacionMeseros.aspx.cs">
+      <DependentUpon>AsignacionMeseros.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AsignacionMeseros.aspx.designer.cs">
+      <DependentUpon>AsignacionMeseros.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

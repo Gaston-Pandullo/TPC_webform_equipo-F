@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace dominio
 {
-    internal class Mesa
+    public class Mesa
     {
         public Mesa() 
         {
@@ -14,13 +14,14 @@ namespace dominio
         }
         public Mesa( Mesero mesero, Comanda comanda) 
         {
-            mesero_asignado = mesero;
+            mesero = mesero;
             this.comanda = comanda;
             ocupada = true;
         }
 
         public int id_mesa { get; set; }
-        public Mesero mesero_asignado { get; set; }
+        public int id_mesero { get; set; }
+        public Mesero mesero { get; set; }
         public Comanda comanda { get; set; }
         public bool ocupada { get; set; }
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace dominio
 {
-    internal class Comanda
+    public class Comanda
     {
         public Comanda() 
         {

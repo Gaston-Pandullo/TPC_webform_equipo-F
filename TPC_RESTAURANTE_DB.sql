@@ -77,6 +77,27 @@ create table IMAGENES
 
 GO
 
+
+CREATE TABLE MESERO (
+   IDMESERO INT IDENTITY PRIMARY KEY,
+   IDUSUARIO INT NOT NULL FOREIGN KEY REFERENCES USERS(id)
+);
+
+GO
+
+CREATE TABLE MESA (
+IDMESA INT IDENTITY PRIMARY KEY,
+MESERO INT FOREIGN KEY REFERENCES MESERO(IDMESERO),
+OCUPADA BIT DEFAULT 0
+)
+
+
+-- Alteramos la tabla MESA para que acepte nulls, asi podemos desasignar y asignar meseros
+ALTER TABLE MESA
+ALTER COLUMN MESERO INT NULL;
+
+GO
+
 -- Insertar datos en la tabla PLATOS
 INSERT INTO PLATOS (nombre, descripcion, precio, preparable, estado, categoria) VALUES
 ('Spaghetti Carbonara', 'Pasta italiana con salsa de crema y tocino', 12.50, 1, 1, 'C'),
@@ -120,11 +141,13 @@ INSERT INTO INGREDIENTES_X_PLATOS (id_Ingrediente, id_Plato) VALUES
 (8, 3), -- Tomate
 (9,3);  -- Carne picada
 
-INSERT INTO USERS (username, password, name, lastname, admin) VALUES ('pepito', 'asdasd', 'Pepito', 'Gonzalez', 1);
-
-SELECT * FROM PLATOS;
-SELECT * FROM BEBIDAS;
-SELECT * FROM USERS;
+INSERT INTO USERS (username, password, name, lastname, admin) VALUES 
+('pepito', 'asdasd', 'Pepito', 'Gonzalez', 1),
+('juanito', 'qwerty', 'Juanito', 'Perez', 0),
+('maria', '123456', 'Maria', 'Lopez', 0),
+('carlos', 'password', 'Carlos', 'Martinez', 0),
+('ana', 'abc123', 'Ana', 'Sanchez', 0),
+('luis', 'pass123', 'Luis', 'Rodriguez', 0);
 
 -- Modificar la tabla PLATOS
 ALTER TABLE PLATOS
@@ -134,4 +157,21 @@ ADD CONSTRAINT CK_PLATOS_Categoria CHECK (categoria IN ('C', 'B', 'P'));
 ALTER TABLE BEBIDAS
 ADD CONSTRAINT CK_BEBIDAS_Categoria CHECK (categoria IN ('C', 'B', 'P'));
 
+INSERT INTO MESA (MESERO, OCUPADA) VALUES
+(NULL, 0),
+(NULL, 0),
+(NULL, 0),
+(NULL, 0),
+(NULL, 0);
+
 SELECT id_Bebida AS Id, nombre AS Nombre, descripcion AS Descripcion, precio AS Precio, stock AS Stock, categoria FROM BEBIDAS UNION ALL SELECT id_Plato AS Id, nombre AS Nombre, descripcion AS Descripcion, precio AS Precio, stock AS Stock, categoria FROM PLATOS;
+UPDATE BEBIDAS SET stock = 101 WHERE id_Bebida = 2;
+
+SELECT * FROM PLATOS;
+SELECT * FROM BEBIDAS;
+SELECT * FROM USERS;
+SELECT * FROM MESA;
+SELECT * FROM MESERO;
+
+
+SELECT * FROM USERS Where id = 1;
