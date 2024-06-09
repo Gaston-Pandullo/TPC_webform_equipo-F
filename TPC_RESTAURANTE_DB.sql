@@ -149,6 +149,13 @@ INSERT INTO USERS (username, password, name, lastname, admin) VALUES
 ('ana', 'abc123', 'Ana', 'Sanchez', 0),
 ('luis', 'pass123', 'Luis', 'Rodriguez', 0);
 
+
+INSERT INTO MESERO (IDUSUARIO) VALUES
+(2),
+(3), 
+(4), 
+(5),
+(6);
 -- Modificar la tabla PLATOS
 ALTER TABLE PLATOS
 ADD CONSTRAINT CK_PLATOS_Categoria CHECK (categoria IN ('C', 'B', 'P'));
@@ -171,7 +178,8 @@ SELECT * FROM PLATOS;
 SELECT * FROM BEBIDAS;
 SELECT * FROM USERS;
 SELECT * FROM MESA;
-SELECT * FROM MESERO;
+SELECT *  FROM MESERO M LEFT JOIN USERS U
+ON U.id = M.IDUSUARIO
 
 
 SELECT * FROM USERS Where id = 1;

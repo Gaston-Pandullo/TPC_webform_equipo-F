@@ -59,6 +59,7 @@
                         <li class="nav-item"><a class="nav-link" runat="server" href="~/Info Mesero">Información de Meseros</a></li>
                         <li class="nav-item"><a class="nav-link" runat="server" href="~/Almacen">Almacen</a></li>
                         <li class="nav-item"><a class="nav-link" runat="server" href="/Administrador">Panel de Administrador</a></li>
+                        <li class="nav-item"><a class="nav-link" runat="server" href="/AsignacionMeseros">Asignacion Meseros</a></li>
                     </ul>
                 </div>
             </div>
