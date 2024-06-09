@@ -12,16 +12,23 @@ namespace TPC_webforms_equipo_F
     public partial class Menu : System.Web.UI.Page
     {
         public List<Plato> listaPlatos = new List<Plato>();
+        public List<Bebidas> listaBebidas = new List<Bebidas>();
         protected void Page_Load(object sender, EventArgs e)
         {
             PlatosService platos = new PlatosService();
+            BebidasService bebidas = new BebidasService();
+
             listaPlatos = platos.getAll();
-            MostrarPlatos(listaPlatos);
+            listaBebidas = bebidas.getAll();
+
+            MostrarItems(listaPlatos,listaBebidas);
         }
 
-        private void MostrarPlatos(List<Plato> listaPlatos)
+        private void MostrarItems(List<Plato> listaPlatos, List<Bebidas> listaBebidas)
         {
             rptPlatos.DataSource = listaPlatos;
+            rptBebidas.DataSource = listaBebidas;
+            rptBebidas.DataBind();
             rptPlatos.DataBind();
         }
     }

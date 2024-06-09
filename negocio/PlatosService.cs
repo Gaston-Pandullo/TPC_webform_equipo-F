@@ -14,9 +14,11 @@ namespace negocio
         AccesoDatos datos = new AccesoDatos();
         public List<Plato> getAll()
         {
+            //Lista de platos
             List<Plato> platos = new List<Plato>();
             try
             {
+                // Carga de la lista de platos
                 datos.setearConsulta("SELECT * FROM PLATOS");
                 datos.ejecutarLectura();
                 while (datos.Lector.Read())

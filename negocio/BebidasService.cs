@@ -20,7 +20,7 @@ namespace negocio
                 while (datos.Lector.Read())
                 {
                     Bebidas aux = new Bebidas();
-                    aux.id = datos.Lector["id_Bebida"] != DBNull.Value ? Convert.ToInt32(datos.Lector["id_Plato"]) : 0;
+                    aux.id = datos.Lector["id_Bebida"] != DBNull.Value ? Convert.ToInt32(datos.Lector["id_Bebida"]) : 0;
                     aux.nombre = datos.Lector["nombre"] != DBNull.Value ? (string)datos.Lector["nombre"] : string.Empty;
                     aux.descripcion = datos.Lector["descripcion"] != DBNull.Value ? (string)datos.Lector["descripcion"] : string.Empty;
                     aux.precio = datos.Lector["precio"] != DBNull.Value ? Convert.ToSingle(datos.Lector["precio"]) : 0.0f;
