@@ -125,6 +125,8 @@
     <Content Include="Info Mesero.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="Menu.aspx" />
+    <Content Include="ModificarUsuario.aspx" />
+    <Content Include="NuevoUsuario.aspx" />
     <Content Include="Pedidos.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -241,6 +243,20 @@
     </Compile>
     <Compile Include="Menu.aspx.designer.cs">
       <DependentUpon>Menu.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ModificarUsuario.aspx.cs">
+      <DependentUpon>ModificarUsuario.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ModificarUsuario.aspx.designer.cs">
+      <DependentUpon>ModificarUsuario.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NuevoUsuario.aspx.cs">
+      <DependentUpon>NuevoUsuario.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NuevoUsuario.aspx.designer.cs">
+      <DependentUpon>NuevoUsuario.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pedidos.aspx.cs">
       <DependentUpon>Pedidos.aspx</DependentUpon>

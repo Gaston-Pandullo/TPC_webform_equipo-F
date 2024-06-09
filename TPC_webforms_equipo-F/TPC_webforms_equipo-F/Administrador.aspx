@@ -4,7 +4,7 @@
 
     <h1>--Lista de Usuarios--</h1>
     <div class="row mb-2">
-        <asp:Button ID="btnNuevoUsuario" runat="server" Text="Nuevo Usuario" CssClass="btn btn-primary" />
+        <asp:Button ID="btnNuevoUsuario" runat="server" Text="Nuevo Usuario" CssClass="btn btn-primary" OnClick="btnNuevoUsuario_Click" />
     </div>
     <div class="row">
         <asp:Repeater ID="rptUsuarios" runat="server">
