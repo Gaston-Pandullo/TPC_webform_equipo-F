@@ -87,5 +87,28 @@ namespace negocio
             }
         }
 
+        public void AgregarUsuario(Usuario usuario)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("insert into USERS (name,lastname,username,password, admin) values(@NAME, @LASTNAME, @USERNAME, @PASSWORD, @ADMIN)");
+                datos.setearParametro("@name", usuario.Name);
+                datos.setearParametro("@lastname", usuario.Lastname);
+                datos.setearParametro("@username", usuario.User);
+                datos.setearParametro("@password", usuario.Pass);
+                datos.setearParametro("@admin", usuario.TipoUsuario);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }

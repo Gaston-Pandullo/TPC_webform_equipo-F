@@ -25,6 +25,16 @@ namespace TPC_webforms_equipo_F
             rptUsuarios.DataBind();
         }
 
+        protected void btnModificar_Click(object sender, EventArgs e)
+        {
+            // Obtiene el ID del usuario desde el CommandArgument del botón
+            Button btn = (Button)sender;
+            int idUsuario = Convert.ToInt32(btn.CommandArgument);
+
+            // Redirige a una página de edición o abre un formulario para modificar el usuario
+            Response.Redirect($"ModificarUsuario.aspx?id={idUsuario}");
+        }
+
         protected void btnEliminar_Click(object sender, EventArgs e)
         {
             UsuarioNegocio negocio = new UsuarioNegocio();
@@ -40,6 +50,11 @@ namespace TPC_webforms_equipo_F
             {
                 throw ex;
             }
+        }
+
+        protected void btnNuevoUsuario_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("NuevoUsuario.aspx");
         }
     }
 }
