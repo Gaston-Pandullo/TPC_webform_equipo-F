@@ -8,23 +8,22 @@
             <span class="fw-bold">2</span> mesas libres de <span class="fw-bold">5</span>
         </p>
         <main>
-            <asp:Button ID="btnTable1" runat="server" Text="1" CssClass="table-button " OnClick="TableButton_Click" CommandArgument="1" />
+            <asp:Button ID="btnTable1" runat="server" Text="1" CssClass="table-button" OnClick="TableButton_Click" CommandArgument="1" />
             <asp:Button ID="btnTable2" runat="server" Text="2" CssClass="table-button" OnClick="TableButton_Click" CommandArgument="2" />
-            <asp:Button ID="btnTable3" runat="server" Text="3" CssClass="table-button green" OnClick="TableButton_Click" CommandArgument="3" />
-            <asp:Button ID="btnTable4" runat="server" Text="4" CssClass="table-button green" OnClick="TableButton_Click" CommandArgument="4" />
+            <asp:Button ID="btnTable3" runat="server" Text="3" CssClass="table-button" OnClick="TableButton_Click" CommandArgument="3" />
+            <asp:Button ID="btnTable4" runat="server" Text="4" CssClass="table-button" OnClick="TableButton_Click" CommandArgument="4" />
             <asp:Button ID="btnTable5" runat="server" Text="5" CssClass="table-button" OnClick="TableButton_Click" CommandArgument="5" />
         </main>
     </asp:Panel>
+
+    <asp:Button ID="btnAbrirMesa" runat="server" Text="Abrir Mesa" OnClick="btnAbrirMesa_Click" Visible="false" />
+    <asp:Button ID="btnContinuar" runat="server" Text="Continuar" OnClick="btnContinuar_Click" Visible="false" />
 
     <asp:Panel ID="OrderDetailsPanel" runat="server" Visible="false" style="padding:20px;">
         <h2>Detalles del Pedido</h2>
         <p><strong>Fecha de Pedido:</strong> <asp:Label ID="lblFechaPedido" runat="server" Text=""></asp:Label></p>
         <p><strong>Número de Mesa:</strong> <asp:Label ID="lblNumeroMesa" runat="server" Text=""></asp:Label></p>
         
-        <asp:DropDownList ID="ddlMeseros" runat="server"></asp:DropDownList>
-        <asp:Button ID="btnAgregarMesero" runat="server" Text="Agregar" OnClick="btnAgregarMesero_Click" />
-
-        <p><strong>Platos:</strong> <asp:Label ID="lblMesero" runat="server" Text=""></asp:Label></p>
 
         <asp:DropDownList ID="ddlPlatos" runat="server"></asp:DropDownList>
         <asp:Button ID="btnAgregarPlato" runat="server" Text="Agregar" OnClick="btnAgregarPlato_Click" />
@@ -35,17 +34,18 @@
     </asp:Panel>
 
     <style>
-
         .table-button {
             width: 100px;
             height: 100px;
             margin: 10px;
             font-size: 24px;
             text-align: center;
-            background-color: indianred;
         }
-        .green{
-            background-color: aquamarine;
+        .green {
+            background-color: aquamarine; /* Mesa libre */
+        }
+        .red {
+            background-color: indianred; /* Mesa ocupada */
         }
     </style>
 </asp:Content>

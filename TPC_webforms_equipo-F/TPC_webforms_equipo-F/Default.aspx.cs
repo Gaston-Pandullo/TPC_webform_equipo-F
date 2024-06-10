@@ -17,7 +17,7 @@ namespace TPC_webforms_equipo_F
             if (!IsPostBack)
             {
                 CargarPlatos();
-                CargarMeseros();
+                InicializarMesas();
             }
         }
 
@@ -34,45 +34,45 @@ namespace TPC_webforms_equipo_F
             ddlPlatos.Items.Insert(0, new ListItem("-- Seleccione un Plato --", "0"));
         }
 
-        private void CargarMeseros()
+        private void InicializarMesas()
         {
-            MeserosService negocio = new MeserosService();
-            List<Mesero> meseros = negocio.getAll();
-
-
-            ddlMeseros.DataSource = meseros;
-            ddlMeseros.DataTextField = "name";
-            ddlMeseros.DataValueField = "id_mesero";
-
-            ddlMeseros.DataBind();
-
-            ddlMeseros.Items.Insert(0, new ListItem("-- Seleccione un mesero --", "0"));
+            MesasService mesaService = new MesasService();
+            foreach (Control control in TableOrder.Controls)
+            {
+                if (control is Button button && button.CommandArgument != null)
+                {
+                    int mesaId = Convert.ToInt32(button.CommandArgument);
+                    if (mesaService.MesaEstaOcupada(mesaId))
+                    {
+                        button.CssClass = "table-button red";
+                    }
+                    else
+                    {
+                        button.CssClass = "table-button green";
+                    }
+                }
+            }
         }
 
         protected void TableButton_Click(object sender, EventArgs e)
         {
             var button = (Button)sender;
             string tableId = button.CommandArgument;
-            // Verificar si la mesa está ocupada
-            MesasService negocio = new MesasService();
-            bool estaOcupada = negocio.MesaEstaOcupada(Convert.ToInt32(tableId));
+            lblNumeroMesa.Text = tableId;
 
-            if (!estaOcupada)
+            MesasService mesaService = new MesasService();
+            if (mesaService.MesaEstaOcupada(Convert.ToInt32(tableId)))
             {
-                string fechaPedido = DateTime.Now.ToString("dd/MM/yyyy");
-                lblFechaPedido.Text = fechaPedido;
-                lblNumeroMesa.Text = tableId.ToString();
-                lblPlatos.Text = "";
-
-                
-                // Marcar la mesa como ocupada
-                negocio.MarcarMesaComoOcupada(Convert.ToInt32(tableId));
-                button.CssClass = "table-button green";
+                btnAbrirMesa.Visible = false;
+                btnContinuar.Visible = true;
                 OrderDetailsPanel.Visible = true;
             }
-
-
-            
+            else
+            {
+                btnAbrirMesa.Visible = true;
+                btnContinuar.Visible = false;
+                OrderDetailsPanel.Visible = false;
+            }
         }
 
         protected void btnAgregarPlato_Click(object sender, EventArgs e)
@@ -90,21 +90,57 @@ namespace TPC_webforms_equipo_F
             }
         }
 
-        protected void btnAgregarMesero_Click(object sender, EventArgs e)
-        {
-            string meseroSeleccionado = ddlMeseros.SelectedItem.Text;
-            lblMesero.Text = meseroSeleccionado;
-        }
-
         protected void btnCerrarMesa_Click(object sender, EventArgs e)
         {
-            OrderDetailsPanel.Visible = false;
-            // Reseteamos los campos
+            int mesaId = Convert.ToInt32(lblNumeroMesa.Text);
+            MesasService mesaService = new MesasService();
+            mesaService.MarcarMesaComoNoOcupada(mesaId);
+
+            Button button = TableOrder.FindControl("btnTable" + mesaId) as Button;
+            if (button != null)
+            {
+                button.CssClass = "table-button green";
+            }
+
             lblFechaPedido.Text = "";
             lblNumeroMesa.Text = "";
-            lblMesero.Text = "";
             lblPlatos.Text = "";
-            lblPrecioTotal.Text = "";
+
+            OrderDetailsPanel.Visible = false;
+            btnAbrirMesa.Visible = false;
+            btnContinuar.Visible = false;
         }
+
+        protected void btnAbrirMesa_Click(object sender, EventArgs e)
+        {
+            int mesaId = Convert.ToInt32(lblNumeroMesa.Text);
+            MesasService mesaService = new MesasService();
+            mesaService.MarcarMesaComoOcupada(mesaId);
+
+            Button button = TableOrder.FindControl("btnTable" + mesaId) as Button;
+            if (button != null)
+            {
+                button.CssClass = "table-button red";
+            }
+
+            string fechaPedido = DateTime.Now.ToString("dd/MM/yyyy");
+            lblFechaPedido.Text = fechaPedido;
+            lblPlatos.Text = "";
+
+            OrderDetailsPanel.Visible = true;
+            btnAbrirMesa.Visible = false;
+            btnContinuar.Visible = true;
+        }
+
+        protected void btnContinuar_Click(object sender, EventArgs e)
+        {
+            OrderDetailsPanel.Visible = true;
+        }
+
+        //falta ver que el btn continuar funciona igual que si tocas la mesa
+        //hay que ver que cuando se vaya agregando la comida se haga un post en la BD y luego
+        //cada vez que ponga continuar me traiga esos datos guardados.
+        //entonces cuando le de a cerrar mesa me tiene que hacer el post final en el de pedidos
+        //y volver a poner la mesa en libre
     }
 }
