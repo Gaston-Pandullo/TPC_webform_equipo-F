@@ -23,5 +23,6 @@
             <label style="font-weight: bold;padding:12px;">Cantidad de Mesas Asignadas:</label>
             <asp:Label ID="lblCantidaddeMesas" runat="server" Text=""></asp:Label>
         </div>
+       
     </div>
 </asp:Content>
