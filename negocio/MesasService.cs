@@ -57,5 +57,28 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
+
+        public int GetCantidadMesasAsignadas(int idMesero)
+        {
+            try
+            {
+                datos.setearConsulta("SELECT COUNT(*) FROM MESA WHERE MESERO = @idMesero");
+                datos.setearParametro("@idMesero", idMesero);
+                datos.ejecutarLectura();
+                if (datos.Lector.Read())
+                {
+                    return Convert.ToInt32(datos.Lector[0]);
+                }
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }
