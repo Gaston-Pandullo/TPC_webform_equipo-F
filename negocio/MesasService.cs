@@ -1,6 +1,7 @@
 ﻿using dominio;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -80,5 +81,73 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
+
+        public bool MesaEstaOcupada(int idMesa)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("SELECT ocupada FROM mesa WHERE IDMESA = @idMesa");
+                datos.setearParametro("@idMesa", idMesa);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    return (bool)datos.Lector["ocupada"];
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+            return false;
+        }
+
+        public void MarcarMesaComoOcupada(int idMesa)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("UPDATE mesa SET ocupada = 1 WHERE IDMESA = @idMesa");
+                datos.setearParametro("@idMesa", idMesa);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void MarcarMesaComoNoOcupada(int idMesa)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("UPDATE mesa SET ocupada = 0 WHERE IDMESA = @idMesa");
+                datos.setearParametro("@idMesa", idMesa);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
     }
 }

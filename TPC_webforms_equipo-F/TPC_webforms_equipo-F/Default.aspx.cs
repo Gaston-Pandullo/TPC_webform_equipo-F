@@ -52,15 +52,27 @@ namespace TPC_webforms_equipo_F
         protected void TableButton_Click(object sender, EventArgs e)
         {
             var button = (Button)sender;
-
             string tableId = button.CommandArgument;
+            // Verificar si la mesa está ocupada
+            MesasService negocio = new MesasService();
+            bool estaOcupada = negocio.MesaEstaOcupada(Convert.ToInt32(tableId));
 
-            string fechaPedido = DateTime.Now.ToString("dd/MM/yyyy");
-            lblFechaPedido.Text = fechaPedido;
-            lblNumeroMesa.Text = tableId.ToString();
-            lblPlatos.Text = "";
+            if (!estaOcupada)
+            {
+                string fechaPedido = DateTime.Now.ToString("dd/MM/yyyy");
+                lblFechaPedido.Text = fechaPedido;
+                lblNumeroMesa.Text = tableId.ToString();
+                lblPlatos.Text = "";
 
-            OrderDetailsPanel.Visible = true;
+                
+                // Marcar la mesa como ocupada
+                negocio.MarcarMesaComoOcupada(Convert.ToInt32(tableId));
+                button.CssClass = "table-button green";
+                OrderDetailsPanel.Visible = true;
+            }
+
+
+            
         }
 
         protected void btnAgregarPlato_Click(object sender, EventArgs e)
