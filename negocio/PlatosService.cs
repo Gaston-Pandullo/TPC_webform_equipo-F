@@ -43,6 +43,28 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
+        public void agregarPlato(Plato plato)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("INSERT INTO PLATOS (nombre,descripcion,precio,stock) VALUES (@nombre,@descripcion,@precio,@stock)");
+                datos.setearParametro("@nombre", plato.nombre);
+                datos.setearParametro("@descripcion", plato.descripcion);
+                datos.setearParametro("@precio", plato.precio);
+                datos.setearParametro("@stock", plato.stock);
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 
 }
