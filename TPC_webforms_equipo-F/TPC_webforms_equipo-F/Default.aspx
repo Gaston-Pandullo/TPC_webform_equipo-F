@@ -17,7 +17,6 @@
     </asp:Panel>
 
     <asp:Button ID="btnAbrirMesa" runat="server" Text="Abrir Mesa" OnClick="btnAbrirMesa_Click" Visible="false" />
-    <asp:Button ID="btnContinuar" runat="server" Text="Continuar" OnClick="btnContinuar_Click" Visible="false" />
 
     <asp:Panel ID="OrderDetailsPanel" runat="server" Visible="false" style="padding:20px;">
         <h2>Detalles del Pedido</h2>
