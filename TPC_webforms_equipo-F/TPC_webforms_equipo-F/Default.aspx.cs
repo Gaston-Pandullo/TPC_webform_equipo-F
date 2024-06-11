@@ -11,6 +11,7 @@ namespace TPC_webforms_equipo_F
 {
     public partial class _Default : System.Web.UI.Page
     {
+        List<int> idPlatosSeleccionados = new List<int>(); //esta lista la vamos a usar para guardar los idPlato
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -80,6 +81,9 @@ namespace TPC_webforms_equipo_F
             string platoSeleccionado = ddlPlatos.SelectedItem.Text;
             PlatosService negocio = new PlatosService();
 
+            int idPlatoSeleccionado = Convert.ToInt32(ddlPlatos.SelectedValue);
+            idPlatosSeleccionados.Add(idPlatoSeleccionado);
+
             if (string.IsNullOrEmpty(lblPlatos.Text))
             {
                 lblPlatos.Text = platoSeleccionado;
@@ -109,6 +113,12 @@ namespace TPC_webforms_equipo_F
             OrderDetailsPanel.Visible = false;
             btnAbrirMesa.Visible = false;
             btnContinuar.Visible = false;
+
+            MesasService negocio = new MesasService();
+            int idComanda = negocio.ObtenerUltimoIDComanda(mesaId);
+
+            negocio.GuardarDetallesComanda(idComanda, Convert.ToInt32(lblNumeroMesa.Text), idPlatosSeleccionados);
+            //falta desarrollar el metodo para hacer el post en la Tabla de Pedidos cuando se cierra la mesa
         }
 
         protected void btnAbrirMesa_Click(object sender, EventArgs e)
@@ -134,13 +144,29 @@ namespace TPC_webforms_equipo_F
 
         protected void btnContinuar_Click(object sender, EventArgs e)
         {
+            MesasService negocio = new MesasService();
+            // Generar un ID único para la comanda
+            int mesaId = Convert.ToInt32(lblNumeroMesa.Text);
+            int idComanda = GenerarIDComandaUnico(mesaId);
+
+            negocio.GuardarDetallesComanda(idComanda, Convert.ToInt32(lblNumeroMesa.Text), idPlatosSeleccionados);
+
+            // Limpiar la lista de idPlatosSeleccionados para el próximo pedido
+            idPlatosSeleccionados.Clear();
+
+            // Mostrar los detalles del pedido
             OrderDetailsPanel.Visible = true;
         }
 
-        //falta ver que el btn continuar funciona igual que si tocas la mesa
-        //hay que ver que cuando se vaya agregando la comida se haga un post en la BD y luego
-        //cada vez que ponga continuar me traiga esos datos guardados.
-        //entonces cuando le de a cerrar mesa me tiene que hacer el post final en el de pedidos
-        //y volver a poner la mesa en libre
+        private int GenerarIDComandaUnico(int mesaId)
+        {
+            MesasService negocio = new MesasService();
+            int idComanda = negocio.ObtenerUltimoIDComanda(mesaId) + 1;
+            return idComanda;
+        }
+
+        //ver que cuando ponga continuar me traiga los datos guardados de esa mesa
+        //Revisar que da error cuando agrego un plato
+
     }
 }

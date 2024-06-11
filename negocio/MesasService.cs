@@ -149,5 +149,62 @@ namespace negocio
             }
         }
 
+        public int ObtenerUltimoIDComanda(int mesaId)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            int ultimoIDComanda = 0;
+
+            try
+            {
+                datos.setearConsulta("SELECT TOP 1 IDCOMANDA FROM COMANDA WHERE IDMESA = @idMesa ORDER BY IDCOMANDA DESC");
+                datos.setearParametro("@idMesa", mesaId);
+                datos.ejecutarAccion();
+
+                if (datos.Lector.Read())
+                {
+                    ultimoIDComanda = Convert.ToInt32(datos.Lector["IDCOMANDA"]);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+            return ultimoIDComanda;
+        }
+
+        public void GuardarDetallesComanda(int idComanda, int idMesa, List<int> idPlatos)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("INSERT INTO COMANDA (IDCOMANDA, IDMESA, IDPLATO) VALUES (@idComanda, @idMesa, @idPlato)");
+
+                // Itera sobre la lista de idPlatos y guarda cada ID en la tabla COMANDA
+                foreach (int idPlato in idPlatos)
+                {
+                    datos.setearParametro("@idComanda", idComanda);
+                    datos.setearParametro("@idMesa", idMesa);
+                    datos.setearParametro("@idPlato", idPlato);
+                    datos.ejecutarAccion();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally 
+            { 
+                datos.cerrarConexion();
+            }
+        }
+
+       
+
     }
 }
