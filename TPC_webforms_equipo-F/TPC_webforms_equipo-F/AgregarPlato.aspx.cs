@@ -39,8 +39,16 @@ namespace TPC_webforms_equipo_F
                     return;
                 }
 
-                // Validacion: El plato debe tener nombre.
-                if (nombre == "")
+                // Validacion: El precio debe ser mayor a cero.
+                if (precio <= 0)
+                {
+                    lblError.Text = "El precio debe ser positivo.";
+                    lblError.Visible = true;
+                    return;
+                }
+
+                    // Validacion: El plato debe tener nombre.
+                    if (nombre == "")
                 {
                     lblError.Text = "No puede cargar un plato sin nombre.";
                     lblError.Visible = true;
