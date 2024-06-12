@@ -247,7 +247,7 @@ namespace negocio
                 datos.setearParametro("@idMesa", mesaId);
                 datos.setearParametro("@idPlato", idPlato);
                 datos.setearParametro("@idPedido", idPedido);
-                datos.ejecutarAccion();
+                datos.ejecutarLectura();
             }
             catch (Exception ex)
             {
@@ -260,14 +260,13 @@ namespace negocio
         }
         public int buscarUltimoIdpedido()
         {
-            int idPedido = 0;
             AccesoDatos datos = new AccesoDatos();
             int ultimoIDPedido = 0;
 
             try
             {
                 datos.setearConsulta("SELECT TOP 1 IDPEDIDO FROM PEDIDOS ORDER BY IDPEDIDO DESC");
-                datos.ejecutarAccion();
+                datos.ejecutarLectura();
 
                 if (datos.Lector != null && datos.Lector.Read())
                 {
@@ -283,7 +282,7 @@ namespace negocio
                 datos.cerrarConexion();
             }
 
-            return idPedido;
+            return ultimoIDPedido;
         }
 
         public void PedidoCompleto(int idPedidoActual)
@@ -305,13 +304,13 @@ namespace negocio
             }
         }
 
-        public void ActualizarPrecioEnPedido(float precioTotal, int idPedido)
+        public void ActualizarPrecioEnPedido(float total, int idPedido)
         {
             try
             {
                 AccesoDatos datos = new AccesoDatos();
-                datos.setearConsulta("UPDATE PEDIDOS SET TOTAL = @precioTotal where IDPEDIDO = @idPedido ");
-                datos.setearParametro("@TOTAL", precioTotal);
+                datos.setearConsulta("UPDATE PEDIDOS SET TOTAL = @TOTAL where IDPEDIDO = @idPedido ");
+                datos.setearParametro("@TOTAL", total);
                 datos.ejecutarAccion();
             }
             catch (Exception ex)

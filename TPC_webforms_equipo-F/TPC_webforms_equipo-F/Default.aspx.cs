@@ -13,7 +13,7 @@ namespace TPC_webforms_equipo_F
     public partial class _Default : System.Web.UI.Page
     {
         List<int> idPlatosSeleccionados = new List<int>(); //esta lista la vamos a usar para guardar los idPlato
-        float precioTotal = 0;
+        float total = 0;
         int idPedidoActual = 0;
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -22,7 +22,7 @@ namespace TPC_webforms_equipo_F
             {
                 CargarPlatos();
                 InicializarMesas();
-                precioTotal = 0;
+                total = 0;
                 idPedidoActual = 0;
             }
         }
@@ -134,11 +134,11 @@ namespace TPC_webforms_equipo_F
 
                     // Calcular y mostrar el precio total
                     float acuSuma = CalcularPrecioTotal();
-                    precioTotal += acuSuma;
+                    total += acuSuma;
                     
 
                     // Actualizar el lblPrecioTotal
-                    lblPrecioTotal.Text = precioTotal.ToString("0.00");
+                    lblPrecioTotal.Text = total.ToString("0.00");
                 }
 
             }
@@ -204,7 +204,7 @@ namespace TPC_webforms_equipo_F
         {
             int mesaId = Convert.ToInt32(lblNumeroMesa.Text);
             MesasService mesaService = new MesasService();
-            mesaService.ActualizarPrecioEnPedido(precioTotal,idPedidoActual);
+            mesaService.ActualizarPrecioEnPedido(total,idPedidoActual);
             mesaService.MarcarMesaComoNoOcupada(mesaId);
 
             Button button = TableOrder.FindControl("btnTable" + mesaId) as Button;
