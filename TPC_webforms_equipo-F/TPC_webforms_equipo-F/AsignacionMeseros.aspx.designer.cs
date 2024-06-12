@@ -15,6 +15,15 @@ namespace TPC_webforms_equipo_F
     {
 
         /// <summary>
+        /// Control ltAlert.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltAlert;
+
+        /// <summary>
         /// Control gvMesas.
         /// </summary>
         /// <remarks>
@@ -22,6 +31,7 @@ namespace TPC_webforms_equipo_F
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView gvMesas;
+
         /// <summary>
         /// Control btnGuardar.
         /// </summary>

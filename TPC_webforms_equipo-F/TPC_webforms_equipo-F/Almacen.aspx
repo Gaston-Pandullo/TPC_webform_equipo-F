@@ -30,17 +30,21 @@
         }
 
     </style>
-     <h1>Aca se administrará el stock de insumos</h1>
-     <asp:GridView ID="gvProductos" runat="server" AutoGenerateColumns="False" OnRowCommand="gvProductos_RowCommand">
+    <h1>STOCK</h1>
+    <asp:GridView ID="gvProductos" runat="server" AutoGenerateColumns="False" CssClass="table table-striped table-bordered" OnRowCommand="gvProductos_RowCommand">
         <Columns>
-            <%--<asp:BoundField DataField="Id" HeaderText="ID" ReadOnly="True" />--%>
-            <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
-            <asp:BoundField DataField="Descripcion" HeaderText="Descripcion" />
-            <asp:BoundField DataField="Precio" HeaderText="Precio" DataFormatString="{0:C}" />
-            <asp:BoundField DataField="Stock" HeaderText="Stock" />
-            <asp:BoundField DataField="Categoria" HeaderText="Categoria" />
-            <asp:ButtonField ButtonType="Button" CommandName="Incrementar" Text="+" />
-            <asp:ButtonField ButtonType="Button" CommandName="Decrementar" Text="-" />
+            <asp:BoundField DataField="Id" HeaderText="ID" ReadOnly="True" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-center" />
+            <asp:BoundField DataField="Nombre" HeaderText="Nombre" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-center" />
+            <asp:BoundField DataField="Descripcion" HeaderText="Descripcion" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-center" />
+            <asp:BoundField DataField="Precio" HeaderText="Precio" DataFormatString="{0:C}" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-center" />
+            <asp:BoundField DataField="Stock" HeaderText="Stock" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-center" />
+            <asp:BoundField DataField="Categoria" HeaderText="Categoria" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-center" />
+            <asp:TemplateField HeaderText="Acciones" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-center">
+                <ItemTemplate>
+                    <asp:Button ID="btnIncrementar" runat="server" CommandName="Incrementar" CommandArgument='<%# Eval("Id") %>' Text="+" CssClass="btn btn-success btn-sm" />
+                    <asp:Button ID="btnDecrementar" runat="server" CommandName="Decrementar" CommandArgument='<%# Eval("Id") %>' Text="-" CssClass="btn btn-danger btn-sm" />
+                </ItemTemplate>
+            </asp:TemplateField>
         </Columns>
     </asp:GridView>
 
