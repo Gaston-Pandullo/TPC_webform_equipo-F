@@ -17,6 +17,13 @@ namespace TPC_webforms_equipo_F
                 if (!Seguridad.sesionActiva(Session["usuario"]))
                     Response.Redirect("Login.aspx", false);
             }
+            if (Seguridad.sesionActiva(Session["usuario"]))
+            {
+                loginLink.Visible = false;
+            }else
+            {
+                loginLink.Visible = true;
+            }
         }
     }
 }
