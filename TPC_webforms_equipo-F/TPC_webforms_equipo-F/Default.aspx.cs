@@ -171,6 +171,7 @@ namespace TPC_webforms_equipo_F
             MesasService mesaService = new MesasService();
             mesaService.MarcarMesaComoOcupada(mesaId);
             idPedidoActual = CrearIDPedido();
+            mesaService.PedidoCompleto(idPedidoActual);
 
 
             Button button = TableOrder.FindControl("btnTable" + mesaId) as Button;
@@ -203,7 +204,7 @@ namespace TPC_webforms_equipo_F
         {
             int mesaId = Convert.ToInt32(lblNumeroMesa.Text);
             MesasService mesaService = new MesasService();
-            mesaService.PedidoCompleto(idPedidoActual, precioTotal);
+            mesaService.ActualizarPrecioEnPedido(precioTotal,idPedidoActual);
             mesaService.MarcarMesaComoNoOcupada(mesaId);
 
             Button button = TableOrder.FindControl("btnTable" + mesaId) as Button;

@@ -286,13 +286,31 @@ namespace negocio
             return idPedido;
         }
 
-        public void PedidoCompleto(int idPedidoActual, float precioTotal)
+        public void PedidoCompleto(int idPedidoActual)
         {
             try
             {
                 AccesoDatos datos = new AccesoDatos();
-                datos.setearConsulta("INSERT INTO PEDIDOS (IDPEDIDO, TOTAL) VALUES (@IDPEDIDO, @TOTAL)");
+                datos.setearConsulta("INSERT INTO PEDIDOS (IDPEDIDO) VALUES (@IDPEDIDO)");
                 datos.setearParametro("@IDPEDIDO", idPedidoActual);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void ActualizarPrecioEnPedido(float precioTotal, int idPedido)
+        {
+            try
+            {
+                AccesoDatos datos = new AccesoDatos();
+                datos.setearConsulta("UPDATE PEDIDOS SET TOTAL = @precioTotal where IDPEDIDO = @idPedido ");
                 datos.setearParametro("@TOTAL", precioTotal);
                 datos.ejecutarAccion();
             }

@@ -4,9 +4,7 @@
     <asp:Panel ID="TableOrder" runat="server">
         <h1>Mesas</h1>
         <p>Seleccione una mesa y agregue los platos que quiera!</p>
-        <p class="text-end">
-            <span class="fw-bold">2</span> mesas libres de <span class="fw-bold">5</span>
-        </p>
+
         <main>
             <asp:Button ID="btnTable1" runat="server" Text="1" CssClass="table-button" OnClick="TableButton_Click" CommandArgument="1" />
             <asp:Button ID="btnTable2" runat="server" Text="2" CssClass="table-button" OnClick="TableButton_Click" CommandArgument="2" />
