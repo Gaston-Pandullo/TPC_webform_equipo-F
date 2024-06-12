@@ -2,6 +2,7 @@
 using negocio;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -11,6 +12,9 @@ namespace TPC_webforms_equipo_F
 {
     public partial class _Default : System.Web.UI.Page
     {
+        List<int> idPlatosSeleccionados = new List<int>(); //esta lista la vamos a usar para guardar los idPlato
+        float precioTotal = 0;
+        int idPedidoActual = 0;
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -18,6 +22,8 @@ namespace TPC_webforms_equipo_F
             {
                 CargarPlatos();
                 InicializarMesas();
+                precioTotal = 0;
+                idPedidoActual = 0;
             }
         }
 
@@ -28,7 +34,7 @@ namespace TPC_webforms_equipo_F
 
             ddlPlatos.DataSource = plato;
             ddlPlatos.DataTextField = "nombre";
-            ddlPlatos.DataValueField = "nombre";
+            ddlPlatos.DataValueField = "id";
             ddlPlatos.DataBind();
 
             ddlPlatos.Items.Insert(0, new ListItem("-- Seleccione un Plato --", "0"));
@@ -64,36 +70,141 @@ namespace TPC_webforms_equipo_F
             if (mesaService.MesaEstaOcupada(Convert.ToInt32(tableId)))
             {
                 btnAbrirMesa.Visible = false;
-                btnContinuar.Visible = true;
                 OrderDetailsPanel.Visible = true;
+
+                // Cada vez que se abra una mesa Ocupada me va a traer los datos guardados
+                CargarDetallesComanda(Convert.ToInt32(tableId));
             }
             else
             {
                 btnAbrirMesa.Visible = true;
-                btnContinuar.Visible = false;
                 OrderDetailsPanel.Visible = false;
             }
         }
 
+        private void CargarDetallesComanda(int mesaId)
+        {
+            MesasService negocio = new MesasService();
+            int idComanda = negocio.ObtenerUltimoIDComanda(mesaId);
+            List<int> platos = negocio.ObtenerPlatosPorComanda(idComanda); //Devuelve el id_Plato
+
+            lblPlatos.Text = "";
+            foreach (int idPlato in platos)
+            {
+                Plato plato = negocio.ObtenerPlatoPorID(idPlato); // Método para obtener un plato por su ID
+                if (string.IsNullOrEmpty(lblPlatos.Text))
+                {
+                    lblPlatos.Text = plato.nombre;
+                }
+                else
+                {
+                    lblPlatos.Text += ", " + plato.nombre;
+                }
+            }
+            //cargamos fecha del sistema
+            DateTime fechaActual = DateTime.Now;
+            string fechaFormateada = fechaActual.ToString("dd/MM/yyyy");
+            lblFechaPedido.Text = fechaFormateada;
+
+            //falta ver tema precio
+        }
+
         protected void btnAgregarPlato_Click(object sender, EventArgs e)
         {
-            string platoSeleccionado = ddlPlatos.SelectedItem.Text;
-            PlatosService negocio = new PlatosService();
+            try
+            {
+                if (ddlPlatos.SelectedValue != "0")
+                {
+                    int idPlatoSeleccionado = Convert.ToInt32(ddlPlatos.SelectedValue);
+                    idPlatosSeleccionados.Add(idPlatoSeleccionado);
 
-            if (string.IsNullOrEmpty(lblPlatos.Text))
-            {
-                lblPlatos.Text = platoSeleccionado;
+                    // Aca se actualiza el Label para mostrar los platos 
+                    if (string.IsNullOrEmpty(lblPlatos.Text))
+                    {
+                        lblPlatos.Text = ddlPlatos.SelectedItem.Text;
+                    }
+                    else
+                    {
+                        lblPlatos.Text += ", " + ddlPlatos.SelectedItem.Text;
+                    }
+
+                    // Guardamos la comanda cada vez que agregamos un plato
+                    MesasService negocio = new MesasService();
+                    negocio.GuardarDetalleComanda(Convert.ToInt32(lblNumeroMesa.Text), idPlatoSeleccionado, idPedidoActual);
+
+                    // Calcular y mostrar el precio total
+                    float acuSuma = CalcularPrecioTotal();
+                    precioTotal += acuSuma;
+                    
+
+                    // Actualizar el lblPrecioTotal
+                    lblPrecioTotal.Text = precioTotal.ToString("0.00");
+                }
+
             }
-            else
+            catch (Exception ex)
             {
-                lblPlatos.Text += ", " + platoSeleccionado;
+                throw ex;
             }
+        }
+
+        private float CalcularPrecioTotal()
+        {
+            float precioTotal = 0;
+
+            foreach (int idPlato in idPlatosSeleccionados)
+            {
+
+                MesasService negocio = new MesasService();
+                Plato plato = negocio.ObtenerPlatoPorID(idPlato);
+
+                precioTotal += plato.precio;
+            }
+
+            return precioTotal;
+        }
+
+        protected void btnAbrirMesa_Click(object sender, EventArgs e)
+        {
+
+            int mesaId = Convert.ToInt32(lblNumeroMesa.Text);
+            MesasService mesaService = new MesasService();
+            mesaService.MarcarMesaComoOcupada(mesaId);
+            idPedidoActual = CrearIDPedido();
+            mesaService.PedidoCompleto(idPedidoActual);
+
+
+            Button button = TableOrder.FindControl("btnTable" + mesaId) as Button;
+            if (button != null)
+            {
+                button.CssClass = "table-button red";
+            }
+
+            // Obtener la fecha actual del sistema
+            DateTime fechaActual = DateTime.Now;
+            // Formatear la fecha como "dd/MM/yyyy"
+            string fechaFormateada = fechaActual.ToString("dd/MM/yyyy");
+
+            lblFechaPedido.Text = fechaFormateada;
+            lblPlatos.Text = "";
+
+            OrderDetailsPanel.Visible = true;
+            btnAbrirMesa.Visible = false;
+        }
+
+        protected int CrearIDPedido()
+        {
+            int idPedido;
+            MesasService negocio = new MesasService();
+            idPedido = negocio.buscarUltimoIdpedido();
+            return idPedido + 1;
         }
 
         protected void btnCerrarMesa_Click(object sender, EventArgs e)
         {
             int mesaId = Convert.ToInt32(lblNumeroMesa.Text);
             MesasService mesaService = new MesasService();
+            mesaService.ActualizarPrecioEnPedido(precioTotal,idPedidoActual);
             mesaService.MarcarMesaComoNoOcupada(mesaId);
 
             Button button = TableOrder.FindControl("btnTable" + mesaId) as Button;
@@ -105,42 +216,13 @@ namespace TPC_webforms_equipo_F
             lblFechaPedido.Text = "";
             lblNumeroMesa.Text = "";
             lblPlatos.Text = "";
+            idPedidoActual = 0;
 
             OrderDetailsPanel.Visible = false;
             btnAbrirMesa.Visible = false;
-            btnContinuar.Visible = false;
         }
 
-        protected void btnAbrirMesa_Click(object sender, EventArgs e)
-        {
-            int mesaId = Convert.ToInt32(lblNumeroMesa.Text);
-            MesasService mesaService = new MesasService();
-            mesaService.MarcarMesaComoOcupada(mesaId);
+        
 
-            Button button = TableOrder.FindControl("btnTable" + mesaId) as Button;
-            if (button != null)
-            {
-                button.CssClass = "table-button red";
-            }
-
-            string fechaPedido = DateTime.Now.ToString("dd/MM/yyyy");
-            lblFechaPedido.Text = fechaPedido;
-            lblPlatos.Text = "";
-
-            OrderDetailsPanel.Visible = true;
-            btnAbrirMesa.Visible = false;
-            btnContinuar.Visible = true;
-        }
-
-        protected void btnContinuar_Click(object sender, EventArgs e)
-        {
-            OrderDetailsPanel.Visible = true;
-        }
-
-        //falta ver que el btn continuar funciona igual que si tocas la mesa
-        //hay que ver que cuando se vaya agregando la comida se haga un post en la BD y luego
-        //cada vez que ponga continuar me traiga esos datos guardados.
-        //entonces cuando le de a cerrar mesa me tiene que hacer el post final en el de pedidos
-        //y volver a poner la mesa en libre
     }
 }

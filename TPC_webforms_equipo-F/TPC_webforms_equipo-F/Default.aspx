@@ -4,9 +4,7 @@
     <asp:Panel ID="TableOrder" runat="server">
         <h1>Mesas</h1>
         <p>Seleccione una mesa y agregue los platos que quiera!</p>
-        <p class="text-end">
-            <span class="fw-bold">2</span> mesas libres de <span class="fw-bold">5</span>
-        </p>
+
         <main>
             <asp:Button ID="btnTable1" runat="server" Text="1" CssClass="table-button" OnClick="TableButton_Click" CommandArgument="1" />
             <asp:Button ID="btnTable2" runat="server" Text="2" CssClass="table-button" OnClick="TableButton_Click" CommandArgument="2" />
@@ -17,7 +15,6 @@
     </asp:Panel>
 
     <asp:Button ID="btnAbrirMesa" runat="server" Text="Abrir Mesa" OnClick="btnAbrirMesa_Click" Visible="false" />
-    <asp:Button ID="btnContinuar" runat="server" Text="Continuar" OnClick="btnContinuar_Click" Visible="false" />
 
     <asp:Panel ID="OrderDetailsPanel" runat="server" Visible="false" style="padding:20px;">
         <h2>Detalles del Pedido</h2>

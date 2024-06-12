@@ -149,5 +149,179 @@ namespace negocio
             }
         }
 
+        public int ObtenerUltimoIDComanda(int mesaId)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            int ultimoIDComanda = 0;
+
+            try
+            {
+                datos.setearConsulta("SELECT TOP 1 IDCOMANDA FROM COMANDA WHERE IDMESA = @idMesa ORDER BY IDCOMANDA DESC");
+                datos.setearParametro("@idMesa", mesaId);
+                datos.ejecutarAccion();
+
+                if (datos.Lector != null && datos.Lector.Read())
+                {
+                    ultimoIDComanda = Convert.ToInt32(datos.Lector["IDCOMANDA"]);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+            return ultimoIDComanda;
+        }
+
+
+        public List<int> ObtenerPlatosPorComanda(int idComanda)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            List<int> platos = new List<int>();
+
+            try
+            {
+                datos.setearConsulta("SELECT IDPLATO FROM COMANDA WHERE IDCOMANDA = @idComanda");
+                datos.setearParametro("@idComanda", idComanda);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    platos.Add(datos.Lector.GetInt32(0));
+                }
+
+                return platos;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public Plato ObtenerPlatoPorID(int idPlato)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT * FROM PLATOS WHERE id_Plato = @idPlato");
+                datos.setearParametro("@idPlato", idPlato);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    Plato plato = new Plato
+                    {
+                        id = datos.Lector.GetInt32(0),
+                        nombre = datos.Lector.GetString(1),
+                        descripcion = datos.Lector.GetString(2),
+                        precio = datos.Lector.GetFloat(3),
+                    };
+                    return plato;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void GuardarDetalleComanda(int mesaId, int idPlato, int idPedido)
+        {
+            try
+            {
+                AccesoDatos datos = new AccesoDatos();
+                datos.setearConsulta("INSERT INTO Comanda (IDMesa, IDPlato, idPedido) VALUES (@idMesa, @idPlato, @idPedido)");
+                datos.setearParametro("@idMesa", mesaId);
+                datos.setearParametro("@idPlato", idPlato);
+                datos.setearParametro("@idPedido", idPedido);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public int buscarUltimoIdpedido()
+        {
+            int idPedido = 0;
+            AccesoDatos datos = new AccesoDatos();
+            int ultimoIDPedido = 0;
+
+            try
+            {
+                datos.setearConsulta("SELECT TOP 1 IDPEDIDO FROM PEDIDOS ORDER BY IDPEDIDO DESC");
+                datos.ejecutarAccion();
+
+                if (datos.Lector != null && datos.Lector.Read())
+                {
+                    ultimoIDPedido = Convert.ToInt32(datos.Lector["IDPEDIDO"]);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+            return idPedido;
+        }
+
+        public void PedidoCompleto(int idPedidoActual)
+        {
+            try
+            {
+                AccesoDatos datos = new AccesoDatos();
+                datos.setearConsulta("INSERT INTO PEDIDOS (IDPEDIDO) VALUES (@IDPEDIDO)");
+                datos.setearParametro("@IDPEDIDO", idPedidoActual);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void ActualizarPrecioEnPedido(float precioTotal, int idPedido)
+        {
+            try
+            {
+                AccesoDatos datos = new AccesoDatos();
+                datos.setearConsulta("UPDATE PEDIDOS SET TOTAL = @precioTotal where IDPEDIDO = @idPedido ");
+                datos.setearParametro("@TOTAL", precioTotal);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }

@@ -66,6 +66,50 @@ namespace negocio
             }
         }
 
+        public void modificarPlato(Plato plato)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("UPDATE PLATOS SET nombre=@NOMBRE,descripcion=@descripcion,precio=@precio,stock=@stock where id_Plato=@id_plato");
+                datos.setearParametro("@NOMBRE", plato.nombre);
+                datos.setearParametro("@descripcion", plato.descripcion);
+                datos.setearParametro("@precio", plato.precio);
+                datos.setearParametro("@stock", plato.stock);
+                datos.setearParametro("@id_plato", plato.id);
+                
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void eliminarPlato(int id)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("DELETE FROM PLATOS where id_Plato=@id");
+                datos.setearParametro("@id", id);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
 
     }
 
