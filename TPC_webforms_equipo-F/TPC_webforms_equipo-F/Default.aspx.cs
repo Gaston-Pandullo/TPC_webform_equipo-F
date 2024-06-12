@@ -14,6 +14,7 @@ namespace TPC_webforms_equipo_F
     {
         List<int> idPlatosSeleccionados = new List<int>(); //esta lista la vamos a usar para guardar los idPlato
         float precioTotal = 0;
+        int idPedidoActual = 0;
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -21,7 +22,8 @@ namespace TPC_webforms_equipo_F
             {
                 CargarPlatos();
                 InicializarMesas();
-                precioTotal = 0; 
+                precioTotal = 0;
+                idPedidoActual = 0;
             }
         }
 
@@ -128,7 +130,7 @@ namespace TPC_webforms_equipo_F
 
                     // Guardamos la comanda cada vez que agregamos un plato
                     MesasService negocio = new MesasService();
-                    negocio.GuardarDetalleComanda(Convert.ToInt32(lblNumeroMesa.Text), idPlatoSeleccionado);
+                    negocio.GuardarDetalleComanda(Convert.ToInt32(lblNumeroMesa.Text), idPlatoSeleccionado, idPedidoActual);
 
                     // Calcular y mostrar el precio total
                     float acuSuma = CalcularPrecioTotal();
@@ -164,9 +166,12 @@ namespace TPC_webforms_equipo_F
 
         protected void btnAbrirMesa_Click(object sender, EventArgs e)
         {
+
             int mesaId = Convert.ToInt32(lblNumeroMesa.Text);
             MesasService mesaService = new MesasService();
             mesaService.MarcarMesaComoOcupada(mesaId);
+            idPedidoActual = CrearIDPedido();
+
 
             Button button = TableOrder.FindControl("btnTable" + mesaId) as Button;
             if (button != null)
@@ -186,10 +191,19 @@ namespace TPC_webforms_equipo_F
             btnAbrirMesa.Visible = false;
         }
 
+        protected int CrearIDPedido()
+        {
+            int idPedido;
+            MesasService negocio = new MesasService();
+            idPedido = negocio.buscarUltimoIdpedido();
+            return idPedido + 1;
+        }
+
         protected void btnCerrarMesa_Click(object sender, EventArgs e)
         {
             int mesaId = Convert.ToInt32(lblNumeroMesa.Text);
             MesasService mesaService = new MesasService();
+            mesaService.PedidoCompleto(idPedidoActual, precioTotal);
             mesaService.MarcarMesaComoNoOcupada(mesaId);
 
             Button button = TableOrder.FindControl("btnTable" + mesaId) as Button;
@@ -201,11 +215,10 @@ namespace TPC_webforms_equipo_F
             lblFechaPedido.Text = "";
             lblNumeroMesa.Text = "";
             lblPlatos.Text = "";
+            idPedidoActual = 0;
 
             OrderDetailsPanel.Visible = false;
             btnAbrirMesa.Visible = false;
-
-            //falta desarrollar el metodo para hacer el post en la Tabla de Pedidos cuando se cierra la mesa
         }
 
         
