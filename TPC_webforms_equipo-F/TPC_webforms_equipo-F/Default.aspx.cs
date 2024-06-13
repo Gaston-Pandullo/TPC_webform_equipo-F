@@ -118,6 +118,7 @@ namespace TPC_webforms_equipo_F
                     int idPlatoSeleccionado = Convert.ToInt32(ddlPlatos.SelectedValue);
                     idPlatosSeleccionados.Add(idPlatoSeleccionado);
 
+
                     // Aca se actualiza el Label para mostrar los platos 
                     if (string.IsNullOrEmpty(lblPlatos.Text))
                     {
@@ -130,6 +131,8 @@ namespace TPC_webforms_equipo_F
 
                     // Guardamos la comanda cada vez que agregamos un plato
                     MesasService negocio = new MesasService();
+                    //buscar el idpedido
+                    idPedidoActual = negocio.buscarUltimoIdpedidoxMesa(Convert.ToInt32(lblNumeroMesa.Text));
                     negocio.GuardarDetalleComanda(Convert.ToInt32(lblNumeroMesa.Text), idPlatoSeleccionado, idPedidoActual);
 
                     // Calcular y mostrar el precio total

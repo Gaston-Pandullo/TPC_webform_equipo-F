@@ -323,5 +323,34 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
+
+        public int buscarUltimoIdpedidoxMesa(int idMesa)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            int ultimoIDPedido = 0;
+
+            try
+            {
+                datos.setearConsulta("SELECT TOP 1 IDPEDIDO FROM PEDIDOS WHERE IDMESA = @IDMESA ORDER BY IDPEDIDO DESC");
+                datos.setearParametro("@IDPEDIDO",ultimoIDPedido);
+                datos.setearParametro("@IDMESA",idMesa);
+                datos.ejecutarLectura();
+
+                if (datos.Lector != null && datos.Lector.Read())
+                {
+                    ultimoIDPedido = Convert.ToInt32(datos.Lector["IDPEDIDO"]);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+            return ultimoIDPedido;
+        }
     }
 }
