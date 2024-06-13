@@ -8,13 +8,18 @@
          <div class="col-md-6 offset-md-3">
              <asp:Panel ID="pnlModificarProducto" runat="server" CssClass="form-group">
 
-                 <%-- Producto a modificar --%>
-                 <asp:Label ID="lblProducto" runat="server" Text="Producto:"></asp:Label>
+                 <%-- Tipo de producto --%>
+                 <asp:Label ID="lblTipoProducto" runat="server" Text="Tipo de Producto:"></asp:Label>
+                 <asp:DropDownList ID="ddlTipoProducto" runat="server" CssClass="form-select" AutoPostBack="True" OnSelectedIndexChanged="ddlTipoProducto_SelectedIndexChanged">
+                 </asp:DropDownList>
+
+                 <%-- Producto --%>
+                 <asp:Label ID="lblProducto" runat="server" Text="Producto:" AssociatedControlID="ddlProducto" CssClass="form-label mt-3"></asp:Label>
                  <asp:DropDownList ID="ddlProducto" runat="server" CssClass="form-select" AutoPostBack="True" OnSelectedIndexChanged="ddlProducto_SelectedIndexChanged">
                  </asp:DropDownList>
 
                  <%-- Nombre del producto --%>
-                 <asp:Label ID="lblNombre" runat="server" Text="Nombre:" AssociatedControlID="txtNombre" CssClass="form-label"></asp:Label>
+                 <asp:Label ID="lblNombre" runat="server" Text="Nombre:" AssociatedControlID="txtNombre" CssClass="form-label mt-3"></asp:Label>
                  <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control"></asp:TextBox>
 
                  <%-- Descripción del producto --%>

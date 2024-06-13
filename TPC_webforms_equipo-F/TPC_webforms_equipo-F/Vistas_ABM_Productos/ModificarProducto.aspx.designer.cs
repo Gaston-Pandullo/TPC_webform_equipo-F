@@ -24,6 +24,24 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
         protected global::System.Web.UI.WebControls.Panel pnlModificarProducto;
 
         /// <summary>
+        /// Control lblTipoProducto.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblTipoProducto;
+
+        /// <summary>
+        /// Control ddlTipoProducto.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlTipoProducto;
+
+        /// <summary>
         /// Control lblProducto.
         /// </summary>
         /// <remarks>
