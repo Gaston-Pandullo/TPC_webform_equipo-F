@@ -1,23 +1,32 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="AgregarPlato.aspx.cs" Inherits="TPC_webforms_equipo_F.AgregarPlato" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <h1>Formulario para agregar platos al menú</h1>
+    <h1>Formulario para agregar un producto al menú</h1>
+    
     <div class="container">
         <div class="row">
             <div class="col-md-6 offset-md-3">
                 <asp:Panel ID="pnlAgregarPlato" runat="server" CssClass="form-group">
-                    <%-- Nombre del plato --%>
+                    
+                     <%-- Tipo de producto --%>
+                    <asp:Label ID="lblTipoProducto" runat="server" Text="Tipo:"></asp:Label>
+                    <asp:DropDownList ID="ddlTipo" runat="server" CssClass="form-select">
+                        <asp:ListItem Value="C">Plato (C)</asp:ListItem>
+                        <asp:ListItem Value="B">Bebida (B)</asp:ListItem>
+                    </asp:DropDownList>
+
+                    <%-- Nombre del producto --%>
                     <asp:Label ID="lblNombre" runat="server" Text="Nombre:" AssociatedControlID="txtNombre" CssClass="form-label"></asp:Label>
                     <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control"></asp:TextBox>
                     
-                    <%-- Descripción del plato --%>
+                    <%-- Descripción del producto --%>
                     <asp:Label ID="lblDescripcion" runat="server" Text="Descripción:" AssociatedControlID="txtDescripcion" CssClass="form-label mt-3"></asp:Label>
                     <asp:TextBox ID="txtDescripcion" runat="server" CssClass="form-control"></asp:TextBox>
 
-                    <%-- Precio del plato --%>
+                    <%-- Precio del producto --%>
                     <asp:Label ID="lblPrecio" runat="server" Text="Precio:" AssociatedControlID="txtPrecio" CssClass="form-label mt-3"></asp:Label>
                     <asp:TextBox ID="txtPrecio" runat="server" CssClass="form-control"></asp:TextBox>
 
-                    <%-- Stock del plato --%>
+                    <%-- Stock del producto --%>
                     <asp:Label ID="lblStock" runat="server" Text="Stock:" AssociatedControlID="txtStock" CssClass="form-label mt-3"></asp:Label>
                     <asp:TextBox ID="txtStock" runat="server" CssClass="form-control"></asp:TextBox>
 

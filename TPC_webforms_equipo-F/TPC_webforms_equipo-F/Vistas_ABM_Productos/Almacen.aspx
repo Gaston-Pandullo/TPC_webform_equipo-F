@@ -49,24 +49,22 @@
     </asp:GridView>
 
      <div class="row mt-3">
-        <asp:Button ID="btnAgregarItem" runat="server" Text="Agregar mercaderia" CssClass="btn btn-primary" OnClientClick="openModal(); return false;" />
+        <asp:Button ID="btnAgregarItem" runat="server" Text="Administrar productos" CssClass="btn btn-primary" OnClientClick="openModal(); return false;" />
     </div>
 
     <div class="modal fade" id="agregarItemModal" tabindex="-1" aria-labelledby="agregarItemModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="agregarItemModalLabel">¿Qué desea agregar?</h5>
+                    <h5 class="modal-title" id="agregarItemModalLabel">¿Qué desea hacer?</h5>
                     
                     <asp:Button ID="btnCerrarVentana" CssClass="btn-close" runat="server" type="button" data-bs-dismiss="modal"/>
                 </div>
                 <div class="modal-body">
                     <div class="btn-container">
-                        
-                        <asp:Button ID="btnPlato" type="button" CssClass="btn btn-primary" runat="server" Text="Plato" PostBackUrl="~/AgregarPlato.aspx" />
-                        
-                        <asp:Button ID="btnBebida" type="button"  CssClass="btn btn-primary" runat="server" Text="Bebida" />
-
+                        <asp:Button ID="btnAgregar" type="button" CssClass="btn btn-secondary" runat="server" Text="Agregar" PostBackUrl="~/Vistas_ABM_Productos/AgregarPlato.aspx" />
+                        <asp:Button ID="btnModificar" type="button" CssClass="btn btn-secondary" runat="server" Text="Modificar" PostBackUrl="~/Vistas_ABM_Productos/ModificarProducto.aspx" />
+                        <asp:Button ID="btnEliminar" type="button" CssClass="btn btn-danger" runat="server" Text="Eliminar" PostBackUrl="~/Vistas_ABM_Productos/EliminarProducto.aspx" />
                     </div>
                 </div>
             </div>

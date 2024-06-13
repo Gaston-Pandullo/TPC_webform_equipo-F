@@ -7,21 +7,39 @@
 // </generado automáticamente>
 //------------------------------------------------------------------------------
 
-namespace TPC_webforms_equipo_F
+namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
 {
 
 
-    public partial class AgregarPlato
+    public partial class ModificarProducto
     {
 
         /// <summary>
-        /// Control pnlAgregarPlato.
+        /// Control pnlModificarProducto.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlAgregarPlato;
+        protected global::System.Web.UI.WebControls.Panel pnlModificarProducto;
+
+        /// <summary>
+        /// Control lblProducto.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblProducto;
+
+        /// <summary>
+        /// Control ddlProducto.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlProducto;
 
         /// <summary>
         /// Control lblNombre.
