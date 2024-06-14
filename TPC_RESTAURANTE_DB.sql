@@ -1,4 +1,4 @@
-use master
+ï»¿use master
 go
 create database TPC_RESTAURANTE_DB
 drop database TPC_RESTAURANTE_DB
@@ -101,8 +101,8 @@ GO
 -- Insertar datos en la tabla PLATOS
 INSERT INTO PLATOS (nombre, descripcion, precio, preparable, estado, categoria) VALUES
 ('Spaghetti Carbonara', 'Pasta italiana con salsa de crema y tocino', 12.50, 1, 1, 'C'),
-('Ensalada César', 'Ensalada con lechuga, croutons y aderezo César', 8.00, 1, 1, 'C'),
-('Hamburguesa Clásica', 'Hamburguesa de carne con queso, lechuga y tomate', 10.00, 1, 1, 'C');
+('Ensalada Cï¿½sar', 'Ensalada con lechuga, croutons y aderezo Cï¿½sar', 8.00, 1, 1, 'C'),
+('Hamburguesa Clï¿½sica', 'Hamburguesa de carne con queso, lechuga y tomate', 10.00, 1, 1, 'C');
 GO
 
 -- Insertar datos en la tabla BEBIDAS
@@ -131,11 +131,11 @@ INSERT INTO INGREDIENTES_X_PLATOS (id_Ingrediente, id_Plato) VALUES
 (1, 1), -- Pasta
 (2, 1), -- Tocino
 (3, 1), -- Crema
--- Ingredientes para Ensalada César (id_Plato = 2)
+-- Ingredientes para Ensalada Cï¿½sar (id_Plato = 2)
 (4, 2), -- Lechuga
 (5, 2), -- Croutons
 (6, 2), -- Queso
--- Ingredientes para Hamburguesa Clásica (id_Plato = 3)
+-- Ingredientes para Hamburguesa Clï¿½sica (id_Plato = 3)
 (7, 3), -- Pan de Hamburguesa
 (6, 3), -- Queso
 (8, 3), -- Tomate
@@ -195,14 +195,6 @@ insert into MESA(MESERO,OCUPADA) values(2,0)
 select * from MESERO m
 inner join USERS as u on u.id = m.IDUSUARIO
 
-
-CREATE TABLE COMANDA(
-IDCOMANDA INT IDENTITY PRIMARY KEY,
-IDMESA INT FOREIGN KEY REFERENCES MESA(IDMESA),
-IDPLATO INT FOREIGN KEY REFERENCES PLATOS(id_Plato),
-IDPEDIDO INT FOREIGN KEY REFERENCES PEDIDOS(IDPEDIDO)
-)
-
 CREATE TABLE PEDIDOS(
 IDPEDIDO INT IDENTITY PRIMARY KEY,
 IDCOMANDA INT FOREIGN KEY REFERENCES COMANDA(IDCOMANDA),
@@ -210,7 +202,12 @@ FECHA DATE NOT NULL DEFAULT GETDATE(),
 TOTAL MONEY 
 )
 
-
+CREATE TABLE COMANDA(
+IDCOMANDA INT IDENTITY PRIMARY KEY,
+IDMESA INT FOREIGN KEY REFERENCES MESA(IDMESA),
+IDPLATO INT FOREIGN KEY REFERENCES PLATOS(id_Plato),
+IDPEDIDO INT FOREIGN KEY REFERENCES PEDIDOS(IDPEDIDO)
+)
 
 ALTER TABLE PEDIDOS
 ADD FECHAPEDIDO DATE NOT NULL DEFAULT GETDATE();

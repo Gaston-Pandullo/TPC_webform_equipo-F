@@ -11,7 +11,7 @@ namespace negocio
 {
     public class PlatosService
     {
-        AccesoDatos datos = new AccesoDatos();
+        private AccesoDatos datos = new AccesoDatos();
         public List<Plato> getAll()
         {
             //Lista de platos
@@ -77,7 +77,7 @@ namespace negocio
                 datos.setearParametro("@precio", plato.precio);
                 datos.setearParametro("@stock", plato.stock);
                 datos.setearParametro("@id_plato", plato.id);
-                
+
 
                 datos.ejecutarAccion();
             }
@@ -110,7 +110,25 @@ namespace negocio
             }
         }
 
+        public void updateStock(int id, int stock, bool incrementar)
+        {
+            try
+            {
+                datos.setearConsulta("UPDATE PLATOS SET stock = @stock WHERE id_Plato = @id");
+                datos.setearParametro("@id", id);
+                datos.setearParametro("@stock", incrementar ? stock + 1 : stock - 1);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
 
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 
 }

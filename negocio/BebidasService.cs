@@ -9,7 +9,7 @@ namespace negocio
 {
     public class BebidasService
     {
-        AccesoDatos datos = new AccesoDatos();
+        private AccesoDatos datos = new AccesoDatos();
         public List<Bebidas> getAll()
         {
             List<Bebidas> bebidas = new List<Bebidas>();
@@ -31,6 +31,25 @@ namespace negocio
                     bebidas.Add(aux);
                 }
                 return bebidas;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public void updateStock(int id, int stock, bool incrementar)
+        {
+            try
+            {
+                datos.limpiarParametros();
+                datos.setearConsulta("UPDATE BEBIDAS SET stock = @stock WHERE id_Bebida = @id");
+                datos.setearParametro("@id", id);
+                datos.setearParametro("@stock", incrementar ? stock + 1 : stock - 1);
+                datos.ejecutarAccion();
             }
             catch (Exception ex)
             {

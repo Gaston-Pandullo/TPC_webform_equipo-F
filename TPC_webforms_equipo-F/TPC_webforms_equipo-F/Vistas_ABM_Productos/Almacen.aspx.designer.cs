@@ -21,7 +21,7 @@ namespace TPC_webforms_equipo_F
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvProductos;
+        protected global::System.Web.UI.WebControls.Repeater gvProductos;
 
         /// <summary>
         /// Control btnAgregarItem.
