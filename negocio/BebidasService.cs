@@ -106,6 +106,24 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
+        public void eliminarBebida(int id)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("DELETE FROM BEBIDAS where id_Bebida=@id");
+                datos.setearParametro("@id", id);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 
 }
