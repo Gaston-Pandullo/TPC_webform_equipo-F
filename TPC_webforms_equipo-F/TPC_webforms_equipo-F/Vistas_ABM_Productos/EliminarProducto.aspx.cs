@@ -142,7 +142,7 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
                 }
                 else if (tipoProductoId == 2)
                 {
-                    //bebidaNegocio.eliminarBebida(productoId);
+                    bebidaNegocio.eliminarBebida(productoId);
                 }
 
                 LimpiarCampos();

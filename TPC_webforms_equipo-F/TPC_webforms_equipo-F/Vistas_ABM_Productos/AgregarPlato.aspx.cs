@@ -12,6 +12,7 @@ namespace TPC_webforms_equipo_F
     public partial class AgregarPlato : System.Web.UI.Page
     {
         PlatosService negocio = new PlatosService();
+        BebidasService negocioBebidas = new BebidasService();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -93,8 +94,66 @@ namespace TPC_webforms_equipo_F
                 break;
 
                 case 'B':
+                    Bebidas bebidaNueva = new Bebidas();
 
-                break;
+                    string nombreBebida = txtNombre.Text;
+                    string descripcionBebida = txtDescripcion.Text;
+                    float precioBebida;
+                    int stockBebida;
+
+
+                    try
+                    {
+                        if (float.TryParse(txtPrecio.Text, out precioBebida) && int.TryParse(txtStock.Text, out stockBebida))
+                        {
+                            // Validacion: El stock no puede ser cero.
+                            if (stockBebida < 0)
+                            {
+                                lblError.Text = "El stock no puede ser negativo.";
+                                lblError.Visible = true;
+                                return;
+                            }
+
+                            // Validacion: El precio debe ser mayor a cero.
+                            if (precioBebida <= 0)
+                            {
+                                lblError.Text = "El precio debe ser positivo.";
+                                lblError.Visible = true;
+                                return;
+                            }
+
+                            // Validacion: El plato debe tener nombre.
+                            if (string.IsNullOrWhiteSpace(nombreBebida))
+                            {
+                                lblError.Text = "No puede cargar un plato sin nombre.";
+                                lblError.Visible = true;
+                                return;
+                            }
+
+
+                            bebidaNueva.nombre = nombreBebida;
+                            bebidaNueva.descripcion = descripcionBebida;
+                            bebidaNueva.precio = precioBebida;
+                            bebidaNueva.stock = stockBebida;
+
+
+                            negocioBebidas.agregarBebida(bebidaNueva);
+                        }
+                        else
+                        {
+                            // Validacion: Valores inválidos en precios y stock.
+                            lblError.Text = "Por favor, ingrese valores válidos para el precio y el stock.";
+                            lblError.Visible = true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                        // Mensaje de error no previsto.
+                        lblError.Text = "Error al guardar el plato. Por favor, intente nuevamente." + ex.Message;
+                        lblError.Visible = true;
+                    }
+                    break;
 
                 default:
                     
