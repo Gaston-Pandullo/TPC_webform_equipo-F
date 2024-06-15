@@ -167,9 +167,6 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
                         }
                         else if (tipoProducto == 'B')
                         {
-                            /*
-                            DESCOMENTAR CUANDO CREE LA FUNCION MODIFICAR BEBIDA
-                            
                             Bebidas bebida = new Bebidas
                             {
                                 id = productoId,
@@ -179,8 +176,7 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
                                 stock = stock
                             };
 
-                            bebidasService.modificarBebida(bebida);
-                            */
+                            bebidaNegocio.modificarBebida(bebida);
                         }
 
                         Response.Redirect("Almacen.aspx");

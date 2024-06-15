@@ -82,6 +82,30 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
+        public void modificarBebida(Bebidas bebida)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("UPDATE BEBIDAS SET nombre=@NOMBRE,descripcion=@descripcion,precio=@precio,stock=@stock where id_Bebida=@id_bebida");
+                datos.setearParametro("@NOMBRE", bebida.nombre);
+                datos.setearParametro("@descripcion", bebida.descripcion);
+                datos.setearParametro("@precio", bebida.precio);
+                datos.setearParametro("@stock", bebida.stock);
+                datos.setearParametro("@id_bebida", bebida.id);
+
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 
 }
