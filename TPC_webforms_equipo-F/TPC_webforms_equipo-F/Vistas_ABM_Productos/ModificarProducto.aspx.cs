@@ -25,20 +25,20 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
         private void CargarTiposProducto()
         {
             ddlTipoProducto.Items.Insert(0, new ListItem("Seleccione un tipo de producto", "0"));
-            ddlTipoProducto.Items.Insert(1, new ListItem("Plato", "1"));
-            ddlTipoProducto.Items.Insert(2, new ListItem("Bebida", "2"));
+            ddlTipoProducto.Items.Insert(1, new ListItem("Plato", "C"));
+            ddlTipoProducto.Items.Insert(2, new ListItem("Bebida", "B"));
         }
 
         protected void ddlTipoProducto_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Tipo de producto se maneja por numero 1: Plato y 2: Bebida.
-            int tipoProducto = int.Parse(ddlTipoProducto.SelectedValue);
+            // Tipo de producto se maneja por C: Plato y B: Bebida.
+            char tipoProducto = char.Parse(ddlTipoProducto.SelectedValue);
 
-            if (tipoProducto == 1)
+            if (tipoProducto == 'C')
             {
                 CargarPlatos();
             }
-            else if (tipoProducto == 2)
+            else if (tipoProducto == 'B')
             {
                 CargarBebidas();
             }
@@ -88,10 +88,10 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
             
             if (productoId > 0)
             {
-                int tipoProductoId = int.Parse(ddlTipoProducto.SelectedValue);
+                char tipoProducto = char.Parse(ddlTipoProducto.SelectedValue);
 
-                // Si se elige "Plato" (1) se cargan los platos y si es Bebida (2), las bebidas.
-                if (tipoProductoId == 1)
+                // Si se elige "Plato" (C) se cargan los platos y si es Bebida (B), las bebidas.
+                if (tipoProducto == 'C')
                 {
                     Plato plato = platoNegocio.getAll().Find(p => p.id == productoId);
                     if (plato != null)
@@ -99,7 +99,7 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
                         CargarDetallesProducto(plato);
                     }
                 }
-                else if (tipoProductoId == 2)
+                else if (tipoProducto == 'B')
                 {
                     Bebidas bebida = bebidaNegocio.getAll().Find(b => b.id == productoId);
                     if (bebida != null)
@@ -120,7 +120,7 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
             if (productoId > 0)
             {
                 // Se cargan variables con los listados modificados (o no modificados)
-                int tipoProductoId = int.Parse(ddlTipoProducto.SelectedValue);
+                char tipoProducto = char.Parse(ddlTipoProducto.SelectedValue);
                 string nombre = txtNombre.Text;
                 string descripcion = txtDescripcion.Text;
                 float precio;
@@ -153,7 +153,7 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
                         }
 
                         // Segun la opcion elegida al principio, se llenan las variables de los objetos Plato o Bebida
-                        if (tipoProductoId == 1)
+                        if (tipoProducto == 'C')
                         {
                             Plato plato = new Plato
                             {
@@ -165,7 +165,7 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
                             };
                             platoNegocio.modificarPlato(plato);
                         }
-                        else if (tipoProductoId == 2)
+                        else if (tipoProducto == 'B')
                         {
                             /*
                             DESCOMENTAR CUANDO CREE LA FUNCION MODIFICAR BEBIDA

@@ -60,6 +60,28 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
+        public void agregarBebida(Bebidas bebida)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("INSERT INTO BEBIDAS (nombre,descripcion,precio,stock) VALUES (@nombre,@descripcion,@precio,@stock)");
+                datos.setearParametro("@nombre", bebida.nombre);
+                datos.setearParametro("@descripcion", bebida.descripcion);
+                datos.setearParametro("@precio", bebida.precio);
+                datos.setearParametro("@stock", bebida.stock);
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 
 }
