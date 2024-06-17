@@ -51,13 +51,13 @@ namespace TPC_webforms_equipo_F
         protected global::System.Web.UI.WebControls.TextBox txtName;
 
         /// <summary>
-        /// Control txtLastName.
+        /// Control txtLastname.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtLastName;
+        protected global::System.Web.UI.WebControls.TextBox txtLastname;
 
         /// <summary>
         /// Control ddlAdmin.

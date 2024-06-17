@@ -124,6 +124,41 @@ namespace negocio
             }
         }
 
+        public Usuario ObtenerUsuarioPorId(int idUsuario)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            Usuario usuario = new Usuario();
+            usuario = null;
+
+            try
+            {
+                datos.setearConsulta("SELECT id, Username, Password, Name, Lastname, admin FROM USERS WHERE id = @id");
+                datos.setearParametro("@id", idUsuario);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    usuario = new Usuario();
+                    usuario.id= Convert.ToInt32(datos.Lector["id"]);
+                    usuario.User = datos.Lector["Username"].ToString();
+                    usuario.Pass = datos.Lector["Password"].ToString();
+                    usuario.Name = datos.Lector["Name"].ToString();
+                    usuario.Lastname = datos.Lector["Lastname"].ToString();
+                    usuario.TipoUsuario = Convert.ToByte(datos.Lector["admin"]);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Manejar excepciones según tus necesidades
+                throw new Exception("Error al obtener el usuario por ID", ex);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+            return usuario;
+        }
 
     }
 }

@@ -11,7 +11,7 @@
     </div>
     <div class="form-group">
         <label for="txtPassword">Contraseña</label>
-        <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control" required="required" TextMode="Password"></asp:TextBox>
+        <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control" TextMode="Password"></asp:TextBox>
     </div>
     <div class="form-group">
         <label for="txtName">Nombre</label>
@@ -19,6 +19,7 @@
     </div>
     <div class="form-group">
         <label for="txtLastname">Apellido</label>
+        <asp:TextBox ID="txtLastname" runat="server" CssClass="form-control"></asp:TextBox>
     </div>
     <div class="form-group">
         <label for="chkAdmin">Tipo de Usuario</label>
@@ -28,7 +29,7 @@
 </asp:DropDownList>
     </div>
     <asp:Button ID="btnGuardar" runat="server" Text="Guardar" CssClass="btn btn-primary" />
-    <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" CssClass="btn btn-secondary" />
+    <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" CssClass="btn btn-secondary" OnClick="btnCancelar_Click" />
 
 </asp:Content>
 
