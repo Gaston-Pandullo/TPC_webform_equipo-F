@@ -73,6 +73,19 @@ namespace negocio
 
             try
             {
+                // Eliminar filas de la tabla MESA que referencian al usuario a través de MESERO
+                datos.setearConsulta("DELETE FROM MESA WHERE MESERO IN (SELECT IDMESERO FROM MESERO WHERE IDUSUARIO = @idUsuario)");
+                datos.setearParametro("@idUsuario", idUsuario);
+                datos.ejecutarAccion();
+                datos.limpiarParametros();
+
+                // Eliminar filas de la tabla MESERO que referencian al usuario
+                datos.setearConsulta("DELETE FROM MESERO WHERE IDUSUARIO = @idUsuario");
+                datos.setearParametro("@idUsuario", idUsuario);
+                datos.ejecutarAccion();
+                datos.limpiarParametros();
+
+                // Eliminar el usuario de la tabla USERS
                 datos.setearConsulta("DELETE FROM USERS WHERE id = @id");
                 datos.setearParametro("@id", idUsuario);
                 datos.ejecutarAccion();
