@@ -160,5 +160,31 @@ namespace negocio
             return usuario;
         }
 
+        public void ModificarUsuario(Usuario usuario)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("UPDATE USERS SET Username = @Username, Password = @Password, Name = @Name, Lastname = @Lastname, admin = @Admin WHERE id = @id");
+                datos.setearParametro("@Username", usuario.User);
+                datos.setearParametro("@Password", usuario.Pass);
+                datos.setearParametro("@Name", usuario.Name);
+                datos.setearParametro("@Lastname", usuario.Lastname);
+                datos.setearParametro("@Admin", usuario.TipoUsuario);
+                datos.setearParametro("@id", usuario.id);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al actualizar el usuario", ex);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+
     }
 }

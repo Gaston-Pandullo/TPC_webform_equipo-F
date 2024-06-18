@@ -46,5 +46,37 @@ namespace TPC_webforms_equipo_F
         {
             Response.Redirect("Administrador.aspx");
         }
+
+        protected void btnGuardar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Obtener el ID de usuario desde la consulta URL
+                if (!string.IsNullOrEmpty(Request.QueryString["id"]))
+                {
+                    int idUsuario = Convert.ToInt32(Request.QueryString["id"]);
+
+                    // Crear un objeto Usuario con los datos del formulario
+                    Usuario usuario = new Usuario();
+                    usuario.id = idUsuario;
+                    usuario.User = txtUsername.Text.Trim();
+                    usuario.Pass = txtPassword.Text.Trim();
+                    usuario.Name = txtName.Text.Trim();
+                    usuario.Lastname = txtLastname.Text.Trim();
+                    usuario.TipoUsuario = Convert.ToByte(ddlAdmin.SelectedValue);
+
+                    // Llamar al método para guardar o actualizar el usuario
+                    UsuarioNegocio negocio = new UsuarioNegocio();
+                    negocio.ModificarUsuario(usuario);
+
+                    // Redireccionar a alguna página de confirmación o a la lista de usuarios
+                    Response.Redirect("Administrador.aspx");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

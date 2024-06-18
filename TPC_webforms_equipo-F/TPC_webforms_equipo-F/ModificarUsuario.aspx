@@ -28,7 +28,7 @@
             <asp:ListItem Text="Administrador" Value="1"></asp:ListItem>
 </asp:DropDownList>
     </div>
-    <asp:Button ID="btnGuardar" runat="server" Text="Guardar" CssClass="btn btn-primary" />
+    <asp:Button ID="btnGuardar" runat="server" Text="Guardar" CssClass="btn btn-primary" OnClick="btnGuardar_Click" />
     <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" CssClass="btn btn-secondary" OnClick="btnCancelar_Click" />
 
 </asp:Content>
