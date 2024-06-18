@@ -55,7 +55,6 @@
                         <li class="nav-item"><a class="nav-link" runat="server" href="~/">Inicio</a></li>
                         <li class="nav-item" id="loginLink" runat="server"><a class="nav-link"  runat="server" href="~/Login">Login</a></li>
                         <li class="nav-item"><a class="nav-link" runat="server" href="~/Menu">Menú</a></li>
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/Pedidos">Pedidos</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="meserosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Meseros

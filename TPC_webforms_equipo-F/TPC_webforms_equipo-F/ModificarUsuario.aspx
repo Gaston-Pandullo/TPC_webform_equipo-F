@@ -11,7 +11,7 @@
     </div>
     <div class="form-group">
         <label for="txtPassword">Contraseña</label>
-        <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control" TextMode="Password"></asp:TextBox>
+        <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control" TextMode="SingleLine"></asp:TextBox>
     </div>
     <div class="form-group">
         <label for="txtName">Nombre</label>

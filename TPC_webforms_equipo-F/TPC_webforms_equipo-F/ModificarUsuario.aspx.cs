@@ -35,7 +35,6 @@ namespace TPC_webforms_equipo_F
                     }
                     else
                     {
-                        // Si no se encuentra el usuario
                         Response.Redirect("Administrador.aspx"); 
                     }
                 }
@@ -56,8 +55,9 @@ namespace TPC_webforms_equipo_F
                 {
                     int idUsuario = Convert.ToInt32(Request.QueryString["id"]);
 
-                    // Crear un objeto Usuario con los datos del formulario
                     Usuario usuario = new Usuario();
+                    UsuarioNegocio negocio = new UsuarioNegocio();
+
                     usuario.id = idUsuario;
                     usuario.User = txtUsername.Text.Trim();
                     usuario.Pass = txtPassword.Text.Trim();
@@ -65,8 +65,6 @@ namespace TPC_webforms_equipo_F
                     usuario.Lastname = txtLastname.Text.Trim();
                     usuario.TipoUsuario = Convert.ToByte(ddlAdmin.SelectedValue);
 
-                    // Llamar al método para guardar o actualizar el usuario
-                    UsuarioNegocio negocio = new UsuarioNegocio();
                     negocio.ModificarUsuario(usuario);
 
                     // Redireccionar a alguna página de confirmación o a la lista de usuarios

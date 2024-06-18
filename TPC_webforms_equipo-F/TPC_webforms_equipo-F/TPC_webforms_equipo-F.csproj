@@ -126,7 +126,6 @@
     <Content Include="Menu.aspx" />
     <Content Include="ModificarUsuario.aspx" />
     <Content Include="NuevoUsuario.aspx" />
-    <Content Include="Pedidos.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -273,13 +272,6 @@
     </Compile>
     <Compile Include="NuevoUsuario.aspx.designer.cs">
       <DependentUpon>NuevoUsuario.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pedidos.aspx.cs">
-      <DependentUpon>Pedidos.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pedidos.aspx.designer.cs">
-      <DependentUpon>Pedidos.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site.Master.cs">
