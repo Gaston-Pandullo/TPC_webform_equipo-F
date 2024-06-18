@@ -206,6 +206,36 @@ namespace negocio
             }
         }
 
+        public List<string> ObtenerNombresPlatosPorPedido(int idPedido)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            List<string> nombresPlatos = new List<string>();
+
+            try
+            {
+                datos.setearConsulta("SELECT P.nombre FROM COMANDA C INNER JOIN PLATOS P ON C.idPlato = P.id_Plato WHERE C.idPedido = @idPedido");
+                datos.setearParametro("@idPedido", idPedido);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    string nombrePlato = Convert.ToString(datos.Lector["nombre"]);
+                    nombresPlatos.Add(nombrePlato);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+            return nombresPlatos;
+        }
+
+
         public Plato ObtenerPlatoPorID(int idPlato)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -247,7 +277,7 @@ namespace negocio
                 datos.setearParametro("@idMesa", mesaId);
                 datos.setearParametro("@idPlato", idPlato);
                 datos.setearParametro("@idPedido", idPedido);
-                datos.ejecutarLectura();
+                datos.ejecutarAccion();
             }
             catch (Exception ex)
             {
@@ -285,14 +315,14 @@ namespace negocio
             return ultimoIDPedido;
         }
 
-        public void PedidoCompleto(int idPedidoActual, int mesaId)
+        public void PedidoCompleto(int idPedidoActual, int IdMesa)
         {
             try
             {
                 AccesoDatos datos = new AccesoDatos();
-                datos.setearConsulta("INSERT INTO PEDIDOS (IDPEDIDO,IDMESA) VALUES (@IDPEDIDO,@IDMESA)");
+                datos.setearConsulta("INSERT INTO PEDIDOS (IDPEDIDO, IDMESA) VALUES (@IDPEDIDO, @IDMESA)");
                 datos.setearParametro("@IDPEDIDO", idPedidoActual);
-                datos.setearParametro("@IDMESA", mesaId);
+                datos.setearParametro("@IDMESA", IdMesa);
                 datos.ejecutarAccion();
             }
             catch (Exception ex)

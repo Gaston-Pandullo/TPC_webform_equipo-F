@@ -72,7 +72,7 @@ namespace TPC_webforms_equipo_F
                 btnAbrirMesa.Visible = false;
                 OrderDetailsPanel.Visible = true;
 
-                // Cada vez que se abra una mesa Ocupada me va a traer los datos guardados
+                // Cada vez que se abra una mesa ocupada, cargar los detalles de la comanda
                 CargarDetallesComanda(Convert.ToInt32(tableId));
             }
             else
@@ -86,28 +86,24 @@ namespace TPC_webforms_equipo_F
         {
             MesasService negocio = new MesasService();
             int idComanda = negocio.ObtenerUltimoIDComanda(mesaId);
-            List<int> platos = negocio.ObtenerPlatosPorComanda(idComanda); //Devuelve el id_Plato
 
-            lblPlatos.Text = "";
-            foreach (int idPlato in platos)
-            {
-                Plato plato = negocio.ObtenerPlatoPorID(idPlato); // Método para obtener un plato por su ID
-                if (string.IsNullOrEmpty(lblPlatos.Text))
-                {
-                    lblPlatos.Text = plato.nombre;
-                }
-                else
-                {
-                    lblPlatos.Text += ", " + plato.nombre;
-                }
-            }
-            //cargamos fecha del sistema
+            // Obtener el idPedidoActual para la mesa específica
+            int idPedidoActual = negocio.buscarUltimoIdpedidoxMesa(mesaId);
+
+            // Obtener los nombres de los platos asociados al idPedidoActual desde la base de datos
+            List<string> nombresPlatos = negocio.ObtenerNombresPlatosPorPedido(idPedidoActual);
+
+            // Mostrar los nombres de los platos en lblPlatos
+            lblPlatos.Text = string.Join(", ", nombresPlatos);
+
+            // Cargar la fecha del sistema
             DateTime fechaActual = DateTime.Now;
             string fechaFormateada = fechaActual.ToString("dd/MM/yyyy");
             lblFechaPedido.Text = fechaFormateada;
 
-            //falta ver tema precio
+            // Faltaría cargar el tema del precio, dependiendo de cómo esté estructurado en tu aplicación
         }
+
 
         protected void btnAgregarPlato_Click(object sender, EventArgs e)
         {
@@ -138,7 +134,7 @@ namespace TPC_webforms_equipo_F
                     // Calcular y mostrar el precio total
                     float acuSuma = CalcularPrecioTotal();
                     total += acuSuma;
-                    
+
 
                     // Actualizar el lblPrecioTotal
                     lblPrecioTotal.Text = total.ToString("0.00");
