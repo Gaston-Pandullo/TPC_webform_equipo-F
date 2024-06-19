@@ -25,7 +25,7 @@ namespace negocio
                     aux.id = datos.Lector["Id"] != DBNull.Value ? Convert.ToInt32(datos.Lector["Id"]) : 0;
                     aux.nombre = datos.Lector["Nombre"] != DBNull.Value ? (string)datos.Lector["nombre"] : string.Empty;
                     aux.descripcion = datos.Lector["Descripcion"] != DBNull.Value ? (string)datos.Lector["descripcion"] : string.Empty;
-                    aux.precio = datos.Lector["Precio"] != DBNull.Value ? Convert.ToSingle(datos.Lector["precio"]) : 0.0f;
+                    aux.precio = datos.Lector["Precio"] != DBNull.Value ? Convert.ToDecimal(datos.Lector["precio"]) : 0;
                     aux.stock = datos.Lector["Stock"] != DBNull.Value ? Convert.ToInt32(datos.Lector["Stock"]) : 0;
                     aux.categoria = datos.Lector["categoria"] != DBNull.Value ? Convert.ToChar(datos.Lector["categoria"]) : 'C';
 

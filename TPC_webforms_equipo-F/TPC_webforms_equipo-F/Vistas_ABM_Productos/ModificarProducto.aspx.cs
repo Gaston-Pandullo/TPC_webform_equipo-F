@@ -123,13 +123,13 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
                 char tipoProducto = char.Parse(ddlTipoProducto.SelectedValue);
                 string nombre = txtNombre.Text;
                 string descripcion = txtDescripcion.Text;
-                float precio;
+                decimal precio;
                 int stock;
 
                 try
                 {
                     // Validaciones
-                    if (float.TryParse(txtPrecio.Text, out precio) && int.TryParse(txtStock.Text, out stock))
+                    if (decimal.TryParse(txtPrecio.Text, out precio) && int.TryParse(txtStock.Text, out stock))
                     {
                         if (stock < 0)
                         {

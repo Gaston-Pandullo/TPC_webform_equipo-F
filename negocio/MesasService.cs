@@ -252,7 +252,7 @@ namespace negocio
                         id = datos.Lector.GetInt32(0),
                         nombre = datos.Lector.GetString(1),
                         descripcion = datos.Lector.GetString(2),
-                        precio = datos.Lector.GetFloat(3),
+                        precio = datos.Lector.GetDecimal(3),
                     };
                     return plato;
                 }
@@ -273,7 +273,7 @@ namespace negocio
             try
             {
                 AccesoDatos datos = new AccesoDatos();
-                datos.setearConsulta("INSERT INTO Comanda (IDMesa, IDPlato, idPedido) VALUES (@idMesa, @idPlato, @idPedido)");
+                datos.setearConsulta("INSERT INTO Comanda (IDMESA, IDPLATO, IDPEDIDO) VALUES (@idMesa, @idPlato, @idPedido)");
                 datos.setearParametro("@idMesa", mesaId);
                 datos.setearParametro("@idPlato", idPlato);
                 datos.setearParametro("@idPedido", idPedido);

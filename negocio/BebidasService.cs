@@ -23,7 +23,7 @@ namespace negocio
                     aux.id = datos.Lector["id_Bebida"] != DBNull.Value ? Convert.ToInt32(datos.Lector["id_Bebida"]) : 0;
                     aux.nombre = datos.Lector["nombre"] != DBNull.Value ? (string)datos.Lector["nombre"] : string.Empty;
                     aux.descripcion = datos.Lector["descripcion"] != DBNull.Value ? (string)datos.Lector["descripcion"] : string.Empty;
-                    aux.precio = datos.Lector["precio"] != DBNull.Value ? Convert.ToSingle(datos.Lector["precio"]) : 0.0f;
+                    aux.precio = datos.Lector["precio"] != DBNull.Value ? Convert.ToDecimal(datos.Lector["precio"]) : 0;
                     aux.stock = datos.Lector["stock"] != DBNull.Value ? (int)datos.Lector["stock"] : 0;
                     aux.alcoholica = datos.Lector["alcoholica"] != DBNull.Value ? Convert.ToByte(datos.Lector["alcoholica"]) : (byte)0;
                     aux.estado = datos.Lector["estado"] != DBNull.Value ? Convert.ToBoolean(datos.Lector["estado"]) : false;

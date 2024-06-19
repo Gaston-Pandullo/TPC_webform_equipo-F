@@ -33,13 +33,13 @@ namespace TPC_webforms_equipo_F
 
                     string nombre = txtNombre.Text;
                     string descripcion = txtDescripcion.Text;
-                    float precio;
+                    decimal precio;
                     int stock;
 
 
                     try
                     {
-                        if (float.TryParse(txtPrecio.Text, out precio) && int.TryParse(txtStock.Text, out stock))
+                        if (decimal.TryParse(txtPrecio.Text, out precio) && int.TryParse(txtStock.Text, out stock))
                         {
                             // Validacion: El stock no puede ser cero.
                             if (stock < 0)
@@ -98,13 +98,13 @@ namespace TPC_webforms_equipo_F
 
                     string nombreBebida = txtNombre.Text;
                     string descripcionBebida = txtDescripcion.Text;
-                    float precioBebida;
+                    decimal precioBebida;
                     int stockBebida;
 
 
                     try
                     {
-                        if (float.TryParse(txtPrecio.Text, out precioBebida) && int.TryParse(txtStock.Text, out stockBebida))
+                        if (decimal.TryParse(txtPrecio.Text, out precioBebida) && int.TryParse(txtStock.Text, out stockBebida))
                         {
                             // Validacion: El stock no puede ser cero.
                             if (stockBebida < 0)

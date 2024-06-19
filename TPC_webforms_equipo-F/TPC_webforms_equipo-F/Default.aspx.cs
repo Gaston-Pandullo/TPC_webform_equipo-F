@@ -111,11 +111,10 @@ namespace TPC_webforms_equipo_F
             {
                 if (ddlPlatos.SelectedValue != "0")
                 {
-                    int idPlatoSeleccionado = Convert.ToInt32(ddlPlatos.SelectedValue);
+                    int idPlatoSeleccionado = Convert.ToInt32(ddlPlatos.SelectedValue);  // Conversión de string a int
                     idPlatosSeleccionados.Add(idPlatoSeleccionado);
 
-
-                    // Aca se actualiza el Label para mostrar los platos 
+                    // Actualizar el Label para mostrar los platos 
                     if (string.IsNullOrEmpty(lblPlatos.Text))
                     {
                         lblPlatos.Text = ddlPlatos.SelectedItem.Text;
@@ -125,21 +124,21 @@ namespace TPC_webforms_equipo_F
                         lblPlatos.Text += ", " + ddlPlatos.SelectedItem.Text;
                     }
 
-                    // Guardamos la comanda cada vez que agregamos un plato
+                    // Guardar la comanda cada vez que se agrega un plato
                     MesasService negocio = new MesasService();
-                    //buscar el idpedido
-                    idPedidoActual = negocio.buscarUltimoIdpedidoxMesa(Convert.ToInt32(lblNumeroMesa.Text));
-                    negocio.GuardarDetalleComanda(Convert.ToInt32(lblNumeroMesa.Text), idPlatoSeleccionado, idPedidoActual);
+                    int idMesa = Convert.ToInt32(lblNumeroMesa.Text);  // Conversión de string a int
+                    int idPedidoActual = negocio.buscarUltimoIdpedidoxMesa(idMesa);
+                    negocio.GuardarDetalleComanda(idMesa, idPlatoSeleccionado, idPedidoActual);
 
                     // Calcular y mostrar el precio total
-                    float acuSuma = CalcularPrecioTotal();
-                    total += acuSuma;
+                    decimal acuSuma = CalcularPrecioTotal();
+                    decimal total =+ acuSuma;
+
 
 
                     // Actualizar el lblPrecioTotal
                     lblPrecioTotal.Text = total.ToString("0.00");
                 }
-
             }
             catch (Exception ex)
             {
@@ -147,9 +146,9 @@ namespace TPC_webforms_equipo_F
             }
         }
 
-        private float CalcularPrecioTotal()
+        private decimal CalcularPrecioTotal()
         {
-            float precioTotal = 0;
+            decimal precioTotal = 0;
 
             foreach (int idPlato in idPlatosSeleccionados)
             {
