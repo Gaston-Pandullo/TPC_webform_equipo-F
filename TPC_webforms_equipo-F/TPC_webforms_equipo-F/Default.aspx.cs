@@ -101,7 +101,7 @@ namespace TPC_webforms_equipo_F
             string fechaFormateada = fechaActual.ToString("dd/MM/yyyy");
             lblFechaPedido.Text = fechaFormateada;
 
-            // Faltaría cargar el tema del precio, dependiendo de cómo esté estructurado en tu aplicación
+            // Faltaría cargar el tema del precio.
         }
 
 

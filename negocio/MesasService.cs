@@ -342,6 +342,7 @@ namespace negocio
                 AccesoDatos datos = new AccesoDatos();
                 datos.setearConsulta("UPDATE PEDIDOS SET TOTAL = @TOTAL where IDPEDIDO = @idPedido ");
                 datos.setearParametro("@TOTAL", total);
+                datos.setearParametro("@idPedido", idPedido);
                 datos.ejecutarAccion();
             }
             catch (Exception ex)
