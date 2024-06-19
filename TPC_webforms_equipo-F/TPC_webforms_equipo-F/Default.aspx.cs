@@ -170,7 +170,7 @@ namespace TPC_webforms_equipo_F
             MesasService mesaService = new MesasService();
             mesaService.MarcarMesaComoOcupada(mesaId);
             idPedidoActual = CrearIDPedido();
-            mesaService.PedidoCompleto(idPedidoActual,mesaId);
+            mesaService.PedidoCompleto(mesaId);
 
 
             Button button = TableOrder.FindControl("btnTable" + mesaId) as Button;
