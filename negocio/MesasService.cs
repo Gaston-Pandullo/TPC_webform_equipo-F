@@ -315,14 +315,13 @@ namespace negocio
             return ultimoIDPedido;
         }
 
-        public void PedidoCompleto(int IdMesa, int IdPedido)
+        public void PedidoCompleto(int IdMesa)
         {
             try
             {
                 AccesoDatos datos = new AccesoDatos();
-                datos.setearConsulta("INSERT INTO PEDIDOS (IDMESA, IDPEDIDO) VALUES (@IDMESA, @IDPEDIDO)");
+                datos.setearConsulta("INSERT INTO PEDIDOS (IDMESA) VALUES (@IDMESA)");
                 datos.setearParametro("@IDMESA", IdMesa);
-                datos.setearParametro("@IDPEDIDO", IdPedido);
                 datos.ejecutarAccion();
             }
             catch (Exception ex)
