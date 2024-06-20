@@ -12,9 +12,24 @@ namespace TPC_webforms_equipo_F
 {
     public partial class _Default : System.Web.UI.Page
     {
-        List<int> idPlatosSeleccionados = new List<int>(); //esta lista la vamos a usar para guardar los idPlato
-        float total = 0;
-        int idPedidoActual = 0;
+        private List<int> idPlatosSeleccionados
+        {
+            get
+            {
+                if (ViewState["idPlatosSeleccionados"] == null)
+                {
+                    ViewState["idPlatosSeleccionados"] = new List<int>();
+                }
+                return (List<int>)ViewState["idPlatosSeleccionados"];
+            }
+            set
+            {
+                ViewState["idPlatosSeleccionados"] = value;
+            }
+        }
+
+        decimal total;
+        int idPedidoActual;
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -24,6 +39,8 @@ namespace TPC_webforms_equipo_F
                 InicializarMesas();
                 total = 0;
                 idPedidoActual = 0;
+
+                idPlatosSeleccionados = new List<int>();
             }
         }
 
@@ -107,12 +124,22 @@ namespace TPC_webforms_equipo_F
 
         protected void btnAgregarPlato_Click(object sender, EventArgs e)
         {
+            
             try
             {
                 if (ddlPlatos.SelectedValue != "0")
                 {
+
                     int idPlatoSeleccionado = Convert.ToInt32(ddlPlatos.SelectedValue);  // Conversión de string a int
-                    idPlatosSeleccionados.Add(idPlatoSeleccionado);
+
+                    // Obtener la lista actual de ViewState
+                    List<int> listaPlatosSeleccionados = idPlatosSeleccionados;
+
+                    // Agregar el nuevo plato a la lista
+                    listaPlatosSeleccionados.Add(idPlatoSeleccionado);
+
+                    // Guardar la lista actualizada en ViewState
+                    idPlatosSeleccionados = listaPlatosSeleccionados;
 
                     // Actualizar el Label para mostrar los platos 
                     if (string.IsNullOrEmpty(lblPlatos.Text))
@@ -131,10 +158,7 @@ namespace TPC_webforms_equipo_F
                     negocio.GuardarDetalleComanda(idMesa, idPlatoSeleccionado, idPedidoActual);
 
                     // Calcular y mostrar el precio total
-                    decimal acuSuma = CalcularPrecioTotal();
-                    decimal total =+ acuSuma;
-
-
+                    total = CalcularPrecioTotal();
 
                     // Actualizar el lblPrecioTotal
                     lblPrecioTotal.Text = total.ToString("0.00");
@@ -150,12 +174,10 @@ namespace TPC_webforms_equipo_F
         {
             decimal precioTotal = 0;
 
+            MesasService negocio = new MesasService();
             foreach (int idPlato in idPlatosSeleccionados)
             {
-
-                MesasService negocio = new MesasService();
                 Plato plato = negocio.ObtenerPlatoPorID(idPlato);
-
                 precioTotal += plato.precio;
             }
 

@@ -334,7 +334,7 @@ namespace negocio
             }
         }
 
-        public void ActualizarPrecioEnPedido(float total, int idPedido)
+        public void ActualizarPrecioEnPedido(decimal total, int idPedido)
         {
             try
             {
