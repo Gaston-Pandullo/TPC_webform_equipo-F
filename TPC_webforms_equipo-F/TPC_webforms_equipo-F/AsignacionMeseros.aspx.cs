@@ -60,9 +60,9 @@ namespace TPC_webforms_equipo_F
 
                 mesasService.asignarMesero(idMesa, idMesero);
             }
-            ScriptManager.RegisterStartupScript(this, GetType(), "showalert", "showAlert();", true);
 
-            // Recargar las mesas para reflejar los cambios
+            ScriptManager.RegisterStartupScript(this, GetType(), "showSuccessModal", "$('#confirmModal').modal('show');", true);
+
             CargarMesas();
         }
     }
