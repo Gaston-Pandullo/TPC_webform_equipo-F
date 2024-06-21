@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -206,21 +207,28 @@ namespace negocio
             }
         }
 
-        public List<string> ObtenerNombresPlatosPorPedido(int idPedido)
+        public List<Plato> ObtenerNombresPlatosPorPedido(int idPedido)
         {
             AccesoDatos datos = new AccesoDatos();
-            List<string> nombresPlatos = new List<string>();
+            List<Plato> platos = new List<Plato>();
+            //Crear lista con datos de la query
 
             try
             {
-                datos.setearConsulta("SELECT P.nombre FROM COMANDA C INNER JOIN PLATOS P ON C.idPlato = P.id_Plato WHERE C.idPedido = @idPedido");
+                datos.setearConsulta("SELECT P.nombre as nombre, P.precio as precio, COUNT(*) as cantidad FROM COMANDA C INNER JOIN PLATOS P ON C.idPlato = P.id_Plato WHERE C.idPedido = @idPedido GROUP BY P.nombre, P.precio;");
                 datos.setearParametro("@idPedido", idPedido);
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
                 {
-                    string nombrePlato = Convert.ToString(datos.Lector["nombre"]);
-                    nombresPlatos.Add(nombrePlato);
+                    Plato plato = new Plato();
+                    plato.nombre = Convert.ToString(datos.Lector["nombre"]);
+                    plato.precio = Convert.ToDecimal(datos.Lector["precio"]);
+                    plato.cantidad = Convert.ToInt32(datos.Lector["cantidad"]);
+                    // Agregar a la lista el item este
+                    Debug.WriteLine($"Plato: {plato.nombre}, Cantidad: {plato.cantidad}, Precio: {plato.precio:C}");
+                    platos.Add(plato);
+
                 }
             }
             catch (Exception ex)
@@ -232,7 +240,7 @@ namespace negocio
                 datos.cerrarConexion();
             }
 
-            return nombresPlatos;
+            return platos;
         }
 
 

@@ -102,35 +102,32 @@ namespace TPC_webforms_equipo_F
         private void CargarDetallesComanda(int mesaId)
         {
             MesasService negocio = new MesasService();
-            int idComanda = negocio.ObtenerUltimoIDComanda(mesaId);
-
-            // Obtener el idPedidoActual para la mesa específica
             int idPedidoActual = negocio.buscarUltimoIdpedidoxMesa(mesaId);
 
-            // Obtener los nombres de los platos asociados al idPedidoActual desde la base de datos
-            List<string> nombresPlatos = negocio.ObtenerNombresPlatosPorPedido(idPedidoActual);
+            if (idPedidoActual > 0)
+            {
+                // Obtener los nombres de los platos asociados al idPedidoActual desde la base de datos
+                List<Plato> platosPedidos = negocio.ObtenerNombresPlatosPorPedido(idPedidoActual);
 
-            // Mostrar los nombres de los platos en lblPlatos
-            lblPlatos.Text = string.Join(", ", nombresPlatos);
+                // Mostrar los nombres de los platos en lblPlatos
+                gvPlatosPedidos.DataSource = platosPedidos;
+                gvPlatosPedidos.DataBind();
+            }
 
             // Cargar la fecha del sistema
             DateTime fechaActual = DateTime.Now;
             string fechaFormateada = fechaActual.ToString("dd/MM/yyyy");
             lblFechaPedido.Text = fechaFormateada;
-
-            // Faltaría cargar el tema del precio.
         }
 
 
         protected void btnAgregarPlato_Click(object sender, EventArgs e)
         {
-            
             try
             {
                 if (ddlPlatos.SelectedValue != "0")
                 {
-
-                    int idPlatoSeleccionado = Convert.ToInt32(ddlPlatos.SelectedValue);  // Conversión de string a int
+                    int idPlatoSeleccionado = Convert.ToInt32(ddlPlatos.SelectedValue);
 
                     // Obtener la lista actual de ViewState
                     List<int> listaPlatosSeleccionados = idPlatosSeleccionados;
@@ -141,27 +138,22 @@ namespace TPC_webforms_equipo_F
                     // Guardar la lista actualizada en ViewState
                     idPlatosSeleccionados = listaPlatosSeleccionados;
 
-                    // Actualizar el Label para mostrar los platos 
-                    if (string.IsNullOrEmpty(lblPlatos.Text))
-                    {
-                        lblPlatos.Text = ddlPlatos.SelectedItem.Text;
-                    }
-                    else
-                    {
-                        lblPlatos.Text += ", " + ddlPlatos.SelectedItem.Text;
-                    }
-
                     // Guardar la comanda cada vez que se agrega un plato
                     MesasService negocio = new MesasService();
-                    int idMesa = Convert.ToInt32(lblNumeroMesa.Text);  // Conversión de string a int
+                    int idMesa = Convert.ToInt32(lblNumeroMesa.Text);
                     int idPedidoActual = negocio.buscarUltimoIdpedidoxMesa(idMesa);
-                    negocio.GuardarDetalleComanda(idMesa, idPlatoSeleccionado, idPedidoActual);
 
-                    // Calcular y mostrar el precio total
-                    total = CalcularPrecioTotal();
+                    if (idPedidoActual > 0)
+                    {
+                        negocio.GuardarDetalleComanda(idMesa, idPlatoSeleccionado, idPedidoActual);
 
-                    // Actualizar el lblPrecioTotal
-                    lblPrecioTotal.Text = total.ToString("0.00");
+                        // Recargar los detalles de la comanda
+                        CargarDetallesComanda(idMesa);
+
+                        // Calcular y mostrar el precio total
+                        total = CalcularPrecioTotal();
+                        lblPrecioTotal.Text = total.ToString("0.00");
+                    }
                 }
             }
             catch (Exception ex)
@@ -206,7 +198,6 @@ namespace TPC_webforms_equipo_F
             string fechaFormateada = fechaActual.ToString("dd/MM/yyyy");
 
             lblFechaPedido.Text = fechaFormateada;
-            lblPlatos.Text = "";
 
             OrderDetailsPanel.Visible = true;
             btnAbrirMesa.Visible = false;
@@ -235,7 +226,6 @@ namespace TPC_webforms_equipo_F
 
             lblFechaPedido.Text = "";
             lblNumeroMesa.Text = "";
-            lblPlatos.Text = "";
             idPedidoActual = 0;
 
             OrderDetailsPanel.Visible = false;
