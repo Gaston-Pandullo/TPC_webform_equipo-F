@@ -24,26 +24,25 @@ namespace TPC_webforms_equipo_F
 
         protected void gvProductos_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
-            if (e.CommandName == "Incrementar" || e.CommandName == "Decrementar")
+            if (e.CommandName == "Guardar")
             {
-                var args = e.CommandArgument.ToString().Split(',');
-                if (args.Length == 3)
-                {
-                    int id = Convert.ToInt32(args[0]);
-                    string categoria = args[1];
-                    int stock = Convert.ToInt32(args[2]);
+                string[] args = e.CommandArgument.ToString().Split(',');
+                int id = Convert.ToInt32(args[0]);
+                string categoria = args[1];
+                TextBox txtStock = (TextBox)e.Item.FindControl("txtStock");
+                int stock = Convert.ToInt32(txtStock.Text);
 
-                    bool incrementar = e.CommandName == "Incrementar";
-                    ActualizarStock(id, categoria, stock, incrementar);
-                }
+                ActualizarStock(id, categoria, stock);
+
+                ScriptManager.RegisterStartupScript(this, GetType(), "showNotificationModal", "showNotificationModal();", true);
             }
         }
 
-        private void ActualizarStock(int id, string categoria, int stock, bool incrementar)
+        private void ActualizarStock(int id, string categoria, int stock)
         {
             try
             {
-                if (stock <= 0 && !incrementar)
+                if (stock <= 0)
                 {
                     return;
                 }
@@ -51,13 +50,14 @@ namespace TPC_webforms_equipo_F
                 if (categoria == "B")
                 {
                     BebidasService bebidasService = new BebidasService();
-                    bebidasService.updateStock(id, stock, incrementar);
+                    bebidasService.updateStock(id, stock);
                 }
                 else if (categoria == "C")
                 {
                     PlatosService platosService = new PlatosService();
-                    platosService.updateStock(id, stock, incrementar);
+                    platosService.updateStock(id, stock);
                 }
+
                 CargarProductos();
             }
             catch (Exception ex)

@@ -9,19 +9,19 @@
             width: 100%;
         }
 
-            #gvProductos td, #gvProductos th {
-                border: 1px solid #dddddd;
-                padding: 8px;
-            }
+        #gvProductos td, #gvProductos th {
+            border: 1px solid #dddddd;
+            padding: 8px;
+        }
 
-            #gvProductos tr:nth-child(even) {
-                background-color: #f2f2f2;
-            }
+        #gvProductos tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
 
-            #gvProductos th {
-                background-color: #4CAF50;
-                color: white;
-            }
+        #gvProductos th {
+            background-color: #4CAF50;
+            color: white;
+        }
 
         .modal-body .btn-container {
             display: flex;
@@ -53,11 +53,12 @@
                 <td class='text-center'><%# Eval("Nombre") %></td>
                 <td class='text-center'><%# Eval("Descripcion") %></td>
                 <td class='text-center'><%# Eval("Precio", "{0:C}") %></td>
-                <td class='text-center'><%# Eval("Stock") %></td>
+                <td class='text-center'>
+                    <asp:TextBox ID="txtStock" runat="server" Text='<%# Eval("Stock") %>' CssClass="form-control text-center" />
+                </td>
                 <td class='text-center'><%# Eval("Categoria") %></td>
                 <td class='text-center'>
-                    <asp:Button ID="Button1" CssClass="btn btn-success btn-sm" runat="server" Text="+" CommandName="Incrementar" CommandArgument='<%# Eval("Id") + "," + Eval("Categoria") + "," + Eval("Stock") %>' />
-                    <asp:Button ID="Button2" CssClass='btn btn-danger btn-sm' runat="server" Text="-" CommandName="Decrementar" CommandArgument='<%# Eval("Id") + "," + Eval("Categoria") + "," + Eval("Stock") %>' />
+                    <asp:Button ID="btnGuardar" CssClass="btn btn-primary btn-sm" runat="server" Text="Guardar" CommandName="Guardar" CommandArgument='<%# Eval("Id") + "," + Eval("Categoria") + "," + Eval("Stock") %>' />
                 </td>
             </tr>
         </ItemTemplate>
@@ -65,7 +66,6 @@
             </tbody>
                 </table>
             </div>
-   
         </FooterTemplate>
     </asp:Repeater>
 
@@ -78,7 +78,6 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="agregarItemModalLabel">¿Qué desea hacer?</h5>
-
                     <asp:Button ID="btnCerrarVentana" CssClass="btn-close" runat="server" type="button" data-bs-dismiss="modal" />
                 </div>
                 <div class="modal-body">
@@ -92,6 +91,20 @@
         </div>
     </div>
 
+    <!-- Modal para notificación -->
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notificationModalLabel">Notificación</h5>
+                </div>
+                <div class="modal-body">
+                    <p>El stock ha sido actualizado correctamente.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="text/javascript">
         function openModal() {
             var myModal = new bootstrap.Modal(document.getElementById('agregarItemModal'), {
@@ -99,6 +112,17 @@
             });
             myModal.show();
         }
-    </script>
 
+        function showNotificationModal() {
+            var notificationModal = new bootstrap.Modal(document.getElementById('notificationModal'), {
+                keyboard: false
+            });
+            notificationModal.show();
+
+            setTimeout(function () {
+                notificationModal.hide();
+            }, 2000);
+        }
+    </script>
 </asp:Content>
+

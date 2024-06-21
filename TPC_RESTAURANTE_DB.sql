@@ -1,7 +1,7 @@
 ﻿use master
 go
 create database TPC_RESTAURANTE_DB
---drop database TPC_RESTAURANTE_DB
+drop database TPC_RESTAURANTE_DB
 go
 use TPC_RESTAURANTE_DB
 

@@ -41,14 +41,14 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
-        public void updateStock(int id, int stock, bool incrementar)
+        public void updateStock(int id, int stock)
         {
             try
             {
                 datos.limpiarParametros();
                 datos.setearConsulta("UPDATE BEBIDAS SET stock = @stock WHERE id_Bebida = @id");
                 datos.setearParametro("@id", id);
-                datos.setearParametro("@stock", incrementar ? stock + 1 : stock - 1);
+                datos.setearParametro("@stock", stock);
                 datos.ejecutarAccion();
             }
             catch (Exception ex)
