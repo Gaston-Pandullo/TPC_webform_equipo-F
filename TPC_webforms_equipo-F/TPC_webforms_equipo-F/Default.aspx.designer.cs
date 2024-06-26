@@ -24,49 +24,13 @@ namespace TPC_webforms_equipo_F
         protected global::System.Web.UI.WebControls.Panel TableOrder;
 
         /// <summary>
-        /// Control btnTable1.
+        /// Control mainTables.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnTable1;
-
-        /// <summary>
-        /// Control btnTable2.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnTable2;
-
-        /// <summary>
-        /// Control btnTable3.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnTable3;
-
-        /// <summary>
-        /// Control btnTable4.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnTable4;
-
-        /// <summary>
-        /// Control btnTable5.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnTable5;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mainTables;
 
         /// <summary>
         /// Control btnAbrirMesa.
@@ -103,15 +67,6 @@ namespace TPC_webforms_equipo_F
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblNumeroMesa;
-
-        /// <summary>
-        /// Control ddlPlatos.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlPlatos;
 
         /// <summary>
         /// Control btnAgregarPlato.

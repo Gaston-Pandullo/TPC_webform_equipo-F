@@ -225,7 +225,6 @@ namespace negocio
                     plato.nombre = Convert.ToString(datos.Lector["nombre"]);
                     plato.precio = Convert.ToDecimal(datos.Lector["precio"]);
                     plato.cantidad = Convert.ToInt32(datos.Lector["cantidad"]);
-                    // Agregar a la lista el item este
                     Debug.WriteLine($"Plato: {plato.nombre}, Cantidad: {plato.cantidad}, Precio: {plato.precio:C}");
                     platos.Add(plato);
 

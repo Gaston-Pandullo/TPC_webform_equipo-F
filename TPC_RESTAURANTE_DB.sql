@@ -219,7 +219,12 @@ ADD IDPEDIDO int foreign key references Pedidos(IDPEDIDO)
 SELECT P.nombre, P.precio, COUNT(*) as cantidad
 FROM COMANDA C
 INNER JOIN PLATOS P ON C.idPlato = P.id_Plato
-WHERE C.idPedido = 1
+WHERE C.idPedido = @idPedido
 GROUP BY P.nombre, P.precio;
+
+SELECT * FROM MESA;
+
+INSERT INTO MESA(MESERO, OCUPADA) VALUES (null, 0)
+
 
 --DROP DATABASE TPC_RESTAURANTE_DB

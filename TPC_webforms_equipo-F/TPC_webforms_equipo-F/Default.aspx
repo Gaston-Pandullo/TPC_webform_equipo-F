@@ -4,13 +4,7 @@
     <asp:Panel ID="TableOrder" runat="server">
         <h1>Mesas</h1>
         <p>Seleccione una mesa y agregue los platos que quiera!</p>
-
-        <main>
-            <asp:Button ID="btnTable1" runat="server" Text="1" CssClass="table-button" OnClick="TableButton_Click" CommandArgument="1" />
-            <asp:Button ID="btnTable2" runat="server" Text="2" CssClass="table-button" OnClick="TableButton_Click" CommandArgument="2" />
-            <asp:Button ID="btnTable3" runat="server" Text="3" CssClass="table-button" OnClick="TableButton_Click" CommandArgument="3" />
-            <asp:Button ID="btnTable4" runat="server" Text="4" CssClass="table-button" OnClick="TableButton_Click" CommandArgument="4" />
-            <asp:Button ID="btnTable5" runat="server" Text="5" CssClass="table-button" OnClick="TableButton_Click" CommandArgument="5" />
+        <main id="mainTables" runat="server">
         </main>
     </asp:Panel>
 
@@ -20,10 +14,8 @@
         <h2>Detalles del Pedido</h2>
         <p><strong>Fecha de Pedido:</strong> <asp:Label ID="lblFechaPedido" runat="server" Text=""></asp:Label></p>
         <p><strong>Número de Mesa:</strong> <asp:Label ID="lblNumeroMesa" runat="server" Text=""></asp:Label></p>
-        
 
-        <asp:DropDownList ID="ddlPlatos" runat="server"></asp:DropDownList>
-        <asp:Button ID="btnAgregarPlato" runat="server" Text="Agregar" OnClick="btnAgregarPlato_Click" />
+        <asp:Button ID="btnAgregarPlato" runat="server" Text="Agregar items a esta mesa" CssClass="btn btn-primary btn-lg my-2" OnClick="btnAgregarPlato_Click" />
 
         <p>
             <strong>Platos:</strong>
