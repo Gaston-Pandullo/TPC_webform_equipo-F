@@ -9,7 +9,7 @@ namespace TPC_webforms_equipo_F
     public partial class _Default : System.Web.UI.Page
     {
         public List<Mesa> _MesaList;
-        private List<int> idPlatosSeleccionados
+        /*private List<int> idPlatosSeleccionados
         {
             get
             {
@@ -23,28 +23,39 @@ namespace TPC_webforms_equipo_F
             {
                 ViewState["idPlatosSeleccionados"] = value;
             }
-        }
+        }*/
 
-        decimal total;
-        int idPedidoActual;
+        decimal total =0;
+        int idPedidoActual=0;
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                CargarPlatos();
+                //CargarPlatos();
                 total = 0;
                 idPedidoActual = 0;
-                idPlatosSeleccionados = new List<int>();
+                //idPlatosSeleccionados = new List<int>();
+                
+                if (Session["Pedido"] != null)
+                {
+                    List<Pedido> listaPedidos = Session["Pedido"] as List<Pedido>;
+                    if (listaPedidos != null)
+                    {
+                        rptPlatosPedidos.DataSource = listaPedidos;
+                        rptPlatosPedidos.DataBind();
+                        CalcularPrecioTotal(listaPedidos);
+                    }
+                }
             }
-            InicializarMesas(); // Mueve InicializarMesas fuera de !IsPostBack
+            InicializarMesas();
         }
 
-        private void CargarPlatos()
-        {
-            PlatosService negocio = new PlatosService();
-            List<Plato> plato = negocio.getAll();
-        }
+        //private void CargarPlatos()
+        //{
+        //    PlatosService negocio = new PlatosService();
+        //    List<Plato> plato = negocio.getAll();
+        //}
 
         private void InicializarMesas()
         {
@@ -95,16 +106,15 @@ namespace TPC_webforms_equipo_F
             Response.Redirect($"Menu.aspx?idMesa={mesaId}", false);
         }
 
-        private decimal CalcularPrecioTotal()
+        private void CalcularPrecioTotal(List<Pedido> listaPedidos)
         {
             decimal precioTotal = 0;
-            MesasService negocio = new MesasService();
-            foreach (int idPlato in idPlatosSeleccionados)
+            foreach (Pedido pedido in listaPedidos)
             {
-                Plato plato = negocio.ObtenerPlatoPorID(idPlato);
-                precioTotal += plato.precio;
+                decimal precio = pedido.precio_unitario * pedido.Cantidad;
+                precioTotal += precio;
             }
-            return precioTotal;
+            lblPrecioTotal.Text = precioTotal.ToString();
         }
 
         protected void btnAbrirMesa_Click(object sender, EventArgs e)

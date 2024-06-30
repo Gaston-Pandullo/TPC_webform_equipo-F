@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using dominio;
 using negocio;
@@ -15,20 +11,21 @@ namespace TPC_webforms_equipo_F
         public List<Plato> listaPlatos = new List<Plato>();
         public List<Bebidas> listaBebidas = new List<Bebidas>();
         protected int mesaId;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                PlatosService platos = new PlatosService();
-                BebidasService bebidas = new BebidasService();
+                PlatosService platosService = new PlatosService();
+                BebidasService bebidasService = new BebidasService();
 
                 if (Request.QueryString["idMesa"] != null)
                 {
                     mesaId = Convert.ToInt32(Request.QueryString["idMesa"]);
                 }
 
-                listaPlatos = platos.getAll();
-                listaBebidas = bebidas.getAll();
+                listaPlatos = platosService.getAll();
+                listaBebidas = bebidasService.getAll();
 
                 MostrarItems(listaPlatos, listaBebidas);
             }
@@ -44,60 +41,96 @@ namespace TPC_webforms_equipo_F
 
         protected void btnAgregar_Click(object sender, EventArgs e)
         {
-            var pedidos = new List<Pedido>();
+            // Se crea una lista donde se llenara con platos y bebidas
+            List<Pedido> listaPedido = new List<Pedido>();
 
-            foreach (RepeaterItem item in rptPlatos.Items)
+            // Se recorre el repeater de los platos
+            foreach (RepeaterItem itemMenu in rptPlatos.Items)
             {
-                var cantidadInput = (HtmlInputControl)item.FindControl("txtCantidad");
-                int cantidad = int.Parse(cantidadInput.Value);
-                if (cantidad > 0)
-                {
-                    var nombreLabel = (Label)item.FindControl("nombreLabel");
-                    string nombre = nombreLabel.Text;
+                TextBox txtCantidad = (TextBox)itemMenu.FindControl("txtCantidad");
+                Label lblNombre = (Label)itemMenu.FindControl("lblNombre");
 
-                    pedidos.Add(new Pedido { Nombre = nombre, Cantidad = cantidad });
+                if (int.TryParse(txtCantidad.Text, out int cantidad) && cantidad > 0)
+                {
+                    PlatosService platosService = new PlatosService();
+                    decimal precio = platosService.ObtenerPrecioPorNombre(lblNombre.Text);
+
+                    Pedido pedido = new Pedido
+                    {
+                        Cantidad = cantidad,
+                        Nombre = lblNombre.Text,
+                        precio_unitario = precio
+                    };
+
+                    listaPedido.Add(pedido);
                 }
             }
 
-            foreach (RepeaterItem item in rptBebidas.Items)
+            // Se recorre el repeater de las bebidas
+            foreach (RepeaterItem itemMenu in rptBebidas.Items)
             {
-                var cantidadInput = (HtmlInputControl)item.FindControl("txtCantidad");
-                int cantidad = int.Parse(cantidadInput.Value);
-                if (cantidad > 0)
-                {
-                    var nombreLabel = (Label)item.FindControl("nombreLabel");
-                    string nombre = nombreLabel.Text;
+                TextBox txtCantidad = (TextBox)itemMenu.FindControl("txtCantidad");
+                Label lblNombre = (Label)itemMenu.FindControl("lblNombre");
 
-                    pedidos.Add(new Pedido { Nombre = nombre, Cantidad = cantidad });
+                if (int.TryParse(txtCantidad.Text, out int cantidad) && cantidad > 0)
+                {
+                    BebidasService bebidasService = new BebidasService();
+                    decimal precio = bebidasService.ObtenerPrecioPorNombre(lblNombre.Text);
+
+                    Pedido pedido = new Pedido
+                    {
+                        Cantidad = cantidad,
+                        Nombre = lblNombre.Text,
+                        precio_unitario = precio
+                    };
+
+                    listaPedido.Add(pedido);
                 }
             }
 
-            //PedidoService pedidoService = new PedidoService();
-            //pedidoService.GuardarPedidos(pedidos);
+            // Guardar listaPedido en la sesión
+            Session["Pedido"] = listaPedido;
 
-            //Response.Redirect("Success.aspx");
+            // Redirigir a Default.aspx
+            Response.Redirect("Default.aspx");
         }
 
-        //private void CargarDetallesComanda(int mesaId)
-        //{
-        //    MesasService negocio = new MesasService();
-        //    int idPedidoActual = negocio.buscarUltimoIdpedidoxMesa(mesaId);
-        //
-        //    if (idPedidoActual > 0)
-        //    {
-        //        List<Plato> platosPedidos = negocio.ObtenerNombresPlatosPorPedido(idPedidoActual);
-        //        gvPlatosPedidos.DataSource = platosPedidos;
-        //        gvPlatosPedidos.DataBind();
-        //    }
-        //
-        //    DateTime fechaActual = DateTime.Now;
-        //    lblFechaPedido.Text = fechaActual.ToString("dd/MM/yyyy");
-        //}
-    }
+        protected void rptPlatos_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            if (e.CommandName == "RestarCantidad")
+            {
+                ActualizarCantidad(e, rptPlatos, -1);
+            }
+            else if (e.CommandName == "SumarCantidad")
+            {
+                ActualizarCantidad(e, rptPlatos, 1);
+            }
+        }
 
-    public class Pedido
-    {
-        public string Nombre { get; set; }
-        public int Cantidad { get; set; }
+        protected void rptBebidas_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            if (e.CommandName == "RestarCantidad")
+            {
+                ActualizarCantidad(e, rptBebidas, -1);
+            }
+            else if (e.CommandName == "SumarCantidad")
+            {
+                ActualizarCantidad(e, rptBebidas, 1);
+            }
+        }
+
+        private void ActualizarCantidad(RepeaterCommandEventArgs e, Repeater repeater, int delta)
+        {
+            int index = Convert.ToInt32(e.CommandArgument);
+            TextBox txtCantidad = (TextBox)repeater.Items[index].FindControl("txtCantidad");
+
+            if (txtCantidad != null)
+            {
+                int cantidad = Convert.ToInt32(txtCantidad.Text);
+                cantidad += delta;
+                if (cantidad < 0) cantidad = 0;
+                txtCantidad.Text = cantidad.ToString();
+            }
+        }
     }
 }

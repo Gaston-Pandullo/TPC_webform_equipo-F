@@ -78,22 +78,13 @@ namespace TPC_webforms_equipo_F
         protected global::System.Web.UI.WebControls.Button btnAgregarPlato;
 
         /// <summary>
-        /// Control gvPlatosPedidos.
+        /// Control rptPlatosPedidos.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater gvPlatosPedidos;
-
-        /// <summary>
-        /// Control lblPlatos.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblPlatos;
+        protected global::System.Web.UI.WebControls.Repeater rptPlatosPedidos;
 
         /// <summary>
         /// Control lblPrecioTotal.

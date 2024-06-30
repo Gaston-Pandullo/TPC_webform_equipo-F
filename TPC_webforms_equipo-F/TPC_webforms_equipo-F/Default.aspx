@@ -19,33 +19,33 @@
 
         <p>
             <strong>Platos:</strong>
-            <asp:Repeater ID="gvPlatosPedidos" runat="server">
-                <HeaderTemplate>
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th class="text-center">Nombre</th>
-                                    <th class="text-center">Cantidad</th>
-                                    <th class="text-center">Precio Unitario</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                </HeaderTemplate>
-                <ItemTemplate>
+            <asp:Repeater ID="rptPlatosPedidos" runat="server">
+    <HeaderTemplate>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
                     <tr>
-                        <td class='text-center'><%# Eval("Nombre") %></td>
-                        <td class='text-center'><%# Eval("Cantidad") %></td>
-                        <td class='text-center'><%# Eval("Precio", "{0:C}") %></td>
+                        <th class="text-center">Nombre</th>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-center">Precio Unitario</th>
                     </tr>
-                </ItemTemplate>
-                <FooterTemplate>
-                    </tbody>
-                                </table>
-                            </div>
-                </FooterTemplate>
-            </asp:Repeater>
-            <asp:Label ID="lblPlatos" runat="server" Text=""></asp:Label>
+                </thead>
+                <tbody>
+    </HeaderTemplate>
+    <ItemTemplate>
+        <tr>
+            <td class='text-center'><%# Eval("Nombre") %></td>
+            <td class='text-center'><%# Eval("Cantidad") %></td>
+            <td class='text-center'><%# Eval("precio_unitario", "{0:C}") %></td>
+        </tr>
+    </ItemTemplate>
+    <FooterTemplate>
+        </tbody>
+        </table>
+        </div>
+    </FooterTemplate>
+</asp:Repeater>
+            
         </p>
         <p><strong>Precio Total:</strong> <asp:Label ID="lblPrecioTotal" runat="server" Text=""></asp:Label></p>
         <asp:Button ID="btnCerrarMesa" runat="server" Text="Cerrar Mesa" OnClick="btnCerrarMesa_Click" />
