@@ -12,11 +12,11 @@ namespace TPC_webforms_equipo_F
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!(Page is Login))
-            {
-                if (!Seguridad.sesionActiva(Session["usuario"]))
-                    Response.Redirect("Login.aspx", false);
-            }
+            //if (!(Page is Login))
+            //{
+            //    if (!Seguridad.sesionActiva(Session["usuario"]))
+            //        Response.Redirect("Login.aspx", false);
+            //}
             if (Seguridad.sesionActiva(Session["usuario"]))
             {
                 loginLink.Visible = false;

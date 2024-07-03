@@ -110,7 +110,7 @@ namespace negocio
             return false;
         }
 
-        public void MarcarMesaComoOcupada(int idMesa)
+        public void OcuparMesa(int idMesa)
         {
             AccesoDatos datos = new AccesoDatos();
 
@@ -322,14 +322,31 @@ namespace negocio
             return ultimoIDPedido;
         }
 
-        public void PedidoCompleto(int IdMesa)
+        public Pedido CrearPedido(int IdMesa)
         {
+            AccesoDatos datos = new AccesoDatos();
+
             try
             {
-                AccesoDatos datos = new AccesoDatos();
-                datos.setearConsulta("INSERT INTO PEDIDOS (IDMESA) VALUES (@IDMESA)");
+                datos.setearConsulta("INSERT INTO PEDIDOS (idMesa, fechaPedido, total) VALUES (@IDMESA, @fechaPedido, @total); SELECT SCOPE_IDENTITY();");
                 datos.setearParametro("@IDMESA", IdMesa);
+                datos.setearParametro("@fechaPedido", DateTime.Now);
+                datos.setearParametro("@total", 0);
                 datos.ejecutarAccion();
+
+                datos.limpiarParametros(); // Limpiar parámetros antes de la nueva consulta
+                datos.setearConsulta("SELECT idPedido FROM PEDIDOS WHERE idPedido = SCOPE_IDENTITY();");
+                int idPedido = Convert.ToInt32(datos.ejecutarEscalar());
+
+                Pedido nuevoPedido = new Pedido
+                {
+                    idPedido = idPedido,
+                    idMesa = IdMesa,
+                    fechaPedido = DateTime.Now,
+                    total = 0,
+                    comandas = new List<Comanda>()
+                };
+                return nuevoPedido;
             }
             catch (Exception ex)
             {
@@ -340,7 +357,35 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
+        public decimal calcularTotal(int idPedido)
+        {
+            try
+            {
+                AccesoDatos datos = new AccesoDatos();
+                datos.setearConsulta("select sum(c.cantidad * it.precio) as total from COMANDA c inner join ITEM_MENU it on it.id = c.idItem where idPedido = @idPedido ");
+                datos.setearParametro("@idPedido", idPedido);
+                datos.ejecutarLectura();
 
+                if (datos.Lector.Read())
+                {
+                    decimal total = Convert.ToDecimal(datos.Lector["total"]);
+                    return total;
+                }
+                else
+                {
+                    throw new Exception("No se encontró el total para el pedido especificado.");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
         public void ActualizarPrecioEnPedido(decimal total, int idPedido)
         {
             try
@@ -389,5 +434,34 @@ namespace negocio
 
             return ultimoIDPedido;
         }
+
+        public int ObtenerIdMesaPorNumero(int numeroMesa)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            int idMesa = 0;
+
+            try
+            {
+                datos.setearConsulta("SELECT idMesa FROM MESA WHERE numeroMesa = @numeroMesa");
+                datos.setearParametro("@numeroMesa", numeroMesa);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    idMesa = Convert.ToInt32(datos.Lector["idMesa"]);
+                }
+
+                return idMesa;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
     }
 }

@@ -40,6 +40,7 @@ namespace TPC_webforms_equipo_F
 
         private void ActualizarStock(int id, string categoria, int stock)
         {
+            ItemMenuService itemMenuService = new ItemMenuService();
             try
             {
                 if (stock <= 0)
@@ -47,15 +48,9 @@ namespace TPC_webforms_equipo_F
                     return;
                 }
 
-                if (categoria == "B")
+                if(categoria == "C" || categoria == "P" || categoria == "B")
                 {
-                    BebidasService bebidasService = new BebidasService();
-                    bebidasService.updateStock(id, stock);
-                }
-                else if (categoria == "C")
-                {
-                    PlatosService platosService = new PlatosService();
-                    platosService.updateStock(id, stock);
+                    itemMenuService.updateStock(id, stock);
                 }
 
                 CargarProductos();

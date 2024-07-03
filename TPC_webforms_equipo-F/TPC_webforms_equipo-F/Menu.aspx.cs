@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.UI.WebControls;
 using dominio;
 using negocio;
@@ -8,91 +9,45 @@ namespace TPC_webforms_equipo_F
 {
     public partial class Menu : System.Web.UI.Page
     {
-        public List<Plato> listaPlatos = new List<Plato>();
-        public List<Bebidas> listaBebidas = new List<Bebidas>();
+        public List<ItemMenu> itemsMenu = new List<ItemMenu> ();
         protected int mesaId;
+        protected int pedidoId;
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                PlatosService platosService = new PlatosService();
-                BebidasService bebidasService = new BebidasService();
-
+                ItemMenuService itemMenuService = new ItemMenuService();
                 if (Request.QueryString["idMesa"] != null)
                 {
                     mesaId = Convert.ToInt32(Request.QueryString["idMesa"]);
                 }
 
-                listaPlatos = platosService.getAll();
-                listaBebidas = bebidasService.getAll();
+                if (Request.QueryString["idPedido"] != null)
+                {
+                    pedidoId = Convert.ToInt32(Request.QueryString["idPedido"]);
+                }
 
-                MostrarItems(listaPlatos, listaBebidas);
+                itemsMenu = itemMenuService.getAll();
+
+                MostrarItems(itemsMenu);
             }
         }
 
-        private void MostrarItems(List<Plato> listaPlatos, List<Bebidas> listaBebidas)
+        private void MostrarItems(List<ItemMenu> items)
         {
-            rptPlatos.DataSource = listaPlatos;
-            rptBebidas.DataSource = listaBebidas;
-            rptBebidas.DataBind();
+            var platos = items.Where(i => i.categoria == 'C').ToList();
+            var bebidas = items.Where(i => i.categoria == 'B').ToList();
+            var postres = items.Where(i => i.categoria == 'P').ToList();
+
+            rptPlatos.DataSource = platos;
             rptPlatos.DataBind();
-        }
 
-        protected void btnAgregar_Click(object sender, EventArgs e)
-        {
-            // Se crea una lista donde se llenara con platos y bebidas
-            List<Pedido> listaPedido = new List<Pedido>();
+            rptBebidas.DataSource = bebidas;
+            rptBebidas.DataBind();
 
-            // Se recorre el repeater de los platos
-            foreach (RepeaterItem itemMenu in rptPlatos.Items)
-            {
-                TextBox txtCantidad = (TextBox)itemMenu.FindControl("txtCantidad");
-                Label lblNombre = (Label)itemMenu.FindControl("lblNombre");
-
-                if (int.TryParse(txtCantidad.Text, out int cantidad) && cantidad > 0)
-                {
-                    PlatosService platosService = new PlatosService();
-                    decimal precio = platosService.ObtenerPrecioPorNombre(lblNombre.Text);
-
-                    Pedido pedido = new Pedido
-                    {
-                        Cantidad = cantidad,
-                        Nombre = lblNombre.Text,
-                        precio_unitario = precio
-                    };
-
-                    listaPedido.Add(pedido);
-                }
-            }
-
-            // Se recorre el repeater de las bebidas
-            foreach (RepeaterItem itemMenu in rptBebidas.Items)
-            {
-                TextBox txtCantidad = (TextBox)itemMenu.FindControl("txtCantidad");
-                Label lblNombre = (Label)itemMenu.FindControl("lblNombre");
-
-                if (int.TryParse(txtCantidad.Text, out int cantidad) && cantidad > 0)
-                {
-                    BebidasService bebidasService = new BebidasService();
-                    decimal precio = bebidasService.ObtenerPrecioPorNombre(lblNombre.Text);
-
-                    Pedido pedido = new Pedido
-                    {
-                        Cantidad = cantidad,
-                        Nombre = lblNombre.Text,
-                        precio_unitario = precio
-                    };
-
-                    listaPedido.Add(pedido);
-                }
-            }
-
-            // Guardar listaPedido en la sesión
-            Session["Pedido"] = listaPedido;
-
-            // Redirigir a Default.aspx
-            Response.Redirect("Default.aspx");
+            rptPostres.DataSource = postres;
+            rptPostres.DataBind();
         }
 
         protected void rptPlatos_ItemCommand(object source, RepeaterCommandEventArgs e)
@@ -119,6 +74,18 @@ namespace TPC_webforms_equipo_F
             }
         }
 
+        protected void rptPostres_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            if (e.CommandName == "RestarCantidad")
+            {
+                ActualizarCantidad(e, rptPostres, -1);
+            }
+            else if (e.CommandName == "SumarCantidad")
+            {
+                ActualizarCantidad(e, rptPostres, 1);
+            }
+        }
+
         private void ActualizarCantidad(RepeaterCommandEventArgs e, Repeater repeater, int delta)
         {
             int index = Convert.ToInt32(e.CommandArgument);
@@ -131,6 +98,99 @@ namespace TPC_webforms_equipo_F
                 if (cantidad < 0) cantidad = 0;
                 txtCantidad.Text = cantidad.ToString();
             }
+        }
+
+        protected void btnAgregar_Click(object sender, EventArgs e)
+        {
+            ItemMenuService itemMenuService = new ItemMenuService();
+            PedidoService pedidoService = new PedidoService();
+
+            Comanda comanda = new Comanda();
+
+            // Recuperar pedidoId de la sesión
+            if (Session["idPedido"] != null)
+            {
+                pedidoId = (int)Session["idPedido"];
+            }
+
+            Pedido pedido = pedidoService.GetPedidoById(pedidoId);//esto devuelve idpedido 0
+
+            //if (pedido == null)
+            //{
+            //    return;
+            //}
+
+            // Se recorre el repeater de los platos
+            foreach (RepeaterItem itemMenu in rptPlatos.Items)
+            {
+                TextBox txtCantidad = (TextBox)itemMenu.FindControl("txtCantidad");
+                Label lblNombre = (Label)itemMenu.FindControl("lblNombre");
+            
+                if (int.TryParse(txtCantidad.Text, out int cantidad) && cantidad > 0)
+                {
+                    decimal precio = itemMenuService.getPrice(lblNombre.Text);
+
+                    ItemMenu item = new ItemMenu
+                    {
+                        cantidad = cantidad,
+                        nombre = lblNombre.Text,
+                        precio = precio,
+                    };
+                    item.id = itemMenuService.getIdbyName(lblNombre.Text);
+                    comanda.items.Add(item);
+                }
+            }
+
+            //Se recorre el repeater de las bebidas
+            foreach (RepeaterItem itemMenu in rptBebidas.Items)
+            {
+                TextBox txtCantidad = (TextBox)itemMenu.FindControl("txtCantidad");
+                Label lblNombre = (Label)itemMenu.FindControl("lblNombre");
+
+                if (int.TryParse(txtCantidad.Text, out int cantidad) && cantidad > 0)
+                {
+                    decimal precio = itemMenuService.getPrice(lblNombre.Text);
+
+                    ItemMenu item = new ItemMenu
+                    {
+                        cantidad = cantidad,
+                        nombre = lblNombre.Text,
+                        precio = precio,
+                    };
+                    item.id = itemMenuService.getIdbyName(lblNombre.Text);
+                    comanda.items.Add(item);
+                }
+            }
+
+            //Se recorre el repeater de las bebidas
+            foreach (RepeaterItem itemMenu in rptPostres.Items)
+            {
+                TextBox txtCantidad = (TextBox)itemMenu.FindControl("txtCantidad");
+                Label lblNombre = (Label)itemMenu.FindControl("lblNombre");
+                
+                if (int.TryParse(txtCantidad.Text, out int cantidad) && cantidad > 0)
+                {
+                    decimal precio = itemMenuService.getPrice(lblNombre.Text);
+
+                    ItemMenu item = new ItemMenu
+                    {
+                        cantidad = cantidad,
+                        nombre = lblNombre.Text,
+                        precio = precio,
+                    };
+
+                    item.id = itemMenuService.getIdbyName(lblNombre.Text);
+                    comanda.items.Add(item);
+                }
+            }
+
+            comanda.precioTotal = comanda.items.Sum(item => item.precio * item.cantidad);
+
+            pedido.comandas.Add(comanda);
+
+            pedidoService.ActualizarPedido(pedido);
+
+            Response.Redirect("Default.aspx");
         }
     }
 }

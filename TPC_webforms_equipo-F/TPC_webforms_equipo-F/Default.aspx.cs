@@ -8,61 +8,38 @@ namespace TPC_webforms_equipo_F
 {
     public partial class _Default : System.Web.UI.Page
     {
+        PedidoService pedidoService = new PedidoService();
+        MesasService mesaService = new MesasService();
+
         public List<Mesa> _MesaList;
-        /*private List<int> idPlatosSeleccionados
-        {
-            get
-            {
-                if (ViewState["idPlatosSeleccionados"] == null)
-                {
-                    ViewState["idPlatosSeleccionados"] = new List<int>();
-                }
-                return (List<int>)ViewState["idPlatosSeleccionados"];
-            }
-            set
-            {
-                ViewState["idPlatosSeleccionados"] = value;
-            }
-        }*/
 
-        decimal total =0;
-        int idPedidoActual=0;
-
+        decimal total = 0;
+        int idPedidoActual = 0;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                //CargarPlatos();
                 total = 0;
                 idPedidoActual = 0;
-                //idPlatosSeleccionados = new List<int>();
-                
-                if (Session["Pedido"] != null)
-                {
-                    List<Pedido> listaPedidos = Session["Pedido"] as List<Pedido>;
-                    if (listaPedidos != null)
-                    {
-                        rptPlatosPedidos.DataSource = listaPedidos;
-                        rptPlatosPedidos.DataBind();
-                        CalcularPrecioTotal(listaPedidos);
-                    }
-                }
+
+                //int idMesa = 1;
+                //Pedido pedido = pedidoService.GetPedidoByMesaId(idMesa);
+                //
+                //if (pedido != null)
+                //{
+                //    List<Comanda> comandas = pedidoService.GetComandasByPedidoId(pedido.idPedido);
+                //    MostrarComandas(comandas);
+                //}
             }
             InicializarMesas();
         }
-
-        //private void CargarPlatos()
-        //{
-        //    PlatosService negocio = new PlatosService();
-        //    List<Plato> plato = negocio.getAll();
-        //}
 
         private void InicializarMesas()
         {
             MesasService mesaService = new MesasService();
             _MesaList = mesaService.getAll();
 
-            mainTables.Controls.Clear(); // Limpia los controles para evitar duplicados
+            mainTables.Controls.Clear();
 
             foreach (var mesa in _MesaList)
             {
@@ -86,12 +63,13 @@ namespace TPC_webforms_equipo_F
 
             MesasService mesaService = new MesasService();
             bool mesaOcupada = mesaService.MesaEstaOcupada(Convert.ToInt32(tableId));
-
+            
             if (mesaOcupada)
             {
                 btnAbrirMesa.Visible = false;
                 OrderDetailsPanel.Visible = true;
-                //CargarDetallesComanda(Convert.ToInt32(tableId));
+
+                MostrarComandas(pedidoService.GetComandasByPedidoId(idPedidoActual));
             }
             else
             {
@@ -103,15 +81,21 @@ namespace TPC_webforms_equipo_F
         protected void btnAgregarPlato_Click(object sender, EventArgs e)
         {
             int mesaId = Convert.ToInt32(lblNumeroMesa.Text);
-            Response.Redirect($"Menu.aspx?idMesa={mesaId}", false);
+            MesasService negocio = new MesasService();
+            int idPedido = negocio.buscarUltimoIdpedidoxMesa(mesaId);
+
+            //Guardo en sesión
+            Session["mesaId"] = mesaId;
+            Session["idPedido"] = idPedido;
+            Response.Redirect($"Menu.aspx?idMesa={mesaId}&idPedido={idPedido}", false);
         }
 
-        private void CalcularPrecioTotal(List<Pedido> listaPedidos)
+        private void CalcularPrecioTotal(List<ItemMenu> items)
         {
             decimal precioTotal = 0;
-            foreach (Pedido pedido in listaPedidos)
+            foreach (ItemMenu item in items)
             {
-                decimal precio = pedido.precio_unitario * pedido.Cantidad;
+                decimal precio = item.precio * item.cantidad;
                 precioTotal += precio;
             }
             lblPrecioTotal.Text = precioTotal.ToString();
@@ -119,13 +103,12 @@ namespace TPC_webforms_equipo_F
 
         protected void btnAbrirMesa_Click(object sender, EventArgs e)
         {
-            int mesaId = Convert.ToInt32(lblNumeroMesa.Text);
-            MesasService mesaService = new MesasService();
-            mesaService.MarcarMesaComoOcupada(mesaId);
-            idPedidoActual = CrearIDPedido();
-            mesaService.PedidoCompleto(mesaId);
+            int idMesa = Convert.ToInt32(lblNumeroMesa.Text);
+            mesaService.OcuparMesa(idMesa);
+            Pedido pedido = mesaService.CrearPedido(idMesa);
+            idPedidoActual = pedido.idPedido;
 
-            Button button = mainTables.FindControl("btnTable" + mesaId) as Button;
+            Button button = mainTables.FindControl("btnTable" + idMesa) as Button;
             if (button != null)
             {
                 button.CssClass = "table-button red";
@@ -138,18 +121,18 @@ namespace TPC_webforms_equipo_F
             btnAbrirMesa.Visible = false;
         }
 
-        protected int CrearIDPedido()
+        private void MostrarComandas(List<Comanda> comandas)
         {
-            int idPedido;
-            MesasService negocio = new MesasService();
-            idPedido = negocio.buscarUltimoIdpedido();
-            return idPedido + 1;
+            rptComandas.DataSource = comandas;
+            rptComandas.DataBind();
         }
 
         protected void btnCerrarMesa_Click(object sender, EventArgs e)
         {
             int mesaId = Convert.ToInt32(lblNumeroMesa.Text);
             MesasService mesaService = new MesasService();
+            idPedidoActual = mesaService.buscarUltimoIdpedidoxMesa(mesaId);
+            total = mesaService.calcularTotal(idPedidoActual);
             mesaService.ActualizarPrecioEnPedido(total, idPedidoActual);
             mesaService.MarcarMesaComoNoOcupada(mesaId);
 
@@ -166,5 +149,6 @@ namespace TPC_webforms_equipo_F
             OrderDetailsPanel.Visible = false;
             btnAbrirMesa.Visible = false;
         }
+
     }
 }

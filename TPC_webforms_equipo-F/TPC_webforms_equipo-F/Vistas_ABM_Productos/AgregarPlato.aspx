@@ -12,6 +12,7 @@
                     <asp:DropDownList ID="ddlTipo" runat="server" CssClass="form-select">
                         <asp:ListItem Value="C">Plato (C)</asp:ListItem>
                         <asp:ListItem Value="B">Bebida (B)</asp:ListItem>
+                        <asp:ListItem Value="P">Postre (P)</asp:ListItem>
                     </asp:DropDownList>
 
                     <%-- Nombre del producto --%>

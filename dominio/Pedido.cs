@@ -8,8 +8,15 @@ namespace dominio
 {
     public class Pedido
     {
-        public string Nombre { get; set; }
-        public int Cantidad { get; set; }
-        public decimal precio_unitario { get; set; }
+        public Pedido()
+        {
+            comandas = new List<Comanda>();
+            fechaPedido = DateTime.Now;
+        }
+        public int idPedido { get; set; }
+        public int idMesa { get; set; }
+        public DateTime fechaPedido { get; set; }
+        public decimal total { get; set; }
+        public List<Comanda> comandas { get; set; }
     }
 }

@@ -8,15 +8,15 @@ namespace dominio
 {
     public class Comanda
     {
-        public Comanda() 
+        public Comanda()
         {
-            precio = 0;
+            items = new List<ItemMenu>();
+            Fecha = DateTime.Now;
         }
         public int id { get; set; }
-        public Mesa mesa_asignada { get; set; }
-        public Mesero mesero_asignado { get; set; }
-        public List<Plato> pedido { get; set; }
-        public int precio { get; set; }
+        public int idPedido { get; set; }
+        public List<ItemMenu> items { get; set; }
+        public decimal precioTotal { get; set; }
         public DateTime Fecha { get; set; }
     }
 }
