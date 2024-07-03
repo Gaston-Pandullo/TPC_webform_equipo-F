@@ -12,8 +12,7 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
 {
     public partial class ModificarProducto : System.Web.UI.Page
     {
-        PlatosService platoNegocio = new PlatosService();
-        BebidasService bebidaNegocio = new BebidasService();
+        ItemMenuService negocio = new ItemMenuService();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -27,11 +26,12 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
             ddlTipoProducto.Items.Insert(0, new ListItem("Seleccione un tipo de producto", "0"));
             ddlTipoProducto.Items.Insert(1, new ListItem("Plato", "C"));
             ddlTipoProducto.Items.Insert(2, new ListItem("Bebida", "B"));
+            ddlTipoProducto.Items.Insert(3, new ListItem("Postre", "P"));
         }
 
         protected void ddlTipoProducto_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Tipo de producto se maneja por C: Plato y B: Bebida.
+            // Tipo de producto se maneja por C: Plato, B: Bebida y P: Postres.
             char tipoProducto = char.Parse(ddlTipoProducto.SelectedValue);
 
             if (tipoProducto == 'C')
@@ -42,6 +42,10 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
             {
                 CargarBebidas();
             }
+            else if (tipoProducto == 'P')
+            {
+                CargarPostres();
+            }
             else
             {
                 ddlProducto.Items.Clear();
@@ -50,8 +54,8 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
         }
         private void CargarPlatos()
         {
-            List<Plato> platos = platoNegocio.getAll();
-            ddlProducto.DataSource = platos;
+            List<ItemMenu> listaPlatos = negocio.getPlatos();
+            ddlProducto.DataSource = listaPlatos;
             ddlProducto.DataTextField = "nombre";
             ddlProducto.DataValueField = "id";
             ddlProducto.DataBind();
@@ -60,12 +64,21 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
 
         private void CargarBebidas()
         {
-            List<Bebidas> bebidas = bebidaNegocio.getAll();
-            ddlProducto.DataSource = bebidas;
+            List<ItemMenu> listaBebidas = negocio.getBebidas();
+            ddlProducto.DataSource = listaBebidas;
             ddlProducto.DataTextField = "nombre";
             ddlProducto.DataValueField = "id";
             ddlProducto.DataBind();
-            ddlProducto.Items.Insert(0, new ListItem("Seleccione una bebida", "0"));
+            ddlProducto.Items.Insert(0, new ListItem("Seleccione un plato", "0"));
+        }
+        private void CargarPostres()
+        {
+            List<ItemMenu> listaPostres = negocio.getPostres();
+            ddlProducto.DataSource = listaPostres;
+            ddlProducto.DataTextField = "nombre";
+            ddlProducto.DataValueField = "id";
+            ddlProducto.DataBind();
+            ddlProducto.Items.Insert(0, new ListItem("Seleccione un plato", "0"));
         }
         private void LimpiarCampos()
         {
@@ -85,27 +98,13 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
         protected void ddlProducto_SelectedIndexChanged(object sender, EventArgs e)
         {
             int productoId = int.Parse(ddlProducto.SelectedValue);
-            
+
             if (productoId > 0)
             {
-                char tipoProducto = char.Parse(ddlTipoProducto.SelectedValue);
-
-                // Si se elige "Plato" (C) se cargan los platos y si es Bebida (B), las bebidas.
-                if (tipoProducto == 'C')
+                ItemMenu producto = negocio.getItemByID(productoId);
+                if (producto != null)
                 {
-                    Plato plato = platoNegocio.getAll().Find(p => p.id == productoId);
-                    if (plato != null)
-                    {
-                        CargarDetallesProducto(plato);
-                    }
-                }
-                else if (tipoProducto == 'B')
-                {
-                    Bebidas bebida = bebidaNegocio.getAll().Find(b => b.id == productoId);
-                    if (bebida != null)
-                    {
-                        CargarDetallesProducto(bebida);
-                    }
+                    CargarDetallesProducto(producto);
                 }
             }
             else
@@ -115,84 +114,95 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
         }
         protected void btnAceptar_Click(object sender, EventArgs e)
         {
-            int productoId = int.Parse(ddlProducto.SelectedValue);
+            ItemMenu itemModificado = new ItemMenu();
 
-            if (productoId > 0)
+            string nombre = txtNombre.Text;
+            char categoriaProducto = Convert.ToChar(ddlTipoProducto.SelectedValue);
+
+            try
             {
-                // Se cargan variables con los listados modificados (o no modificados)
-                char tipoProducto = char.Parse(ddlTipoProducto.SelectedValue);
-                string nombre = txtNombre.Text;
-                string descripcion = txtDescripcion.Text;
-                decimal precio;
-                int stock;
-
-                try
+                // Validacion: El plato debe tener nombre.
+                if (string.IsNullOrWhiteSpace(nombre))
                 {
-                    // Validaciones
-                    if (decimal.TryParse(txtPrecio.Text, out precio) && int.TryParse(txtStock.Text, out stock))
-                    {
-                        if (stock < 0)
-                        {
-                            lblError.Text = "El stock no puede ser negativo.";
-                            lblError.Visible = true;
-                            return;
-                        }
-
-                        if (precio <= 0)
-                        {
-                            lblError.Text = "El precio debe ser positivo.";
-                            lblError.Visible = true;
-                            return;
-                        }
-
-                        if (string.IsNullOrWhiteSpace(nombre))
-                        {
-                            lblError.Text = "El nombre no puede estar vacío.";
-                            lblError.Visible = true;
-                            return;
-                        }
-
-                        // Segun la opcion elegida al principio, se llenan las variables de los objetos Plato o Bebida
-                        if (tipoProducto == 'C')
-                        {
-                            Plato plato = new Plato
-                            {
-                                id = productoId,
-                                nombre = nombre,
-                                descripcion = descripcion,
-                                precio = precio,
-                                stock = stock
-                            };
-                            platoNegocio.modificarPlato(plato);
-                        }
-                        else if (tipoProducto == 'B')
-                        {
-                            Bebidas bebida = new Bebidas
-                            {
-                                id = productoId,
-                                nombre = nombre,
-                                descripcion = descripcion,
-                                precio = precio,
-                                stock = stock
-                            };
-
-                            bebidaNegocio.modificarBebida(bebida);
-                        }
-
-                        Response.Redirect("Almacen.aspx");
-                    }
-                    else
-                    {
-                        lblError.Text = "Por favor, ingrese valores válidos para el precio y el stock.";
-                        lblError.Visible = true;
-                    }
+                    lblErrorNombre.Text = "Maestro...acordate del nombre....";
+                    lblErrorNombre.Visible = true;
+                    return;
                 }
-                catch (Exception ex)
+                else { lblErrorNombre.Visible = false; }
+
+                // Validacion: El plato debe tener un precio.
+                if (string.IsNullOrWhiteSpace(txtPrecio.Text))
                 {
-                    lblError.Text = "Error al guardar el producto. Por favor, intente nuevamente. " + ex.Message;
+                    lblErrorPrecio.Text = "¿Y el precio?";
+                    lblErrorPrecio.Visible = true;
+                    return;
+                }
+                else { lblErrorPrecio.Visible = false; }
+
+                // Validacion: Campo stock.
+                if (string.IsNullOrWhiteSpace(txtStock.Text))
+                {
+                    lblErrorStock.Text = "¿Y el stock?";
+                    lblErrorStock.Visible = true;
+                    return;
+                }
+                else { lblErrorStock.Visible = false; }
+
+                if (decimal.TryParse(txtPrecio.Text, out decimal precio) && int.TryParse(txtStock.Text, out int stock))
+                {
+
+                    // Validacion: El precio debe ser mayor a cero.
+                    if (precio == 0)
+                    {
+                        lblErrorPrecio.Text = "¿Queres regalarlo? Ponele precio!";
+                        lblErrorPrecio.Visible = true;
+                        return;
+                    }
+                    else if (precio < 0)
+                    {
+                        lblErrorPrecio.Text = "¿Le tenemos que pagar al cliente? El precio mayor a cero!!";
+                        lblErrorPrecio.Visible = true;
+                        return;
+                    }
+                    else { lblErrorPrecio.Visible = false; }
+
+
+                    // Validacion: El stock no puede ser cero.
+                    if (stock < 0)
+                    {
+                        lblErrorStock.Text = "No contamos lo que no hay... El stock debe ser positivo.";
+                        lblErrorStock.Visible = true;
+                        return;
+                    }
+                    else { lblErrorStock.Visible = false; }
+
+                    itemModificado.nombre = nombre;
+                    itemModificado.descripcion = txtDescripcion.Text;
+                    itemModificado.precio = precio;
+                    itemModificado.stock = stock;
+                    itemModificado.categoria = categoriaProducto;
+                    itemModificado.id = int.Parse(ddlProducto.SelectedValue);
+
+                    negocio.modificarItem(itemModificado);
+
+                }
+                else
+                {
+                    // Validacion: Valores inválidos en precios y stock.
+                    lblError.Text = "Nada de cosas raras, solo numeros para el precio y el stock.";
                     lblError.Visible = true;
+                    return;
                 }
             }
+            catch (Exception ex)
+            {
+                // Mensaje de error no previsto.
+                lblError.Text = "Error al guardar el plato. Por favor, intente nuevamente." + ex.Message;
+                lblError.Visible = true;
+
+            }
+
+            Response.Redirect("Almacen.aspx");
         }
         protected void btnCancelar_Click(object sender, EventArgs e)
         {

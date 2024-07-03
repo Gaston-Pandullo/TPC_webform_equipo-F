@@ -5,8 +5,7 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <asp:Panel ID="pnlModificarProducto" runat="server" CssClass="form-group">
+                            <asp:Panel ID="pnlModificarProducto" runat="server" CssClass="form-group">
 
                     <%-- Tipo de producto --%>
                     <asp:Label ID="lblTipoProducto" runat="server" Text="Tipo de Producto:"></asp:Label>

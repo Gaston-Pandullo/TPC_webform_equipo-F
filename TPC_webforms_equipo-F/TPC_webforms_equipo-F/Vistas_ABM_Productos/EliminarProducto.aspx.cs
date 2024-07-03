@@ -11,8 +11,7 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
 {
     public partial class EliminarProducto : System.Web.UI.Page
     {
-        PlatosService platoNegocio = new PlatosService();
-        BebidasService bebidaNegocio = new BebidasService();
+        ItemMenuService negocio = new ItemMenuService();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -26,6 +25,7 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
             ddlTipoProducto.Items.Insert(0, new ListItem("Seleccione un tipo de producto", "0"));
             ddlTipoProducto.Items.Insert(1, new ListItem("Plato", "1"));
             ddlTipoProducto.Items.Insert(2, new ListItem("Bebida", "2"));
+            ddlTipoProducto.Items.Insert(3, new ListItem("Postres", "3"));
         }
 
         protected void ddlTipoProducto_SelectedIndexChanged(object sender, EventArgs e)
@@ -41,6 +41,10 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
             {
                 CargarBebidas();
             }
+            else if (tipoProducto == 3)
+            {
+                CargarPostres();
+            }
             else
             {
                 ddlProducto.Items.Clear();
@@ -49,8 +53,8 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
         }
         private void CargarPlatos()
         {
-            List<Plato> platos = platoNegocio.getAll();
-            ddlProducto.DataSource = platos;
+            List<ItemMenu> listaPlatos = negocio.getPlatos();
+            ddlProducto.DataSource = listaPlatos;
             ddlProducto.DataTextField = "nombre";
             ddlProducto.DataValueField = "id";
             ddlProducto.DataBind();
@@ -59,12 +63,21 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
 
         private void CargarBebidas()
         {
-            List<Bebidas> bebidas = bebidaNegocio.getAll();
-            ddlProducto.DataSource = bebidas;
+            List<ItemMenu> listaBebidas = negocio.getBebidas();
+            ddlProducto.DataSource = listaBebidas;
             ddlProducto.DataTextField = "nombre";
             ddlProducto.DataValueField = "id";
             ddlProducto.DataBind();
-            ddlProducto.Items.Insert(0, new ListItem("Seleccione una bebida", "0"));
+            ddlProducto.Items.Insert(0, new ListItem("Seleccione un plato", "0"));
+        }
+        private void CargarPostres()
+        {
+            List<ItemMenu> listaPostres = negocio.getPostres();
+            ddlProducto.DataSource = listaPostres;
+            ddlProducto.DataTextField = "nombre";
+            ddlProducto.DataValueField = "id";
+            ddlProducto.DataBind();
+            ddlProducto.Items.Insert(0, new ListItem("Seleccione un plato", "0"));
         }
         private void LimpiarCampos()
         {
@@ -86,24 +99,10 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
 
             if (productoId > 0)
             {
-                int tipoProductoId = int.Parse(ddlTipoProducto.SelectedValue);
-
-                // Si se elige "Plato" (1) se cargan los platos y si es Bebida (2), las bebidas.
-                if (tipoProductoId == 1)
+                ItemMenu producto = negocio.getItemByID(productoId);
+                if (producto != null)
                 {
-                    Plato plato = platoNegocio.getAll().Find(p => p.id == productoId);
-                    if (plato != null)
-                    {
-                        CargarDetallesProducto(plato);
-                    }
-                }
-                else if (tipoProductoId == 2)
-                {
-                    Bebidas bebida = bebidaNegocio.getAll().Find(b => b.id == productoId);
-                    if (bebida != null)
-                    {
-                        CargarDetallesProducto(bebida);
-                    }
+                    CargarDetallesProducto(producto);
                 }
             }
             else
@@ -115,14 +114,14 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
         protected void btnAceptar_Click(object sender, EventArgs e)
         {
             string nombre = txtNombre.Text;
-            
+
             if (string.IsNullOrWhiteSpace(nombre))
             {
-                lblError.Text = "El nombre no puede estar vacío.";
+                lblError.Text = "Debe seleccionar un algun producto.";
                 lblError.Visible = true;
                 return;
             }
-            else 
+            else
             {
                 lblError.Visible = false;
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "confirmModal", "$('#confirmModal').modal('show');", true);
@@ -134,16 +133,9 @@ namespace TPC_webforms_equipo_F.Vistas_ABM_Productos
             try
             {
                 int productoId = int.Parse(ddlProducto.SelectedValue);
-                int tipoProductoId = int.Parse(ddlTipoProducto.SelectedValue);
+                //int tipoProductoId = int.Parse(ddlTipoProducto.SelectedValue);
 
-                if (tipoProductoId == 1)
-                {
-                    platoNegocio.eliminarPlato(productoId);
-                }
-                else if (tipoProductoId == 2)
-                {
-                    bebidaNegocio.eliminarBebida(productoId);
-                }
+                negocio.eliminarItem(productoId);
 
                 LimpiarCampos();
                 ddlTipoProducto.SelectedIndex = 0;

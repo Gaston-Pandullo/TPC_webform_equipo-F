@@ -11,8 +11,7 @@ namespace TPC_webforms_equipo_F
 {
     public partial class AgregarPlato : System.Web.UI.Page
     {
-        PlatosService negocio = new PlatosService();
-        BebidasService negocioBebidas = new BebidasService();
+        ItemMenuService negocio = new ItemMenuService();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -24,140 +23,92 @@ namespace TPC_webforms_equipo_F
 
         protected void btnAceptar_Click(object sender, EventArgs e)
         {
-            char TipoProducto = Convert.ToChar(ddlTipo.SelectedValue);
+            ItemMenu itemNuevo = new ItemMenu();
 
-            switch (TipoProducto)
+            string nombre = txtNombre.Text;
+            string descripcion = txtDescripcion.Text;
+            char categoriaProducto = Convert.ToChar(ddlTipo.SelectedValue);
+
+            try
             {
-                case 'C':
-                    Plato platoNuevo = new Plato();
+                // Validacion: El plato debe tener nombre.
+                if (string.IsNullOrWhiteSpace(nombre))
+                {
+                    lblErrorNombre.Text = "Maestro...acordate del nombre....";
+                    lblErrorNombre.Visible = true;
+                    return;
+                }
+                else { lblErrorNombre.Visible = false; }
 
-                    string nombre = txtNombre.Text;
-                    string descripcion = txtDescripcion.Text;
-                    decimal precio;
-                    int stock;
+                // Validacion: El plato debe tener un precio.
+                if (string.IsNullOrWhiteSpace(txtPrecio.Text))
+                {
+                    lblErrorPrecio.Text = "¿Y el precio?";
+                    lblErrorPrecio.Visible = true;
+                    return;
+                }
+                else { lblErrorPrecio.Visible = false; }
 
+                // Validacion: Campo stock.
+                if (string.IsNullOrWhiteSpace(txtStock.Text))
+                {
+                    lblErrorStock.Text = "¿Y el stock?";
+                    lblErrorStock.Visible = true;
+                    return;
+                }
+                else { lblErrorStock.Visible = false; }
 
-                    try
+                if (decimal.TryParse(txtPrecio.Text, out decimal precio) && int.TryParse(txtStock.Text, out int stock))
+                {
+
+                    // Validacion: El precio debe ser mayor a cero.
+                    if (precio == 0)
                     {
-                        if (decimal.TryParse(txtPrecio.Text, out precio) && int.TryParse(txtStock.Text, out stock))
-                        {
-                            // Validacion: El stock no puede ser cero.
-                            if (stock < 0)
-                            {
-                                lblError.Text = "El stock no puede ser negativo.";
-                                lblError.Visible = true;
-                                return;
-                            }
-
-                            // Validacion: El precio debe ser mayor a cero.
-                            if (precio <= 0)
-                            {
-                                lblError.Text = "El precio debe ser positivo.";
-                                lblError.Visible = true;
-                                return;
-                            }
-
-                            // Validacion: El plato debe tener nombre.
-                            if (string.IsNullOrWhiteSpace(nombre))
-                            {
-                                lblError.Text = "No puede cargar un plato sin nombre.";
-                                lblError.Visible = true;
-                                return;
-                            }
-
-
-                            platoNuevo.nombre = nombre;
-                            platoNuevo.descripcion = descripcion;
-                            platoNuevo.precio = precio;
-                            platoNuevo.stock = stock;
-
-
-                            negocio.agregarPlato(platoNuevo);
-
-                            
-
-                        }
-                        else
-                        {
-                            // Validacion: Valores inválidos en precios y stock.
-                            lblError.Text = "Por favor, ingrese valores válidos para el precio y el stock.";
-                            lblError.Visible = true;
-                        }
+                        lblErrorPrecio.Text = "¿Queres regalarlo? Ponele precio!";
+                        lblErrorPrecio.Visible = true;
+                        return;
                     }
-                    catch (Exception ex)
+                    else if (precio < 0)
                     {
-
-                        // Mensaje de error no previsto.
-                        lblError.Text = "Error al guardar el plato. Por favor, intente nuevamente." + ex.Message;
-                        lblError.Visible = true;
+                        lblErrorPrecio.Text = "¿Le tenemos que pagar al cliente? El precio mayor a cero!!";
+                        lblErrorPrecio.Visible = true;
+                        return;
                     }
-                break;
-
-                case 'B':
-                    Bebidas bebidaNueva = new Bebidas();
-
-                    string nombreBebida = txtNombre.Text;
-                    string descripcionBebida = txtDescripcion.Text;
-                    decimal precioBebida;
-                    int stockBebida;
+                    else { lblErrorPrecio.Visible = false; }
 
 
-                    try
+                    // Validacion: El stock no puede ser cero.
+                    if (stock < 0)
                     {
-                        if (decimal.TryParse(txtPrecio.Text, out precioBebida) && int.TryParse(txtStock.Text, out stockBebida))
-                        {
-                            // Validacion: El stock no puede ser cero.
-                            if (stockBebida < 0)
-                            {
-                                lblError.Text = "El stock no puede ser negativo.";
-                                lblError.Visible = true;
-                                return;
-                            }
-
-                            // Validacion: El precio debe ser mayor a cero.
-                            if (precioBebida <= 0)
-                            {
-                                lblError.Text = "El precio debe ser positivo.";
-                                lblError.Visible = true;
-                                return;
-                            }
-
-                            // Validacion: El plato debe tener nombre.
-                            if (string.IsNullOrWhiteSpace(nombreBebida))
-                            {
-                                lblError.Text = "No puede cargar un plato sin nombre.";
-                                lblError.Visible = true;
-                                return;
-                            }
-
-
-                            bebidaNueva.nombre = nombreBebida;
-                            bebidaNueva.descripcion = descripcionBebida;
-                            bebidaNueva.precio = precioBebida;
-                            bebidaNueva.stock = stockBebida;
-
-
-                            negocioBebidas.agregarBebida(bebidaNueva);
-                        }
-                        else
-                        {
-                            // Validacion: Valores inválidos en precios y stock.
-                            lblError.Text = "Por favor, ingrese valores válidos para el precio y el stock.";
-                            lblError.Visible = true;
-                        }
+                        lblErrorStock.Text = "No contamos lo que no hay... El stock debe ser positivo.";
+                        lblErrorStock.Visible = true;
+                        return;
                     }
-                    catch (Exception ex)
-                    {
+                    else { lblErrorStock.Visible = false; }
 
-                        // Mensaje de error no previsto.
-                        lblError.Text = "Error al guardar el plato. Por favor, intente nuevamente." + ex.Message;
-                        lblError.Visible = true;
-                    }
-                    break;
+                    itemNuevo.nombre = nombre;
+                    itemNuevo.descripcion = descripcion;
+                    itemNuevo.precio = precio;
+                    itemNuevo.stock = stock;
+                    itemNuevo.categoria = categoriaProducto;
 
-                default:
-                    
-                break;
+                    negocio.agregarItem(itemNuevo);
+
+                }
+                else
+                {
+                    // Validacion: Valores inválidos en precios y stock.
+                    lblError.Text = "Nada de cosas raras, solo numeros para el precio y el stock.";
+                    lblError.Visible = true;
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Mensaje de error no previsto.
+                lblError.Text = "Error al guardar el plato. Por favor, intente nuevamente." + ex.Message;
+                lblError.Visible = true;
+
             }
 
             Response.Redirect("Almacen.aspx");
