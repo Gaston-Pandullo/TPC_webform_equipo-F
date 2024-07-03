@@ -128,6 +128,8 @@ namespace TPC_webforms_equipo_F
 
             rptComandas.DataSource = itemsMenu;
             rptComandas.DataBind();
+
+            CalcularPrecioTotal(itemsMenu);
         }
         protected void btnCerrarMesa_Click(object sender, EventArgs e)
         {
