@@ -134,3 +134,24 @@ SELECT * FROM COMANDA
 --inner join USERS as u on u.id = m.IDUSUARIO
 
 SELECT p.idPedido, p.fechaPedido, p.total, p.idMesa FROM PEDIDOS p WHERE p.idPedido = 5;
+SELECT c.idPedido, im.id AS idItemMenu, im.nombre,im.descripcion,
+    im.precio,
+    im.stock,
+    SUM(c.cantidad) AS cantidadTotal,
+    im.estado,
+    im.categoria
+FROM 
+    COMANDA c
+INNER JOIN 
+    ITEM_MENU im ON c.idItem = im.id
+WHERE 
+    c.idPedido = 4
+GROUP BY 
+    c.idPedido,
+    im.id,
+    im.nombre,
+    im.descripcion,
+    im.precio,
+    im.stock,
+    im.estado,
+    im.categoria;

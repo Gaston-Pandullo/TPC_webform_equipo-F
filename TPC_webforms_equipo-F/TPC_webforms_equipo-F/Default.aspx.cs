@@ -21,24 +21,13 @@ namespace TPC_webforms_equipo_F
             {
                 total = 0;
                 idPedidoActual = 0;
-
-                //int idMesa = 1;
-                //Pedido pedido = pedidoService.GetPedidoByMesaId(idMesa);
-                //
-                //if (pedido != null)
-                //{
-                //    List<Comanda> comandas = pedidoService.GetComandasByPedidoId(pedido.idPedido);
-                //    MostrarComandas(comandas);
-                //}
             }
             InicializarMesas();
         }
 
         private void InicializarMesas()
         {
-            MesasService mesaService = new MesasService();
             _MesaList = mesaService.getAll();
-
             mainTables.Controls.Clear();
 
             foreach (var mesa in _MesaList)
@@ -61,15 +50,25 @@ namespace TPC_webforms_equipo_F
             string tableId = button.CommandArgument;
             lblNumeroMesa.Text = tableId;
 
-            MesasService mesaService = new MesasService();
             bool mesaOcupada = mesaService.MesaEstaOcupada(Convert.ToInt32(tableId));
-            
+
             if (mesaOcupada)
             {
                 btnAbrirMesa.Visible = false;
                 OrderDetailsPanel.Visible = true;
 
-                MostrarComandas(pedidoService.GetComandasByPedidoId(idPedidoActual));
+                int idMesa = Convert.ToInt32(tableId);
+                idPedidoActual = mesaService.buscarUltimoIdpedidoxMesa(idMesa);
+
+                // Añade esta línea para depurar
+                Console.WriteLine($"Mesa ocupada. IdMesa: {idMesa}, IdPedidoActual: {idPedidoActual}");
+
+                var comandas = pedidoService.GetComandasByPedidoId(idPedidoActual);
+
+                // Añade esta línea para depurar
+                Console.WriteLine($"Número de comandas: {comandas.Count}");
+
+                MostrarComandas(comandas);
             }
             else
             {
@@ -81,8 +80,7 @@ namespace TPC_webforms_equipo_F
         protected void btnAgregarPlato_Click(object sender, EventArgs e)
         {
             int mesaId = Convert.ToInt32(lblNumeroMesa.Text);
-            MesasService negocio = new MesasService();
-            int idPedido = negocio.buscarUltimoIdpedidoxMesa(mesaId);
+            int idPedido = mesaService.buscarUltimoIdpedidoxMesa(mesaId);
 
             //Guardo en sesión
             Session["mesaId"] = mesaId;
@@ -98,7 +96,7 @@ namespace TPC_webforms_equipo_F
                 decimal precio = item.precio * item.cantidad;
                 precioTotal += precio;
             }
-            lblPrecioTotal.Text = precioTotal.ToString();
+            lblPrecioTotal.Text = precioTotal.ToString("C"); // Formatear como moneda
         }
 
         protected void btnAbrirMesa_Click(object sender, EventArgs e)
@@ -114,19 +112,23 @@ namespace TPC_webforms_equipo_F
                 button.CssClass = "table-button red";
             }
 
-            DateTime fechaActual = DateTime.Now;
-            lblFechaPedido.Text = fechaActual.ToString("dd/MM/yyyy");
+            lblFechaPedido.Text = DateTime.Now.ToString("dd/MM/yyyy");
 
             OrderDetailsPanel.Visible = true;
             btnAbrirMesa.Visible = false;
         }
-
         private void MostrarComandas(List<Comanda> comandas)
         {
-            rptComandas.DataSource = comandas;
+            var itemsMenu = new List<ItemMenu>();
+
+            foreach (var comanda in comandas)
+            {
+                itemsMenu.AddRange(comanda.items);
+            }
+
+            rptComandas.DataSource = itemsMenu;
             rptComandas.DataBind();
         }
-
         protected void btnCerrarMesa_Click(object sender, EventArgs e)
         {
             int mesaId = Convert.ToInt32(lblNumeroMesa.Text);

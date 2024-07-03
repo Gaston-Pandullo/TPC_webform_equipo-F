@@ -362,13 +362,13 @@ namespace negocio
             try
             {
                 AccesoDatos datos = new AccesoDatos();
-                datos.setearConsulta("select sum(c.cantidad * it.precio) as total from COMANDA c inner join ITEM_MENU it on it.id = c.idItem where idPedido = @idPedido ");
+                datos.setearConsulta("select sum(c.cantidad * it.precio) as total from COMANDA c inner join ITEM_MENU it on it.id = c.idItem where idPedido = @idPedido");
                 datos.setearParametro("@idPedido", idPedido);
                 datos.ejecutarLectura();
 
                 if (datos.Lector.Read())
                 {
-                    decimal total = Convert.ToDecimal(datos.Lector["total"]);
+                    decimal total = datos.Lector.IsDBNull(datos.Lector.GetOrdinal("total")) ? 0 : (decimal)datos.Lector["total"];
                     return total;
                 }
                 else

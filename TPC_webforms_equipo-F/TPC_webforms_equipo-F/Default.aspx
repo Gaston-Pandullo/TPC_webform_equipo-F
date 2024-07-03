@@ -42,14 +42,13 @@
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
-                    </tbody>
-        </table>
-        </div>
-   
+                            </tbody>
+                        </table>
+                    </div>
                 </FooterTemplate>
             </asp:Repeater>
-
         </p>
+
         <p><strong>Precio Total:</strong>
             <asp:Label ID="lblPrecioTotal" runat="server" Text=""></asp:Label></p>
         <asp:Button ID="btnCerrarMesa" runat="server" Text="Cerrar Mesa" OnClick="btnCerrarMesa_Click" />
@@ -73,3 +72,4 @@
         }
     </style>
 </asp:Content>
+

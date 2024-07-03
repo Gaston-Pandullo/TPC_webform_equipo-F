@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
@@ -103,38 +104,25 @@ namespace negocio
         public List<Comanda> GetComandasByPedidoId(int pedidoId)
         {
             List<Comanda> comandas = new List<Comanda>();
-            string query = @"
-        SELECT c.idComanda, c.idPedido,
-               im.id AS idItemMenu, im.nombre, im.descripcion, im.precio, im.stock, im.cantidad, im.estado, im.categoria
-        FROM COMANDA c
-        INNER JOIN ITEM_MENU im ON c.idItem = im.id
-        WHERE c.idPedido = @idPedido";
 
             try
             {
-                datos.setearConsulta(query);
+                datos.setearConsulta("SELECT c.idPedido, im.id AS idItemMenu, im.nombre, im.descripcion, im.precio, im.stock, SUM(c.cantidad) AS cantidadTotal, im.estado, im.categoria FROM COMANDA c INNER JOIN ITEM_MENU im ON c.idItem = im.id WHERE c.idPedido = @idPedido GROUP BY c.idPedido, im.id, im.nombre, im.descripcion, im.precio, im.stock, im.estado, im.categoria");
                 datos.setearParametro("@idPedido", pedidoId);
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
                 {
-                    int idComanda = (int)datos.Lector["idComanda"];
                     int idPedido = (int)datos.Lector["idPedido"];
 
-                    // Verificar si la comanda ya está en la lista
-                    Comanda comanda = comandas.FirstOrDefault(c => c.id == idComanda);
-                    if (comanda == null)
+                    // Crear una nueva comanda
+                    Comanda comanda = new Comanda
                     {
-                        comanda = new Comanda
-                        {
-                            id = idComanda,
-                            idPedido = idPedido,
-                            precioTotal = 0, // Ajusta esto según lo que necesites
-                            Fecha = DateTime.Now,
-                            items = new List<ItemMenu>()
-                        };
-                        comandas.Add(comanda);
-                    }
+                        idPedido = idPedido,
+                        precioTotal = 0, // Ajusta esto según lo que necesites
+                        Fecha = DateTime.Now,
+                        items = new List<ItemMenu>()
+                    };
 
                     // Agregar el item de menú a la comanda
                     ItemMenu itemMenu = new ItemMenu
@@ -144,11 +132,14 @@ namespace negocio
                         descripcion = (string)datos.Lector["descripcion"],
                         precio = (decimal)datos.Lector["precio"],
                         stock = (int)datos.Lector["stock"],
-                        cantidad = (int)datos.Lector["cantidad"],
+                        cantidad = (int)datos.Lector["cantidadTotal"], // Aquí se actualiza la cantidad total
                         estado = (bool)datos.Lector["estado"],
                         categoria = ((string)datos.Lector["categoria"])[0]
                     };
                     comanda.items.Add(itemMenu);
+
+                    // Agregar la comanda a la lista
+                    comandas.Add(comanda);
                 }
             }
             catch (Exception ex)
@@ -162,6 +153,7 @@ namespace negocio
 
             return comandas;
         }
+
 
         public Pedido GetPedidoById(int pedidoId)
         {
