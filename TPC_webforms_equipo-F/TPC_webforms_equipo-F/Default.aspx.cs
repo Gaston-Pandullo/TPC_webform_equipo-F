@@ -13,18 +13,15 @@ namespace TPC_webforms_equipo_F
 
         public List<Mesa> _MesaList;
 
-        decimal total = 0;
-        int idPedidoActual = 0;
+        decimal total;
+        int idPedidoActual;
         protected void Page_Load(object sender, EventArgs e)
         {
+            lblFechaPedido.Text = DateTime.Now.ToString("dd/MM/yyyy"); ;
             if (!IsPostBack)
             {
                 total = 0;
                 idPedidoActual = 0;
-                lblFechaPedido.Text = "";
-                lblNumeroMesa.Text = "";
-                OrderDetailsPanel.Visible = false;
-                btnAbrirMesa.Visible = false;
             }
             InicializarMesas();
         }
@@ -119,11 +116,12 @@ namespace TPC_webforms_equipo_F
             }
 
             // Reinicio de datos al abrir las mesas
-            lblFechaPedido.Text = DateTime.Now.ToString("dd/MM/yyyy");
             OrderDetailsPanel.Visible = true;
             btnAbrirMesa.Visible = false;
-            lblPrecioTotal.Text = ""; 
-            rptComandas.DataSource = null; 
+            lblPrecioTotal.Text = "";
+            //Lista vacia para que siempre aparezca el encabezado de los pedidos.
+            List<Comanda> comandas = new List<Comanda>();  
+            rptComandas.DataSource = comandas; 
             rptComandas.DataBind(); 
         }
         private void MostrarComandas(List<Comanda> comandas)
