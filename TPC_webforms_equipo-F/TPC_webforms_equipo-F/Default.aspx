@@ -18,7 +18,7 @@
             <asp:Label ID="lblNumeroMesa" runat="server" Text=""></asp:Label></p>
 
         <asp:Button ID="btnAgregarPlato" runat="server" Text="Agregar items a esta mesa" CssClass="btn btn-primary btn-lg my-2" OnClick="btnAgregarPlato_Click" />
-
+        
         <p>
             <strong>Platos:</strong>
             <asp:Repeater ID="rptComandas" runat="server">

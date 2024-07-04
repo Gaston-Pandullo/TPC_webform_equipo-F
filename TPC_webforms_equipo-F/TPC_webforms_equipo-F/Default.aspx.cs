@@ -21,6 +21,10 @@ namespace TPC_webforms_equipo_F
             {
                 total = 0;
                 idPedidoActual = 0;
+                lblFechaPedido.Text = "";
+                lblNumeroMesa.Text = "";
+                OrderDetailsPanel.Visible = false;
+                btnAbrirMesa.Visible = false;
             }
             InicializarMesas();
         }
@@ -106,16 +110,21 @@ namespace TPC_webforms_equipo_F
             Pedido pedido = mesaService.CrearPedido(idMesa);
             idPedidoActual = pedido.idPedido;
 
+            
+
             Button button = mainTables.FindControl("btnTable" + idMesa) as Button;
             if (button != null)
             {
                 button.CssClass = "table-button red";
             }
 
+            // Reinicio de datos al abrir las mesas
             lblFechaPedido.Text = DateTime.Now.ToString("dd/MM/yyyy");
-
             OrderDetailsPanel.Visible = true;
             btnAbrirMesa.Visible = false;
+            lblPrecioTotal.Text = ""; 
+            rptComandas.DataSource = null; 
+            rptComandas.DataBind(); 
         }
         private void MostrarComandas(List<Comanda> comandas)
         {
