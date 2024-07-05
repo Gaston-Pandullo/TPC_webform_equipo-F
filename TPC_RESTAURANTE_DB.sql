@@ -155,3 +155,8 @@ GROUP BY
     im.stock,
     im.estado,
     im.categoria;
+
+SELECT COUNT(*) as cantidad FROM MESA WHERE MESA.ocupada = 1;
+
+SELECT * FROM MESA;
+DELETE FROM MESA WHERE idMesa = (SELECT MAX(idMesa) FROM MESA);

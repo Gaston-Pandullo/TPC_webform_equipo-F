@@ -3,6 +3,7 @@ using negocio;
 using System.Collections.Generic;
 using System.Web.UI.WebControls;
 using System;
+using System.Web.UI;
 
 namespace TPC_webforms_equipo_F
 {
@@ -31,19 +32,72 @@ namespace TPC_webforms_equipo_F
             _MesaList = mesaService.getAll();
             mainTables.Controls.Clear();
 
+            int index = 1;
             foreach (var mesa in _MesaList)
             {
                 Button button = new Button
                 {
+                    
                     ID = "btnTable" + mesa.id_mesa,
-                    Text = mesa.id_mesa.ToString(),
+                    Text = index.ToString(),
                     CommandArgument = mesa.id_mesa.ToString(),
                     CssClass = "table-button " + (mesa.ocupada ? "red" : "green")
                 };
                 button.Click += new EventHandler(TableButton_Click);
                 mainTables.Controls.Add(button);
+                index++;
             }
         }
+
+        protected void btnRemoveMesa_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                bool mesasOcupadas = mesaService.CheckMesasLibres();
+                if (mesasOcupadas)
+                {
+                    alertaMesa.Text = "Primero hay que desocupar las mesas.";
+                    ScriptManager.RegisterStartupScript(this, GetType(), "hideAlert", "setTimeout(function(){ document.getElementById('alertaMesa').innerText = ''; }, 3000);", true);
+                    return;
+                }
+                else
+                {
+                    mesaService.updateMesaQty(false);
+                    Response.Redirect(Request.RawUrl);
+                }
+            }
+            catch (Exception ex)
+            {
+                alertaMesa.Text = "Se produjo un error al intentar eliminar una mesa. Intente de nuevo.";
+                Console.WriteLine("Error en btnRemoveMesa_Click: " + ex.Message);
+            }
+        }
+
+        protected void btnAddMesa_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                bool mesasOcupadas = mesaService.CheckMesasLibres();
+                if (mesasOcupadas)
+                {
+                    alertaMesa.Text = "Primero hay que desocupar las mesas.";
+                    ScriptManager.RegisterStartupScript(this, GetType(), "hideAlert", "setTimeout(function(){ document.getElementById('alertaMesa').innerText = ''; }, 3000);", true);
+                    return;
+                }
+                else
+                {
+                    mesaService.updateMesaQty(true);
+                    Response.Redirect(Request.RawUrl);
+                }
+            }
+            catch (Exception ex)
+            {
+                alertaMesa.Text = "Se produjo un error al intentar agregar una mesa. Intente de nuevo.";
+                Console.WriteLine("Error en btnAddMesa_Click: " + ex.Message);
+            }
+        }
+
+
 
         protected void TableButton_Click(object sender, EventArgs e)
         {

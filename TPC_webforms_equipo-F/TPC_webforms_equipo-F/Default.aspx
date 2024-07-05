@@ -4,10 +4,20 @@
     <asp:UpdatePanel ID="UpdatePanel1" runat="server">
         <ContentTemplate>
             <asp:Panel ID="TableOrder" runat="server">
-                <h1>Mesas</h1>
+                <div style="display: flex; justify-content: space-between; align-items: center">
+                    <h1>Mesas</h1>
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 10px; justify-content: flex-end;">
+                            <asp:Button ID="ButtonRemoveMesa" runat="server" CssClass="btn btn-danger" Text="-" OnClick="btnRemoveMesa_Click" />
+                            <p style="margin: auto 0;">Mesa</p>
+                            <asp:Button ID="ButtonAddMesa" runat="server" CssClass="btn btn-success" Text="+" OnClick="btnAddMesa_Click" />
+                        </div>
+                        <asp:Label ID="alertaMesa" runat="server" CssClass="alerta-mesa d-block"></asp:Label>
+                    </div>
+                </div>
+
                 <p>Seleccione una mesa y agregue los platos que quiera!</p>
-                <main id="mainTables" runat="server">
-                </main>
+                <main id="mainTables" runat="server"></main>
             </asp:Panel>
 
             <asp:Button ID="btnAbrirMesa" runat="server" Text="Abrir Mesa" OnClick="btnAbrirMesa_Click" Visible="false" />
@@ -19,7 +29,7 @@
                     <asp:Label ID="lblFechaPedido" runat="server" Text=""></asp:Label>
                 </p>
                 <p>
-                    <strong>Número de Mesa:</strong>
+                    <strong>ID de Mesa:</strong>
                     <asp:Label ID="lblNumeroMesa" runat="server" Text=""></asp:Label>
                 </p>
 
@@ -59,7 +69,7 @@
                     <strong>Precio Total:</strong>
                     <asp:Label ID="lblPrecioTotal" runat="server" Text=""></asp:Label>
                 </p>
-                <asp:Button ID="btnCerrarMesa" runat="server" Text="Cerrar Mesa" OnClick="btnCerrarMesa_Click" />
+                <asp:Button ID="btnCerrarMesa" CssClass="btn btn-danger" runat="server" Text="Cerrar Mesa" OnClick="btnCerrarMesa_Click" />
             </asp:Panel>
         </ContentTemplate>
     </asp:UpdatePanel>
@@ -71,14 +81,24 @@
             font-size: 24px;
             text-align: center;
         }
-
         .green {
-            background-color: aquamarine; /* Mesa libre */
+            background-color: aquamarine;
         }
 
         .red {
-            background-color: indianred; /* Mesa ocupada */
+            background-color: indianred;
+        }
+        .alerta-mesa {
+            margin-left: 10px;
+            color: red;
         }
     </style>
+    <script type="text/javascript">
+    function hideAlert() {
+        setTimeout(function() {
+            document.getElementById('<%= alertaMesa.ClientID %>').innerText = '';
+        }, 3000);
+    }
+    </script>
 </asp:Content>
 

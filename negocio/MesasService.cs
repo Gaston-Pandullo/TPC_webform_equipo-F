@@ -357,6 +357,48 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
+
+        public void updateMesaQty(bool add)
+        {
+            try
+            {
+                if (add){datos.setearConsulta("INSERT INTO MESA (mesero, ocupada) VALUES (NULL, 0);");}
+                else{datos.setearConsulta("DELETE FROM MESA WHERE idMesa = (SELECT MAX(idMesa) FROM MESA);");}
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public bool CheckMesasLibres()
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                int cantidadMesas = 0;
+                datos.setearConsulta("SELECT COUNT(*) as cantidad FROM MESA WHERE MESA.ocupada = 1;");
+                datos.ejecutarLectura();
+                if (datos.Lector.Read())
+                {   
+                    cantidadMesas = datos.Lector.IsDBNull(datos.Lector.GetOrdinal("cantidad")) ? 0 : (int)datos.Lector["cantidad"];
+                }
+                return (cantidadMesas > 0);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
         public decimal calcularTotal(int idPedido)
         {
             try
