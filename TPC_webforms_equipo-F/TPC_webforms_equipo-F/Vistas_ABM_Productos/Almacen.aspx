@@ -30,6 +30,31 @@
         }
     </style>
     <h1>STOCK</h1>
+    <div class="container text-center">
+        <div class="row">
+            <div class="col">
+                <div class="form-floating">
+                    <asp:TextBox ID="txtFiltroNombre" runat="server" CssClass="form-control" placeholder="" OnTextChanged="txtFiltroNombre_TextChanged" AutoPostBack="true"></asp:TextBox>
+                    <label for="txtFiltroNombre">Filtro por nombre</label>
+                </div>
+            </div>
+            <div class="col">
+                 <div class="form-floating">
+                    <asp:DropDownList ID="ddlFiltroCategoria" runat="server" CssClass="form-select" AutoPostBack="true" OnSelectedIndexChanged="ddlFiltroCategoria_SelectedIndexChanged">
+                        <asp:ListItem Text="Seleccione una categoría" Value="x" />
+                        <asp:ListItem Text="Plato" Value="C" />
+                        <asp:ListItem Text="Bebida" Value="B" />
+                        <asp:ListItem Text="Postre" Value="P" />
+                    </asp:DropDownList>
+                    <label for="ddlFiltroCategoria">Filtro por categoría:</label>
+                </div>
+            </div>
+            <div class="col">
+                
+            </div>
+        </div>
+    </div>
+    <hr />
     <asp:Repeater ID="gvProductos" runat="server" OnItemCommand="gvProductos_ItemCommand">
         <HeaderTemplate>
             <div class="table-responsive">

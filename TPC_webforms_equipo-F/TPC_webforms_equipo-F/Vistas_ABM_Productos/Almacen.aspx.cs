@@ -78,5 +78,62 @@ namespace TPC_webforms_equipo_F
                 throw ex;
             }
         }
+
+        protected void txtFiltroNombre_TextChanged(object sender, EventArgs e)
+        {
+            string textoFiltro = txtFiltroNombre.Text;
+            if(textoFiltro != "")
+            {
+                try
+                {
+                    ItemMenuService itemMenuService = new ItemMenuService();
+                    List<ItemMenu> itemMenus = itemMenuService.getItems_by_filtro(textoFiltro);
+
+                    ddlFiltroCategoria.SelectedIndex=0;
+                    gvProductos.DataSource = itemMenus;
+                    gvProductos.DataBind();
+
+                    Debug.WriteLine("Productos cargados.");
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            else
+            {
+                ddlFiltroCategoria.SelectedIndex = 0;
+                CargarProductos();
+            }
+            
+        }
+
+        protected void ddlFiltroCategoria_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            char categoriaFiltro = Convert.ToChar(ddlFiltroCategoria.SelectedValue);
+            if (ddlFiltroCategoria.SelectedIndex!=0)
+            {
+                try
+                {
+                    ItemMenuService itemMenuService = new ItemMenuService();
+                    List<ItemMenu> itemMenus = itemMenuService.getItems_by_filtroCategoria(categoriaFiltro);
+
+                    txtFiltroNombre.Text = "";
+                    gvProductos.DataSource = itemMenus;
+                    gvProductos.DataBind();
+
+                    Debug.WriteLine("Productos cargados.");
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            else if(ddlFiltroCategoria.SelectedIndex == 0)
+            {
+                txtFiltroNombre.Text = "";
+                CargarProductos();
+            }
+        }
     }
 }

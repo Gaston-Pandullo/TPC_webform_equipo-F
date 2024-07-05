@@ -305,5 +305,72 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
+
+        public List<ItemMenu> getItems_by_filtro(string filtro)
+        {
+            List<ItemMenu> listaItems = new List<ItemMenu>();
+            try
+            {
+                
+                    datos.setearConsulta("select * from ITEM_MENU where nombre like @filtro + '%'");
+                    datos.setearParametro("@filtro", filtro);
+                    datos.ejecutarLectura();
+                    while (datos.Lector.Read())
+                    {
+                        ItemMenu aux = new ItemMenu();
+                        aux.id = datos.Lector["id"] != DBNull.Value ? Convert.ToInt32(datos.Lector["id"]) : 0;
+                        aux.nombre = datos.Lector["nombre"] != DBNull.Value ? (string)datos.Lector["nombre"] : string.Empty;
+                        aux.descripcion = datos.Lector["descripcion"] != DBNull.Value ? (string)datos.Lector["descripcion"] : string.Empty;
+                        aux.precio = datos.Lector["precio"] != DBNull.Value ? Convert.ToDecimal(datos.Lector["precio"]) : 0;
+                        aux.stock = datos.Lector["stock"] != DBNull.Value ? Convert.ToInt32(datos.Lector["stock"]) : 0;
+                        aux.cantidad = datos.Lector["cantidad"] != DBNull.Value ? Convert.ToInt32(datos.Lector["cantidad"]) : 0;
+                        aux.categoria = datos.Lector["categoria"] != DBNull.Value ? Convert.ToChar(datos.Lector["categoria"]) : 'C';
+
+                        listaItems.Add(aux);
+                    }
+                    return listaItems;
+                }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public List<ItemMenu> getItems_by_filtroCategoria(char filtro)
+        {
+            List<ItemMenu> listaItems = new List<ItemMenu>();
+            try
+            {
+
+                datos.setearConsulta("select * from ITEM_MENU where categoria = @filtro");
+                datos.setearParametro("@filtro", filtro);
+                datos.ejecutarLectura();
+                while (datos.Lector.Read())
+                {
+                    ItemMenu aux = new ItemMenu();
+                    aux.id = datos.Lector["id"] != DBNull.Value ? Convert.ToInt32(datos.Lector["id"]) : 0;
+                    aux.nombre = datos.Lector["nombre"] != DBNull.Value ? (string)datos.Lector["nombre"] : string.Empty;
+                    aux.descripcion = datos.Lector["descripcion"] != DBNull.Value ? (string)datos.Lector["descripcion"] : string.Empty;
+                    aux.precio = datos.Lector["precio"] != DBNull.Value ? Convert.ToDecimal(datos.Lector["precio"]) : 0;
+                    aux.stock = datos.Lector["stock"] != DBNull.Value ? Convert.ToInt32(datos.Lector["stock"]) : 0;
+                    aux.cantidad = datos.Lector["cantidad"] != DBNull.Value ? Convert.ToInt32(datos.Lector["cantidad"]) : 0;
+                    aux.categoria = datos.Lector["categoria"] != DBNull.Value ? Convert.ToChar(datos.Lector["categoria"]) : 'C';
+
+                    listaItems.Add(aux);
+                }
+                return listaItems;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }

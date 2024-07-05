@@ -15,6 +15,24 @@ namespace TPC_webforms_equipo_F
     {
 
         /// <summary>
+        /// Control txtFiltroNombre.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtFiltroNombre;
+
+        /// <summary>
+        /// Control ddlFiltroCategoria.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlFiltroCategoria;
+
+        /// <summary>
         /// Control gvProductos.
         /// </summary>
         /// <remarks>
