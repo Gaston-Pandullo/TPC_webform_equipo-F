@@ -37,7 +37,7 @@ namespace TPC_webforms_equipo_F
             {
                 Button button = new Button
                 {
-                    
+                
                     ID = "btnTable" + mesa.id_mesa,
                     Text = index.ToString(),
                     CommandArgument = mesa.id_mesa.ToString(),
@@ -194,8 +194,8 @@ namespace TPC_webforms_equipo_F
         }
         protected void btnCerrarMesa_Click(object sender, EventArgs e)
         {
-            int mesaId = Convert.ToInt32(lblNumeroMesa.Text);
             MesasService mesaService = new MesasService();
+            int mesaId = Convert.ToInt32(lblNumeroMesa.Text);
             idPedidoActual = mesaService.buscarUltimoIdpedidoxMesa(mesaId);
             total = mesaService.calcularTotal(idPedidoActual);
             mesaService.ActualizarPrecioEnPedido(total, idPedidoActual);

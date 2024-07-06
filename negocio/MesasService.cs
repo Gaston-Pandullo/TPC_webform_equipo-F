@@ -17,7 +17,7 @@ namespace negocio
             List<Mesa> mesas = new List<Mesa>();
             try
             {
-                datos.setearConsulta("SELECT IDMESA, MESERO, OCUPADA FROM MESA");
+                datos.setearConsulta("SELECT idMesa, mesero, ocupada, activo FROM MESA WHERE activo = 1");
                 datos.ejecutarLectura();
                 while (datos.Lector.Read())
                 {
@@ -25,6 +25,7 @@ namespace negocio
                     aux.id_mesa = datos.Lector["IDMESA"] != DBNull.Value ? Convert.ToInt32(datos.Lector["IDMESA"]) : 0;
                     aux.id_mesero = datos.Lector["MESERO"] != DBNull.Value ? Convert.ToInt32(datos.Lector["MESERO"]) : 0;
                     aux.ocupada = datos.Lector["OCUPADA"] != DBNull.Value ? Convert.ToBoolean(datos.Lector["OCUPADA"]) : false;
+                    aux.activo = datos.Lector["ACTIVO"] != DBNull.Value ? Convert.ToBoolean(datos.Lector["ACTIVO"]) : false;
 
                     mesas.Add(aux);
                 }
@@ -362,8 +363,8 @@ namespace negocio
         {
             try
             {
-                if (add){datos.setearConsulta("INSERT INTO MESA (mesero, ocupada) VALUES (NULL, 0);");}
-                else{datos.setearConsulta("DELETE FROM MESA WHERE idMesa = (SELECT MAX(idMesa) FROM MESA);");}
+                if (add){datos.setearConsulta("INSERT INTO MESA (mesero, ocupada, activo) VALUES (NULL, 0, 1);");}
+                else{datos.setearConsulta("UPDATE MESA SET activo = 0 WHERE idMesa = (SELECT MAX(idMesa) FROM MESA WHERE activo = 1);");}
                 datos.ejecutarAccion();
             }
             catch (Exception ex)

@@ -19,6 +19,7 @@ namespace dominio
             ocupada = true;
         }
 
+        public bool activo {  get; set; }
         public int id_mesa { get; set; }
         public int id_mesero { get; set; }
         public Mesero mesero { get; set; }
