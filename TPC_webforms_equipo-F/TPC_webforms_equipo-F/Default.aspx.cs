@@ -157,26 +157,37 @@ namespace TPC_webforms_equipo_F
         protected void btnAbrirMesa_Click(object sender, EventArgs e)
         {
             int idMesa = Convert.ToInt32(lblNumeroMesa.Text);
-            mesaService.OcuparMesa(idMesa);
-            Pedido pedido = mesaService.CrearPedido(idMesa);
-            idPedidoActual = pedido.idPedido;
+            bool mesero = mesaService.verifMeseroAsig(idMesa);
+
+            if(mesero == true)
+            {
+                mesaService.OcuparMesa(idMesa);
+                Pedido pedido = mesaService.CrearPedido(idMesa);
+                idPedidoActual = pedido.idPedido;
 
             
 
-            Button button = mainTables.FindControl("btnTable" + idMesa) as Button;
-            if (button != null)
+                Button button = mainTables.FindControl("btnTable" + idMesa) as Button;
+                if (button != null)
+                {
+                    button.CssClass = "table-button red";
+                }
+
+                // Reinicio de datos al abrir las mesas
+                OrderDetailsPanel.Visible = true;
+                btnAbrirMesa.Visible = false;
+                lblPrecioTotal.Text = "";
+                //Lista vacia para que siempre aparezca el encabezado de los pedidos.
+                List<Comanda> comandas = new List<Comanda>();  
+                rptComandas.DataSource = comandas; 
+                rptComandas.DataBind(); 
+
+            }
+            else
             {
-                button.CssClass = "table-button red";
+                Response.Redirect("AsignacionMeseros.aspx");
             }
 
-            // Reinicio de datos al abrir las mesas
-            OrderDetailsPanel.Visible = true;
-            btnAbrirMesa.Visible = false;
-            lblPrecioTotal.Text = "";
-            //Lista vacia para que siempre aparezca el encabezado de los pedidos.
-            List<Comanda> comandas = new List<Comanda>();  
-            rptComandas.DataSource = comandas; 
-            rptComandas.DataBind(); 
         }
         private void MostrarComandas(List<Comanda> comandas)
         {

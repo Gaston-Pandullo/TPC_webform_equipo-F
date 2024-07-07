@@ -506,5 +506,39 @@ namespace negocio
             }
         }
 
+        public bool verifMeseroAsig(int idMesa)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("SELECT mesero FROM MESA WHERE idMesa = @idMesa");
+                datos.setearParametro("@idMesa", idMesa);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    if (datos.Lector["mesero"] != DBNull.Value)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                return false;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
     }
 }
