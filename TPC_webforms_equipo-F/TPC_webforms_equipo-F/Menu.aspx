@@ -93,6 +93,33 @@
 </div>
         </ContentTemplate>
     </asp:UpdatePanel>
-    
+
+    <!-- Modal para notificación -->
+<div class="modal fade" id="stockErrorModal" tabindex="-1" role="dialog" aria-labelledby="stockErrorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="stockErrorModalLabel">Error de Stock</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="stockErrorMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function showStockErrorModal(message) {
+        var stockErrorModal = new bootstrap.Modal(document.getElementById('stockErrorModal'), {
+            keyboard: false
+        });
+
+        document.getElementById('stockErrorMessage').innerText = message;
+        stockErrorModal.show();
+    }
+</script>
 </asp:Content>
 

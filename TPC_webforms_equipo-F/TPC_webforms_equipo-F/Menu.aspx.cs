@@ -10,7 +10,7 @@ namespace TPC_webforms_equipo_F
 {
     public partial class Menu : System.Web.UI.Page
     {
-        public List<ItemMenu> itemsMenu = new List<ItemMenu> ();
+        public List<ItemMenu> itemsMenu = new List<ItemMenu>();
         protected int mesaId;
         protected int pedidoId;
 
@@ -126,7 +126,7 @@ namespace TPC_webforms_equipo_F
             {
                 TextBox txtCantidad = (TextBox)itemMenu.FindControl("txtCantidad");
                 Label lblNombre = (Label)itemMenu.FindControl("lblNombre");
-            
+
                 if (int.TryParse(txtCantidad.Text, out int cantidad) && cantidad > 0)
                 {
                     int itemId = itemMenuService.getIdbyName(lblNombre.Text);
@@ -144,6 +144,12 @@ namespace TPC_webforms_equipo_F
                             id = itemId,
                         };
                         comanda.items.Add(item);
+                    }
+                    else
+                    {
+                        string mensajeError = $"No hay suficiente stock para {lblNombre.Text}. Stock actual: {stockActual}.";
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "showStockErrorModal", $"showStockErrorModal('{mensajeError}');", true);
+                        return; 
                     }
 
                 }
@@ -173,6 +179,13 @@ namespace TPC_webforms_equipo_F
                         };
                         comanda.items.Add(item);
                     }
+                    else
+                    {
+                        string mensajeError = $"No hay suficiente stock para {lblNombre.Text}. Stock actual: {stockActual}.";
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "showStockErrorModal", $"showStockErrorModal('{mensajeError}');", true);
+                        return; 
+                    }
+
                 }
             }
 
@@ -181,7 +194,7 @@ namespace TPC_webforms_equipo_F
             {
                 TextBox txtCantidad = (TextBox)itemMenu.FindControl("txtCantidad");
                 Label lblNombre = (Label)itemMenu.FindControl("lblNombre");
-                
+
                 if (int.TryParse(txtCantidad.Text, out int cantidad) && cantidad > 0)
                 {
                     int itemId = itemMenuService.getIdbyName(lblNombre.Text);
@@ -200,23 +213,32 @@ namespace TPC_webforms_equipo_F
                         };
                         comanda.items.Add(item);
                     }
+                    else
+                    {
+                        string mensajeError = $"No hay suficiente stock para {lblNombre.Text}. Stock actual: {stockActual}.";
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "showStockErrorModal", $"showStockErrorModal('{mensajeError}');", true);
+                        return;
+                    }
+
                 }
+
+
+                //descontar stock de la tabla itemMenu
+                foreach (var item in comanda.items)
+                {
+                    itemMenuService.DescontarStock(item.id, item.cantidad);
+                }
+
+                comanda.precioTotal = comanda.items.Sum(item => item.precio * item.cantidad);
+
+                pedido.comandas.Add(comanda);
+
+                pedidoService.ActualizarPedido(pedido);
+
+                Response.Redirect("Default.aspx");
             }
-
-
-            //descontar stock de la tabla itemMenu
-            foreach (var item in comanda.items)
-            {
-                itemMenuService.DescontarStock(item.id, item.cantidad);
-            }
-
-            comanda.precioTotal = comanda.items.Sum(item => item.precio * item.cantidad);
-
-            pedido.comandas.Add(comanda);
-
-            pedidoService.ActualizarPedido(pedido);
-
-            Response.Redirect("Default.aspx");
         }
     }
 }
+
+
