@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 using dominio;
 using negocio;
@@ -183,6 +184,14 @@ namespace TPC_webforms_equipo_F
                     comanda.items.Add(item);
                 }
             }
+
+
+            //descontar stock de la tabla itemMenu
+            foreach (var item in comanda.items)
+            {
+                itemMenuService.DescontarStock(item.id, item.cantidad);
+            }
+
 
             comanda.precioTotal = comanda.items.Sum(item => item.precio * item.cantidad);
 

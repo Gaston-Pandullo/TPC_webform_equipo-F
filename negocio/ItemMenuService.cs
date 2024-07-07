@@ -42,6 +42,28 @@ namespace negocio
             }
         }
 
+        public void DescontarStock(int id, int cantidadADescontar)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.limpiarParametros();
+                datos.setearConsulta("UPDATE ITEM_MENU SET stock = stock - @cantidadADescontar WHERE id = @id");
+                datos.setearParametro("@id", id);
+                datos.setearParametro("@cantidadADescontar", cantidadADescontar);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
         public void updateStock(int id, int stock)
         {
             try
