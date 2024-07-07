@@ -64,6 +64,36 @@ namespace negocio
             }
         }
 
+        public int GetStockById(int id)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.limpiarParametros();
+                datos.setearConsulta("SELECT stock FROM ITEM_MENU WHERE id = @id");
+                datos.setearParametro("@id", id);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    return Convert.ToInt32(datos.Lector["stock"]);
+                }
+                else
+                {
+                    return 0; // Si no se encuentra el ítem, devolver 0
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
         public void updateStock(int id, int stock)
         {
             try

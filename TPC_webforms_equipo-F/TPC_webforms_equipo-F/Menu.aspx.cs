@@ -129,16 +129,23 @@ namespace TPC_webforms_equipo_F
             
                 if (int.TryParse(txtCantidad.Text, out int cantidad) && cantidad > 0)
                 {
-                    decimal precio = itemMenuService.getPrice(lblNombre.Text);
+                    int itemId = itemMenuService.getIdbyName(lblNombre.Text);
+                    int stockActual = itemMenuService.GetStockById(itemId);
 
-                    ItemMenu item = new ItemMenu
+                    if (stockActual >= cantidad)
                     {
-                        cantidad = cantidad,
-                        nombre = lblNombre.Text,
-                        precio = precio,
-                    };
-                    item.id = itemMenuService.getIdbyName(lblNombre.Text);
-                    comanda.items.Add(item);
+                        decimal precio = itemMenuService.getPrice(lblNombre.Text);
+
+                        ItemMenu item = new ItemMenu
+                        {
+                            cantidad = cantidad,
+                            nombre = lblNombre.Text,
+                            precio = precio,
+                            id = itemId,
+                        };
+                        comanda.items.Add(item);
+                    }
+
                 }
             }
 
@@ -150,16 +157,22 @@ namespace TPC_webforms_equipo_F
 
                 if (int.TryParse(txtCantidad.Text, out int cantidad) && cantidad > 0)
                 {
-                    decimal precio = itemMenuService.getPrice(lblNombre.Text);
+                    int itemId = itemMenuService.getIdbyName(lblNombre.Text);
+                    int stockActual = itemMenuService.GetStockById(itemId);
 
-                    ItemMenu item = new ItemMenu
+                    if (stockActual >= cantidad)
                     {
-                        cantidad = cantidad,
-                        nombre = lblNombre.Text,
-                        precio = precio,
-                    };
-                    item.id = itemMenuService.getIdbyName(lblNombre.Text);
-                    comanda.items.Add(item);
+                        decimal precio = itemMenuService.getPrice(lblNombre.Text);
+
+                        ItemMenu item = new ItemMenu
+                        {
+                            cantidad = cantidad,
+                            nombre = lblNombre.Text,
+                            precio = precio,
+                            id = itemId,
+                        };
+                        comanda.items.Add(item);
+                    }
                 }
             }
 
@@ -171,17 +184,22 @@ namespace TPC_webforms_equipo_F
                 
                 if (int.TryParse(txtCantidad.Text, out int cantidad) && cantidad > 0)
                 {
-                    decimal precio = itemMenuService.getPrice(lblNombre.Text);
+                    int itemId = itemMenuService.getIdbyName(lblNombre.Text);
+                    int stockActual = itemMenuService.GetStockById(itemId);
 
-                    ItemMenu item = new ItemMenu
+                    if (stockActual >= cantidad)
                     {
-                        cantidad = cantidad,
-                        nombre = lblNombre.Text,
-                        precio = precio,
-                    };
+                        decimal precio = itemMenuService.getPrice(lblNombre.Text);
 
-                    item.id = itemMenuService.getIdbyName(lblNombre.Text);
-                    comanda.items.Add(item);
+                        ItemMenu item = new ItemMenu
+                        {
+                            cantidad = cantidad,
+                            nombre = lblNombre.Text,
+                            precio = precio,
+                            id = itemId,
+                        };
+                        comanda.items.Add(item);
+                    }
                 }
             }
 
@@ -191,7 +209,6 @@ namespace TPC_webforms_equipo_F
             {
                 itemMenuService.DescontarStock(item.id, item.cantidad);
             }
-
 
             comanda.precioTotal = comanda.items.Sum(item => item.precio * item.cantidad);
 
