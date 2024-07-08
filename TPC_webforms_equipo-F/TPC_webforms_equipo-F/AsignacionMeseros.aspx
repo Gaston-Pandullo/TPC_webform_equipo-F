@@ -9,7 +9,7 @@
                     <asp:BoundField DataField="id_mesa" HeaderText="Mesa" HeaderStyle-CssClass="text-center" ItemStyle-CssClass="text-center" />
                     <asp:TemplateField HeaderText="Mesero Asignado" HeaderStyle-CssClass="text-center">
                         <ItemTemplate>
-                            <asp:DropDownList ID="ddlMeseros" runat="server" CssClass="form-select mx-auto">
+                            <asp:DropDownList ID="ddlMeseros" runat="server" CssClass="form-select mx-auto" AutoPostBack="True">
                             </asp:DropDownList>
                         </ItemTemplate>
                     </asp:TemplateField>

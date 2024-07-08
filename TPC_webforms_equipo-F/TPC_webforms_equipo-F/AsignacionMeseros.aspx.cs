@@ -2,6 +2,7 @@
 using negocio;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -18,7 +19,6 @@ namespace TPC_webforms_equipo_F
         {
             if (!IsPostBack)
             {
-                gvMesas.DataKeyNames = new string[] { "id_mesa" };
                 CargarMesas();
             }
         }
@@ -35,19 +35,33 @@ namespace TPC_webforms_equipo_F
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
                 DropDownList ddlMeseros = (DropDownList)e.Row.FindControl("ddlMeseros");
-                List<Mesero> meseros = meserosService.getAll();
+                ddlMeseros.Items.Insert(0, new ListItem("Elegir", "0"));
+                CargarMeseros(ddlMeseros);
 
-                ddlMeseros.DataSource = meseros;
-                ddlMeseros.DataTextField = "NombreCompleto";
-                ddlMeseros.DataValueField = "id_mesero";
-                ddlMeseros.DataBind();
 
                 int idMeseroAsignado = Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "id_mesero"));
+
                 if (idMeseroAsignado != 0)
                 {
                     ddlMeseros.SelectedValue = idMeseroAsignado.ToString();
                 }
+                else
+                {
+                    ddlMeseros.SelectedIndex = 0; // Seleccionar la opción "Elegir" por defecto
+                }
             }
+        }
+
+        private void CargarMeseros(DropDownList ddlMeseros)
+        {
+            List<Mesero> meseros = meserosService.getAll();
+
+            ddlMeseros.DataSource = meseros;
+            ddlMeseros.DataTextField = "NombreCompleto";
+            ddlMeseros.DataValueField = "id_mesero";
+            ddlMeseros.DataBind();
+
+            ddlMeseros.Items.Insert(0, new ListItem("-- Seleccione un mesero --", "0"));
         }
 
         protected void btnGuardar_Click(object sender, EventArgs e)
@@ -65,5 +79,7 @@ namespace TPC_webforms_equipo_F
 
             CargarMesas();
         }
+
+        
     }
 }
