@@ -40,6 +40,35 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
+        public List<Mesa> getMesasByMesero(int idUser)
+        {
+            List<Mesa> mesas = new List<Mesa>();
+            try
+            {
+                datos.setearConsulta("SELECT idMesa, mesero, ocupada, activo FROM MESERO M LEFT JOIN USERS U ON U.id = M.IDUSUARIO LEFT JOIN MESA Me ON Me.mesero = M.idMesero WHERE U.id = @idUser");
+                datos.setearParametro("@idUser", idUser);
+                datos.ejecutarLectura();
+                while (datos.Lector.Read())
+                {
+                    Mesa aux = new Mesa();
+                    aux.id_mesa = datos.Lector["IDMESA"] != DBNull.Value ? Convert.ToInt32(datos.Lector["IDMESA"]) : 0;
+                    aux.id_mesero = datos.Lector["MESERO"] != DBNull.Value ? Convert.ToInt32(datos.Lector["MESERO"]) : 0;
+                    aux.ocupada = datos.Lector["OCUPADA"] != DBNull.Value ? Convert.ToBoolean(datos.Lector["OCUPADA"]) : false;
+                    aux.activo = datos.Lector["ACTIVO"] != DBNull.Value ? Convert.ToBoolean(datos.Lector["ACTIVO"]) : false;
+
+                    mesas.Add(aux);
+                }
+                return mesas;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
         public void asignarMesero(int idMesa, int idMesero)
         {
             AccesoDatos datos = new AccesoDatos();

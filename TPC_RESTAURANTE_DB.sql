@@ -104,8 +104,10 @@ INSERT INTO MESA (mesero, ocupada) VALUES
 (NULL, 0);
 
 
+SELECT idMesa, mesero, ocupada, activo FROM MESA WHERE activo = 1 AND mesero = 2
+
 GO
-/*
+
 INSERT INTO MESA (mesero, ocupada) VALUES (NULL, 0);
 
 --DROP DATABASE TPC_RESTAURANTE_DB
@@ -122,11 +124,14 @@ INSERT INTO MESA (mesero, ocupada) VALUES (NULL, 0);
 
 SELECT * FROM USERS;
 SELECT * FROM MESA;
-SELECT *  FROM MESERO M LEFT JOIN USERS U
-ON U.id = M.IDUSUARIO
+SELECT ME.* FROM MESERO M LEFT JOIN USERS U ON U.id = M.IDUSUARIO LEFT JOIN MESA Me ON Me.mesero = M.idMesero WHERE U.id = 3
 SELECT * FROM PEDIDOS
 SELECT * FROM COMANDA
 
+Select ME.* from MESA ME
+inner join Mesero M on ME.mesero=M.idMesero
+inner join USERS U on U.id=M.idUsuario
+where U.admin=0
 
 --SELECT * FROM USERS Where id = 1;
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Web.UI.WebControls;
 using System;
 using System.Web.UI;
+using System.Web;
 
 namespace TPC_webforms_equipo_F
 {
@@ -33,7 +34,18 @@ namespace TPC_webforms_equipo_F
 
         private void InicializarMesas()
         {
-            _MesaList = mesaService.getAll();
+            if (Seguridad.esAdmin(Session["usuario"]))
+            {
+                _MesaList = mesaService.getAll();
+            }
+            else
+            {
+                Usuario user = (Usuario)Session["usuario"];
+                if(user != null && Seguridad.sesionActiva(Session["usuario"]))
+                {
+                    _MesaList = mesaService.getMesasByMesero(user.id);
+                }
+            }
             mainTables.Controls.Clear();
 
             int index = 1;
