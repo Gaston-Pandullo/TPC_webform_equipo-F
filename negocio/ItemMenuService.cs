@@ -424,5 +424,29 @@ namespace negocio
                 datos.cerrarConexion();
             }
         }
+        public int ObtenerCantidadesVendidas(int idItem)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            int totalPedido=0;
+            try
+            {
+                datos.setearConsulta("select sum(cantidad) as cantidad from COMANDA where idItem=@id_item");
+                datos.setearParametro("@id_item", idItem);
+                datos.ejecutarLectura();
+                if (datos.Lector.Read())
+                {
+                    totalPedido = datos.Lector["cantidad"] != DBNull.Value ? Convert.ToInt32(datos.Lector["cantidad"]) : 0;
+                }
+                return totalPedido;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }

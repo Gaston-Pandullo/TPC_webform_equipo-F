@@ -25,5 +25,6 @@ namespace dominio
         }
         //public List<Mesa> mesas_asignadas { get; set; }
         //public List<Comanda> lista_comandas { get; set; }
+        public decimal total_facturado { get; set; }
     }
 }

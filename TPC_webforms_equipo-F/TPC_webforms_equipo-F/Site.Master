@@ -62,7 +62,7 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="meserosDropdown">
                                 <li><a class="dropdown-item" runat="server" href="~/AsignacionMeseros">Asignación Meseros</a></li>
-                                <li><a class="dropdown-item" runat="server" href="~/Info Mesero">Información de Meseros</a></li>
+                                <li><%--<a class="dropdown-item" runat="server" href="~/Info Mesero">Información de Meseros</a>--%></li>
                             </ul>
                         </li>
                         <%--
@@ -71,6 +71,7 @@
                         --%>
                         <li class="nav-item"><a class="nav-link" runat="server" href="~/Vistas_ABM_Productos/Almacen">Almacen</a></li>
                         <li class="nav-item"><a class="nav-link" runat="server" href="/Administrador">Panel de Administrador</a></li>
+                        <li class="nav-item"><a class="nav-link" runat="server" href="/Informes">Informes del dia</a></li>
                     </ul>
                 </div>
             </div>

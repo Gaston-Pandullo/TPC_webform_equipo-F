@@ -1,17 +1,14 @@
 ﻿using dominio;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace negocio
 {
     public class MeserosService
     {
-        AccesoDatos datos = new AccesoDatos();
         public List<Mesero> getAll()
         {
+            AccesoDatos datos = new AccesoDatos();
             List<Mesero> meseros = new List<Mesero>();
             try
             {
@@ -41,6 +38,7 @@ namespace negocio
 
         public Mesero GetById(int idMesero)
         {
+            AccesoDatos datos = new AccesoDatos();
             try
             {
                 datos.setearConsulta("SELECT M.IDMESERO, U.id AS ID_USUARIO, U.username, U.password, U.name, U.lastname, U.admin, U.created_at, U.updated_at FROM MESERO M LEFT JOIN USERS U ON U.id = M.IDUSUARIO WHERE M.IDMESERO = @idMesero");
@@ -68,6 +66,58 @@ namespace negocio
             }
         }
 
-        
+        public int ObtenerPedidosAtendidos(int idMesero)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("select count(*) as cantidad from PEDIDOS P inner join MESA M on P.idMesa=M.idMesa where mesero=@identificador");
+                datos.setearParametro("@identificador", idMesero);
+                datos.ejecutarLectura();
+                if (datos.Lector.Read())
+                {
+                    int cantidad = Convert.ToInt32(datos.Lector["cantidad"]);
+                    return cantidad;
+                }
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public decimal ObtenerTotalFacturado(int idMesero)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("select sum(total) as TotalFacturado from PEDIDOS P inner join MESA M on P.idMesa=M.idMesa where mesero=@identificador");
+                datos.setearParametro("@identificador", idMesero);
+                datos.ejecutarLectura();
+                if (datos.Lector.Read())
+                {
+                    if (datos.Lector["TotalFacturado"] != DBNull.Value)
+                    {
+                        decimal totalFacturado = Convert.ToDecimal(datos.Lector["TotalFacturado"]);
+                        return totalFacturado;
+                    }
+                }
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }
