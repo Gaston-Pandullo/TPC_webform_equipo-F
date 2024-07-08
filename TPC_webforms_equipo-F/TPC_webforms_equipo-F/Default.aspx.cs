@@ -24,6 +24,10 @@ namespace TPC_webforms_equipo_F
                 total = 0;
                 idPedidoActual = 0;
             }
+            if (!Seguridad.esAdmin(Session["usuario"]))
+            {
+                adminMesas.Visible = false;
+            }
             InicializarMesas();
         }
 

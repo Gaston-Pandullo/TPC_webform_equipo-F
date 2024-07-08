@@ -33,6 +33,42 @@ namespace TPC_webforms_equipo_F
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl loginLink;
 
         /// <summary>
+        /// Control meserosLink.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl meserosLink;
+
+        /// <summary>
+        /// Control almacenLink.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl almacenLink;
+
+        /// <summary>
+        /// Control adminLink.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl adminLink;
+
+        /// <summary>
+        /// Control informeLink.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl informeLink;
+
+        /// <summary>
         /// Control MainContent.
         /// </summary>
         /// <remarks>

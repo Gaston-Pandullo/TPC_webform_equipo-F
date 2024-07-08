@@ -12,17 +12,36 @@ namespace TPC_webforms_equipo_F
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            //if (!(Page is Login))
-            //{
-            //    if (!Seguridad.sesionActiva(Session["usuario"]))
-            //        Response.Redirect("Login.aspx", false);
-            //}
+            //REDIRIGE SI NO ESTA LOGEADO Y QUIERE IR A OTRA PAGINA
+            if (!(Page is Login))
+            {
+                if (!Seguridad.sesionActiva(Session["usuario"]))
+                {
+                    Response.Redirect("Login.aspx", false);
+                }
+            }
+            // OCULTA LINKS 
             if (Seguridad.sesionActiva(Session["usuario"]))
             {
                 loginLink.Visible = false;
             }else
             {
                 loginLink.Visible = true;
+            }
+            // OCULTA LINKS
+            if (!Seguridad.esAdmin(Session["usuario"]))
+            {
+                almacenLink.Visible = false;
+                adminLink.Visible = false;
+                informeLink.Visible = false;
+                meserosLink.Visible = false;
+            }
+            if(!(Page is _Default) && !(Page is Menu))
+            {
+                if (!Seguridad.esAdmin(Session["usuario"]) && Seguridad.sesionActiva(Session["usuario"]))
+                {
+                    Response.Redirect("Default.aspx", false);
+                }
             }
         }
     }

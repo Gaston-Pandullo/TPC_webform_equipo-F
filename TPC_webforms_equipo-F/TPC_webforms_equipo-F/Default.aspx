@@ -4,7 +4,7 @@
     <asp:UpdatePanel ID="UpdatePanel1" runat="server">
         <ContentTemplate>
             <asp:Panel ID="TableOrder" runat="server">
-                <div style="display: flex; justify-content: space-between; align-items: center">
+                <div id="adminMesas" runat="server" style="display: flex; justify-content: space-between; align-items: center">
                     <h1>Mesas</h1>
                     <div>
                         <div style="display: flex; align-items: center; gap: 10px; justify-content: flex-end;">

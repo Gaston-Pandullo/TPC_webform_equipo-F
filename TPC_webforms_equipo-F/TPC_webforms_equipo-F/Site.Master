@@ -56,7 +56,7 @@
                         <li class="nav-item"><a class="nav-link" runat="server" href="~/">Inicio</a></li>
                         <li class="nav-item" id="loginLink" runat="server"><a class="nav-link"  runat="server" href="~/Login">Login</a></li>
                         <%--<li class="nav-item"><a class="nav-link" runat="server" href="~/Menu">Menú</a></li>--%>
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown" id="meserosLink" runat="server">
                             <a class="nav-link dropdown-toggle" href="#" id="meserosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Meseros
                             </a>
@@ -69,9 +69,9 @@
                         <li class="nav-item"><a class="nav-link" runat="server" href="~/Info Mesero">Información de Meseros</a></li>
                         <li class="nav-item"><a class="nav-link" runat="server" href="/AsignacionMeseros">Asignacion Meseros</a></li> 
                         --%>
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/Vistas_ABM_Productos/Almacen">Almacen</a></li>
-                        <li class="nav-item"><a class="nav-link" runat="server" href="/Administrador">Panel de Administrador</a></li>
-                        <li class="nav-item"><a class="nav-link" runat="server" href="/Informes">Informes del dia</a></li>
+                        <li class="nav-item" id="almacenLink" runat="server" ><a class="nav-link" runat="server" href="~/Vistas_ABM_Productos/Almacen">Almacen</a></li>
+                        <li class="nav-item" id="adminLink" runat="server"><a class="nav-link" runat="server" href="/Administrador">Panel de Administrador</a></li>
+                        <li class="nav-item" id="informeLink" runat="server"><a class="nav-link" runat="server" href="/Informes">Informes del dia</a></li>
                     </ul>
                 </div>
             </div>
