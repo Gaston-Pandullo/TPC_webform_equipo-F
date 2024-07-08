@@ -46,9 +46,18 @@ namespace negocio
 
             try
             {
-                datos.setearConsulta("UPDATE MESA SET MESERO = @idMesero WHERE IDMESA = @idMesa");
-                datos.setearParametro("@idMesero", idMesero);
-                datos.setearParametro("@idMesa", idMesa);
+                if (idMesero == 0)
+                {
+                    datos.setearConsulta("UPDATE MESA SET MESERO = NULL WHERE IDMESA = @idMesa");
+                    datos.setearParametro("@idMesa", idMesa);
+                }
+                else
+                {
+                    datos.setearConsulta("UPDATE MESA SET MESERO = @idMesero WHERE IDMESA = @idMesa");
+                    datos.setearParametro("@idMesero", idMesero);
+                    datos.setearParametro("@idMesa", idMesa);
+                }
+
                 datos.ejecutarAccion();
             }
             catch (Exception ex)

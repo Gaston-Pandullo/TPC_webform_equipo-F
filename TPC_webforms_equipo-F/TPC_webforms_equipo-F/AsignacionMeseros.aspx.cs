@@ -19,6 +19,7 @@ namespace TPC_webforms_equipo_F
         {
             if (!IsPostBack)
             {
+                gvMesas.DataKeyNames = new string[] { "id_mesa" };
                 CargarMesas();
             }
         }
@@ -35,33 +36,21 @@ namespace TPC_webforms_equipo_F
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
                 DropDownList ddlMeseros = (DropDownList)e.Row.FindControl("ddlMeseros");
-                ddlMeseros.Items.Insert(0, new ListItem("Elegir", "0"));
-                CargarMeseros(ddlMeseros);
+                
+                List<Mesero> meseros = meserosService.getAll();
 
+                ddlMeseros.DataSource = meseros;
+                ddlMeseros.DataTextField = "NombreCompleto";
+                ddlMeseros.DataValueField = "id_mesero";
+                ddlMeseros.DataBind();
+                ddlMeseros.Items.Insert(0, new ListItem("Elegir", "0"));
 
                 int idMeseroAsignado = Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "id_mesero"));
-
                 if (idMeseroAsignado != 0)
                 {
                     ddlMeseros.SelectedValue = idMeseroAsignado.ToString();
                 }
-                else
-                {
-                    ddlMeseros.SelectedIndex = 0; // Seleccionar la opción "Elegir" por defecto
-                }
             }
-        }
-
-        private void CargarMeseros(DropDownList ddlMeseros)
-        {
-            List<Mesero> meseros = meserosService.getAll();
-
-            ddlMeseros.DataSource = meseros;
-            ddlMeseros.DataTextField = "NombreCompleto";
-            ddlMeseros.DataValueField = "id_mesero";
-            ddlMeseros.DataBind();
-
-            ddlMeseros.Items.Insert(0, new ListItem("-- Seleccione un mesero --", "0"));
         }
 
         protected void btnGuardar_Click(object sender, EventArgs e)
@@ -73,13 +62,12 @@ namespace TPC_webforms_equipo_F
                 int idMesero = Convert.ToInt32(ddlMeseros.SelectedValue);
 
                 mesasService.asignarMesero(idMesa, idMesero);
+
             }
 
             ScriptManager.RegisterStartupScript(this, GetType(), "showSuccessModal", "$('#confirmModal').modal('show');", true);
 
             CargarMesas();
         }
-
-        
     }
 }
