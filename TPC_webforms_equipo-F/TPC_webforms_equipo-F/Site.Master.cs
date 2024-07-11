@@ -24,9 +24,11 @@ namespace TPC_webforms_equipo_F
             if (Seguridad.sesionActiva(Session["usuario"]))
             {
                 loginLink.Visible = false;
+                logoutLink.Visible = true;
             }else
             {
                 loginLink.Visible = true;
+                logoutLink.Visible = false;
             }
             // OCULTA LINKS
             if (!Seguridad.esAdmin(Session["usuario"]))
@@ -43,6 +45,12 @@ namespace TPC_webforms_equipo_F
                     Response.Redirect("Default.aspx", false);
                 }
             }
+        }
+
+        protected void btnLogout_Click(object sender, EventArgs e)
+        {
+            Session.Clear();
+            Response.Redirect("Login.aspx", false);
         }
     }
 }

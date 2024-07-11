@@ -34,6 +34,8 @@ namespace TPC_webforms_equipo_F
 
         private void InicializarMesas()
         {
+            _MesaList = new List<Mesa>();
+
             if (Seguridad.esAdmin(Session["usuario"]))
             {
                 _MesaList = mesaService.getAll();
@@ -41,28 +43,34 @@ namespace TPC_webforms_equipo_F
             else
             {
                 Usuario user = (Usuario)Session["usuario"];
-                if(user != null && Seguridad.sesionActiva(Session["usuario"]))
+                if (user != null && Seguridad.sesionActiva(Session["usuario"]))
                 {
                     _MesaList = mesaService.getMesasByMesero(user.id);
                 }
             }
             mainTables.Controls.Clear();
-
-            int index = 1;
-            foreach (var mesa in _MesaList)
+            if (_MesaList != null && _MesaList.Count > 0)
             {
-                Button button = new Button
+                int index = 1;
+                foreach (var mesa in _MesaList)
                 {
-                
-                    ID = "btnTable" + mesa.id_mesa,
-                    Text = index.ToString(),
-                    CommandArgument = mesa.id_mesa.ToString(),
-                    CssClass = "table-button " + (mesa.ocupada ? "red" : "green")
-                };
-                button.Click += new EventHandler(TableButton_Click);
-                mainTables.Controls.Add(button);
-                index++;
+                    Button button = new Button
+                    {
+                        ID = "btnTable" + mesa.id_mesa,
+                        Text = index.ToString(),
+                        CommandArgument = mesa.id_mesa.ToString(),
+                        CssClass = "table-button " + (mesa.ocupada ? "red" : "green")
+                    };
+                    button.Click += new EventHandler(TableButton_Click);
+                    mainTables.Controls.Add(button);
+                    index++;
+                }
             }
+            else
+            {
+                alertaMesa.Text = "No hay mesas disponibles.";
+            }
+
         }
 
         protected void btnRemoveMesa_Click(object sender, EventArgs e)

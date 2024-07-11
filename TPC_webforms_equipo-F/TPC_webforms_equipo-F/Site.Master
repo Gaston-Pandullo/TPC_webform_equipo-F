@@ -72,6 +72,9 @@
                         <li class="nav-item" id="almacenLink" runat="server" ><a class="nav-link" runat="server" href="~/Vistas_ABM_Productos/Almacen">Almacen</a></li>
                         <li class="nav-item" id="adminLink" runat="server"><a class="nav-link" runat="server" href="/Administrador">Panel de Administrador</a></li>
                         <li class="nav-item" id="informeLink" runat="server"><a class="nav-link" runat="server" href="/Informes">Informes del dia</a></li>
+                        <li class="nav-item ms-auto" id="logoutLink" runat="server">
+                            <asp:Button ID="btnLogout" runat="server" CssClass="btn btn-danger" OnClick="btnLogout_Click" Text="Logout" />
+                        </li>
                     </ul>
                 </div>
             </div>
